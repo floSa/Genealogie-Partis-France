@@ -1,0 +1,11 @@
+# Copies locales volumineuses : reconstruites par pipeline/run_all.py (voir docs/METHODE.md)
+data/raw/*.sqlite
+data/raw/logs/
+
+# Python
+__pycache__/
+*.pyc
+
+# Fichiers de l'éditeur ou du système
+.DS_Store
+Thumbs.db
