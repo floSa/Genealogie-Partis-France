@@ -1,0 +1,37 @@
+{
+  "_commentaire": "Corrections manuelles appliquees par s05_build_graph.py apres l'extraction automatique. 'include' force l'entree d'une page dans le graphe, 'exclude' l'en retire, 'org' remplace des champs d'une organisation (par titre de page) : start, end (dates ISO partielles), tier, peripheral, position_value... Ne rien modifier dans data/raw ni data/graph a la main : tout est regenere.",
+  "include": [
+    "Action française",
+    "Parti nationaliste breton",
+    "Les Verts Pacifique",
+    "La Manif pour tous",
+    "SOS Racisme",
+    "Ligue communiste internationale (quatrième internationaliste)",
+    "Mouvement de libération nationale (1944)",
+    "Courant lambertiste",
+    "La Droite populaire",
+    "La Gauche forte",
+    "Internationale situationniste",
+    "Comité socialiste d'études et d'action pour la paix en Algérie",
+    "Union des anarcho-syndicalistes",
+    "Rassemblement national lorrain"
+  ],
+  "exclude": [],
+  "org": {
+    "Action française": {
+      "peripheral": false
+    },
+    "Civitas (mouvement)": {
+      "peripheral": false
+    },
+    "Union de la gauche": {
+      "start": "1972"
+    },
+    "Batasuna": {
+      "peripheral": true
+    },
+    "Internationale situationniste": {
+      "tier": 3
+    }
+  }
+}
