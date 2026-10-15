@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 from collections import defaultdict
 
 from wikiclient import RAW, Client, chunks
@@ -200,6 +201,10 @@ def main():
         "list_pages": list_pages,
         "infobox_world_count": len(ib),
     }
+    if (RAW / "discovery.json").exists():  # copie pour le rapport de changements (s09)
+        snap = RAW.parent / "snapshots"
+        snap.mkdir(exist_ok=True)
+        shutil.copy2(RAW / "discovery.json", snap / "previous_discovery.json")
     (RAW / "discovery.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     n_ib = sum(1 for d in cand.values() if d["has_party_infobox"])
     print(f"Candidats: {len(cand)} (avec infobox parti: {n_ib}); reseau={c.net_calls} cache={c.cache_hits}")

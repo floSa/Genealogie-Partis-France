@@ -1,6 +1,7 @@
 # Copies locales volumineuses : reconstruites par pipeline/run_all.py (voir docs/METHODE.md)
 data/raw/*.sqlite
 data/raw/logs/
+data/snapshots/
 
 # Python
 __pycache__/

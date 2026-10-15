@@ -8,6 +8,7 @@ Sortie : data/raw/wd_entities.json   {qid: {...}}
 from __future__ import annotations
 
 import json
+import os
 
 from client_shortcuts import store
 from wikiclient import RAW, ROOT, WD_API, Client, chunks
@@ -49,7 +50,8 @@ def main():
             qids.add(qid)
     qids = sorted(qids)
     out_path = RAW / "wd_entities.json"
-    out = json.loads(out_path.read_text(encoding="utf-8")) if out_path.exists() else {}
+    fresh = os.environ.get("PARTIS_FRESH") == "1"
+    out = {} if fresh or not out_path.exists() else json.loads(out_path.read_text(encoding="utf-8"))
     todo = [q for q in qids if q not in out]
     print("entites Wikidata a enrichir:", len(todo), "sur", len(qids), flush=True)
     for b in chunks(todo, 50):

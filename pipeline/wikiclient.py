@@ -10,6 +10,7 @@ Aucune dependance externe (bibliotheque standard uniquement).
 from __future__ import annotations
 
 import hashlib
+import os
 import json
 import sqlite3
 import time
@@ -43,6 +44,9 @@ class Client:
         self._last = 0.0
         self.net_calls = 0
         self.cache_hits = 0
+        # PARTIS_FRESH=1 : ignorer le cache en lecture (les reponses neuves le remplacent).
+        # Sert aux mises a jour (run_update.py) ; la copie locale reste utilisable hors ligne.
+        self.fresh = os.environ.get("PARTIS_FRESH") == "1"
 
     # -- cache ---------------------------------------------------------
     @staticmethod
@@ -99,7 +103,7 @@ class Client:
         p.setdefault("formatversion", "2")
         p.setdefault("maxlag", "5")
         k = self._key(api, p)
-        if use_cache:
+        if use_cache and not self.fresh:
             hit = self._get_cached(k)
             if hit is not None:
                 return hit
@@ -129,7 +133,7 @@ class Client:
     def sparql(self, query: str):
         params = {"query": query, "format": "json"}
         k = self._key(WD_SPARQL, params)
-        hit = self._get_cached(k)
+        hit = None if self.fresh else self._get_cached(k)
         if hit is not None:
             return hit
         url = WD_SPARQL + "?" + urllib.parse.urlencode(params)

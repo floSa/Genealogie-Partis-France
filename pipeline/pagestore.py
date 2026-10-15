@@ -116,15 +116,28 @@ class PageStore:
         t = self.resolve(title)
         return [r[0] for r in self.db.execute("SELECT cat FROM cats WHERE title=?", (t,))]
 
+    # -- mise a jour -----------------------------------------------------
+    def stored_revisions(self):
+        """{titre: (revid, portee)} des pages stockees."""
+        return {t: (r, sc) for t, r, sc in self.db.execute("SELECT title, revid, scope FROM pages")}
+
+    def forget_categories(self, titles):
+        for t in titles:
+            self.db.execute("DELETE FROM cats WHERE title=?", (t,))
+            self.db.execute("DELETE FROM cats_done WHERE title=?", (t,))
+        self.db.commit()
+
     # -- ecriture --------------------------------------------------------
-    def fetch(self, titles, scope="full", batch=20, progress=True):
-        """Telecharge les pages absentes. scope='lead' : section 0 seulement."""
+    def fetch(self, titles, scope="full", batch=20, progress=True, force=False):
+        """Telecharge les pages absentes. scope='lead' : section 0 seulement.
+        force=True : retelecharge meme les pages deja presentes, sans lire le cache (mise a jour)."""
         todo = []
         for t in titles:
-            if self.is_missing(t):
-                continue
-            if self.has(t, "full" if scope == "full" else None):
-                continue
+            if not force:
+                if self.is_missing(t):
+                    continue
+                if self.has(t, "full" if scope == "full" else None):
+                    continue
             todo.append(t)
         todo = list(dict.fromkeys(todo))
         done = 0
@@ -144,7 +157,7 @@ class PageStore:
             }
             if scope == "lead":
                 params["rvsection"] = "0"
-            obj = self.c.mw(params)
+            obj = self.c.mw(params, use_cache=not force)
             q = obj.get("query", {})
             for r in q.get("redirects", []):
                 self.db.execute("INSERT OR REPLACE INTO redirects VALUES (?,?)", (r["from"], r["to"]))
