@@ -60,6 +60,10 @@ def candidates(ps):
             add(t, "founder_infobox")
         for l in p["leaders_listed"]:
             add(l["target"], "leader_infobox")
+    lp = ROOT / "data" / "graph" / "leaders_raw.json"  # dirigeants lus dans les tableaux (s04d)
+    if lp.exists():
+        for x in json.loads(lp.read_text(encoding="utf-8")):
+            add(x["person"], "leader_table")
     wd = json.loads((RAW / "wd_people.json").read_text(encoding="utf-8"))
     for r in wd["roles"]:
         if r.get("frTitle"):
