@@ -115,6 +115,9 @@
       else if (o.st === "actif") o.t1 = NOW;
       else { o.t1 = o.t0 + 3; o.endUnknown = true; }
     } else o.t1 = null;
+    // intervalle pendant lequel l'organisation est comptée comme active (photographie à une date) :
+    // celui de la barre dessinée ; sans date de fin et toujours active, elle l'est jusqu'à aujourd'hui
+    o.a1 = o.t0 == null ? null : (o.st === "actif" && !o.e) ? Infinity : o.t1;
     const b = (() => {
       if (o.pv != null) return { x: o.pv, est: o.ps === "relations" };
       for (const f of o.fam) if (f in FAM_POS) return { x: FAM_POS[f], est: true };
@@ -158,6 +161,7 @@
   const state = {
     detail: 2, wing: "all", ppy: 22, y0: 1958, y1: 2027, fam: new Set(), kinds: new Set(KIND_DEFAULT_ON),
     per: false, rel: true, aff: false, pres: true, chains: true, sel: null, person: null,
+    date: null, // date de la photographie (ISO complète) ou null
   };
   let forced = new Set();
   let geom = new Map(); // id -> {x, w, y0, y1}
@@ -170,16 +174,23 @@
     if (o.px == null) return false;
     return o.px >= lo && o.px <= hi;
   }
+  // filtres de contenu (nature, famille, zone, étrangères), sans le niveau de détail
+  function passesFilters(o) {
+    if (o.t0 == null) return false;
+    if (!state.per && o.per) return false;
+    if (!state.kinds.has(o.k)) return false;
+    if (state.fam.size && !o.fam.some((f) => state.fam.has(f))) return false;
+    return inWing(o);
+  }
   function isVisible(o) {
     if (o.t0 == null || o.t1 < state.y0 || o.t0 > state.y1) return false;
     if (o.t1 < DOMAIN_START) return false;
     if (forced.has(o.id)) return true;
-    if (!state.per && o.per) return false;
-    if (!state.kinds.has(o.k)) return false;
     if (o.tier > state.detail) return false;
-    if (state.fam.size && !o.fam.some((f) => state.fam.has(f))) return false;
-    return inWing(o);
+    return passesFilters(o);
   }
+  // l'organisation existe-t-elle à l'instant t (année décimale) ?
+  const isActiveAt = (o, t) => o.t0 != null && o.t0 <= t && o.a1 >= t;
 
   // -------------------------------------------------------------------------- mise en page
   function computeLayout(vis, innerW, left) {
@@ -311,6 +322,9 @@
     const gPath = el("g", {}, svg);
 
     const hl = highlightSet();
+    const td = state.date ? yf(state.date) : null;
+    // estompée si hors de la sélection, ou inexistante à la date de la photographie
+    const dimmed = (o) => (hl && !hl.has(o.id)) || (td != null && !isActiveAt(o, td));
     const link = (x1, y1, x2, y2) => {
       const mx = (x1 + x2) / 2;
       return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
@@ -351,7 +365,7 @@
         "stroke-opacity": e.ty === "affiliation" ? 0.45 : 0.6,
         "stroke-dasharray": e.ty === "succession" ? "5 3" : e.ty === "affiliation" ? "1 3" : "",
       }, gEdges);
-      if (hl && !(hl.has(e.s) && hl.has(e.t))) path.setAttribute("class", "dim");
+      if ((hl && !(hl.has(e.s) && hl.has(e.t))) || (td != null && !(isActiveAt(a, td) && isActiveAt(b, td)))) path.setAttribute("class", "dim");
       nEdges++;
     }
 
@@ -360,7 +374,7 @@
     const sorted = [...vis].sort((a, b) => b.imp - a.imp);
     for (const o of vis) {
       const g = geom.get(o.id);
-      const bar = el("g", { class: "bar", tabindex: 0, role: "button", "data-id": o.id, "aria-label": `${o.n}, ${span(o.s, o.e, o.st === "actif")}` }, gBars);
+      const bar = el("g", { class: "bar", tabindex: 0, role: "button", "data-id": o.id, "aria-label": `${o.n}, ${span(o.s, o.e, o.st === "actif")}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}` }, gBars);
       const rect = el("rect", {
         class: "body", x: g.x, y: g.ya, width: g.w, height: g.yb - g.ya, rx: 3,
         fill: o.color, "fill-opacity": o.est ? 0.38 : 0.92,
@@ -370,7 +384,7 @@
       if (state.sel === o.id) {
         el("rect", { x: g.x - 3, y: g.ya - 3, width: g.w + 6, height: g.yb - g.ya + 6, rx: 5, fill: "none", stroke: "var(--focus)", "stroke-width": 2.5 }, bar);
       }
-      if (hl && !hl.has(o.id)) bar.setAttribute("class", "bar dim");
+      if (dimmed(o)) bar.setAttribute("class", "bar dim");
     }
     // étiquettes (placement glouton : les plus importants d'abord)
     for (const o of sorted) {
@@ -385,7 +399,7 @@
       labelBoxes.push(box);
       const t = el("text", { class: "lbl", x: bx, y: by, "font-weight": o.tier === 1 || forcedLabel ? 650 : 400, "font-size": fs }, gLbl);
       t.textContent = txt;
-      if (hl && !hl.has(o.id)) t.setAttribute("class", "lbl dim");
+      if (dimmed(o)) t.setAttribute("class", "lbl dim");
     }
     // repères de renommage sur les barres (FN -> RN, UMP -> LR...) : trait et nom, au zoom suffisant
     for (const o of vis) {
@@ -412,10 +426,22 @@
 
     // parcours d'une personne
     if (state.person) drawPersonPath(gPath, L);
+    // ligne de la photographie à une date, tracée par-dessus
+    if (td != null && td >= state.y0 && td <= state.y1) drawDateLine(gPath, L, W, RIGHT);
 
     cur = { L, W, H, count: vis.length, edges: nEdges };
     drawAxis(L, W, LEFT);
     updateCounts(vis.length);
+    updateSnapshot();
+  }
+
+  // ligne horizontale à la date choisie, avec la date écrite à droite
+  function drawDateLine(parent, L, W, RIGHT) {
+    const yy = L.Y(yf(state.date));
+    const g = el("g", { class: "dateline", "pointer-events": "none" }, parent);
+    el("line", { x1: 28, x2: W - RIGHT, y1: yy, y2: yy, stroke: "var(--accent)", "stroke-width": 2 }, g);
+    const t = el("text", { class: "lbl", x: W - RIGHT - 4, y: yy - 6, "text-anchor": "end", "font-size": 12, "font-weight": 650 }, g);
+    t.textContent = fmtDate(state.date);
   }
 
   function labelText(o) {
@@ -504,7 +530,16 @@
   const orgLink = (id, label) => `<button class="lnk" data-org="${esc(id)}">${esc(label ?? O.get(id)?.n ?? id)}</button>`;
   const perLink = (id, label) => `<button class="lnk" data-person="${esc(id)}">${esc(label ?? P.get(id)?.n ?? id)}</button>`;
 
+  // ce que montre le panneau : "defaut" (accueil ou photographie), ou une fiche
+  let panelMode = "defaut";
+  let snapHtml = ""; // dernier HTML de la photographie, pour ne pas reconstruire à l'identique
+  const zoneOpen = {}; // zones dépliées par l'utilisateur dans la photographie
+
   function showDefault() {
+    panelMode = "defaut";
+    if (state.date) { showSnapshot(); return; }
+    snapHtml = "";
+    delete panel.dataset.snap;
     const total = orgs.length, np = people.length;
     const m = D.meta || {};
     panel.innerHTML = `
@@ -519,6 +554,7 @@
         <p>Cliquez sur une barre pour voir un parti, ses scissions, fusions, ses fondateurs et dirigeants. Cliquez sur un nom de personne pour suivre son parcours à travers les partis.</p>
         <p>Choisissez une zone du spectre à gauche pour agrandir cette partie de l'axe et faire apparaître les petits mouvements.</p>
         <p>Ctrl + molette sur la frise pour changer l'échelle du temps.</p>
+        <p>Le champ « Voir à la date » trace une ligne sur la frise et liste les organisations qui existaient ce jour-là.</p>
       </section>
       <section><h3>Sources et limites</h3>
         <p class="src">Données extraites automatiquement de Wikipédia en français (texte sous licence CC BY-SA 4.0) et de Wikidata (CC0). Les positions gauche-droite sont celles que déclare Wikipédia, ou une estimation par famille politique, signalée par un contour en pointillés. Les dates sont souvent limitées à l'année.</p>
@@ -527,6 +563,7 @@
   }
 
   function showNoDate() {
+    panelMode = "autre"; delete panel.dataset.snap;
     const list = orgs.filter((o) => o.t0 == null).sort((a, b) => b.imp - a.imp);
     panel.innerHTML = `<h2>Sans date de fondation</h2><p class="meta">${list.length} organisations dont Wikipédia ne donne pas la date.</p>
       <ul class="rel">${list.map((o) => `<li>${orgLink(o.id)} <span class="d">${esc(KIND_SINGLE[o.k] || "")}</span></li>`).join("")}</ul>`;
@@ -538,6 +575,7 @@
   }
 
   function showOrg(o) {
+    panelMode = "autre"; delete panel.dataset.snap;
     const out = relOut.get(o.id) || [], inn = relIn.get(o.id) || [];
     const row = (id, txt, e) => `<li>${txt ? esc(txt) + " " : ""}${orgLink(id)}<span class="d">${e}</span></li>`;
     const dt = (e) => (e ? span(e.d || e.st, e.en, !e.en) : "");
@@ -592,6 +630,7 @@
   }
 
   function showPerson(p) {
+    panelMode = "autre"; delete panel.dataset.snap;
     const rows = [...(orgsByPers.get(p.id) || [])].filter((e) => O.get(e.o))
       .sort((a, b) => (a.s || O.get(a.o).s || "9999").localeCompare(b.s || O.get(b.o).s || "9999"));
     const life = p.b || p.d ? `${p.b ? fmtDate(p.b) : "?"} - ${p.d ? fmtDate(p.d) : ""}` : "";
@@ -606,6 +645,101 @@
       <p class="kicker">Le parcours est tracé en orange sur la frise ; les ronds creux indiquent une date inconnue.</p>
       <button class="more" id="clear-person">Quitter le parcours</button>`;
     $("#clear-person").onclick = () => selectNone();
+  }
+
+  // ------------------------------------------------------- photographie à une date
+  const ZONES = [
+    ["xg", "Extrême gauche"], ["g", "Gauche"], ["c", "Centre"], ["d", "Droite"], ["xd", "Extrême droite"], ["np", "Non positionné"],
+  ];
+  // zone du spectre d'une organisation (mêmes bornes que le zoom par zone)
+  function zoneOf(o) {
+    const v = o.px;
+    if (v == null) return "np";
+    if (v < -2.35) return "xg";
+    if (v < -0.65) return "g";
+    if (v <= 0.65) return "c";
+    if (v < 2.35) return "d";
+    return "xd";
+  }
+  // organisations actives à la date choisie, groupées par zone. On respecte les filtres de contenu
+  // (nature, famille, zone, étrangères) mais pas le niveau de détail : `hidden` compte celles qui
+  // existent mais ne sont pas dessinées à ce niveau.
+  function snapshot() {
+    const t = yf(state.date);
+    const groups = new Map(ZONES.map(([k]) => [k, []]));
+    let total = 0, hidden = 0;
+    for (const o of orgs) {
+      if (!passesFilters(o) || !isActiveAt(o, t)) continue;
+      groups.get(zoneOf(o)).push(o);
+      total++;
+      if (o.tier > state.detail) hidden++;
+    }
+    for (const l of groups.values()) l.sort((a, b) => b.imp - a.imp);
+    return { t, groups, total, hidden };
+  }
+  const plural = (n, un, plus) => `${n} ${n > 1 ? plus : un}`;
+
+  function showSnapshot() {
+    const sn = snapshot();
+    const when = fmtDate(state.date);
+    const zonesHtml = ZONES.map(([k, name]) => {
+      const list = sn.groups.get(k);
+      if (!list.length) return "";
+      const open = zoneOpen[k] ?? list.length <= 15;
+      const rows = list.map((o) => `<li>${orgLink(o.id)}<span class="d">${esc(KIND_SINGLE[o.k] || "")}, ${esc(span(o.s, o.e, o.st === "actif"))}${o.endUnknown ? " (fin inconnue)" : ""}${o.tier > state.detail ? ", non dessinée" : ""}</span></li>`);
+      return `<details data-zone="${k}"${open ? " open" : ""}><summary>${esc(name)} (${list.length})</summary><ul class="rel">${rows.join("")}</ul></details>`;
+    }).join("");
+    snapHtml = `
+      <h2>Photographie au ${esc(when)}</h2>
+      <p class="meta">${plural(sn.total, "organisation active", "organisations actives")} à cette date, d'après les dates de fondation et de fin de chaque fiche.</p>
+      <div class="stats zones">${ZONES.map(([k, name]) => `<div><b>${sn.groups.get(k).length}</b><span>${esc(name)}</span></div>`).join("")}</div>
+      ${sn.hidden ? `<p class="hint">${plural(sn.hidden, "organisation n'est pas dessinée", "organisations ne sont pas dessinées")} au niveau de détail actuel. <button class="lnk" data-act="all-levels">Afficher tous les niveaux</button></p>` : ""}
+      <section><h3>Organisations actives</h3>${zonesHtml || "<p>Aucune organisation ne correspond aux filtres actuels à cette date.</p>"}</section>
+      <p class="src">Une organisation dont la fin est inconnue est comptée sur la durée tracée (trois ans). Les dates données à l'année près sont comptées au 1er janvier.</p>
+      <button class="more" data-act="clear-date">Retirer la date</button>`;
+    if (panel.dataset.snap !== snapHtml) { panel.innerHTML = snapHtml; panel.dataset.snap = snapHtml; }
+  }
+  // mise à jour après chaque dessin : texte du bloc « Voir à la date » et, si le panneau montre la
+  // photographie, sa liste
+  function updateSnapshot() {
+    const out = $("#date-out"), see = $("#date-see");
+    if (!state.date) {
+      out.textContent = "Aucune date choisie.";
+      see.hidden = true;
+      return;
+    }
+    const sn = snapshot();
+    out.textContent = `${fmtDate(state.date)} : ${plural(sn.total, "organisation active", "organisations actives")}.`;
+    see.hidden = false;
+    if (panelMode === "defaut" && !state.sel && !state.person) showSnapshot();
+  }
+
+  const DATE_MIN = "1958-01-01", DATE_MAX = "2026-12-31";
+  const monthIso = (i) => `${1958 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, "0")}-01`;
+  const isoMonth = (iso) => (+iso.slice(0, 4) - 1958) * 12 + (+iso.slice(5, 7) - 1);
+  const validIso = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v || "") && !Number.isNaN(Date.parse(v));
+  const clampDate = (v) => (v < DATE_MIN ? DATE_MIN : v > DATE_MAX ? DATE_MAX : v);
+
+  // fixe (ou retire, avec null) la date de la photographie
+  function setDate(iso, { scroll = true } = {}) {
+    state.date = iso && validIso(iso) ? clampDate(iso) : null;
+    const range = $("#date-range");
+    $("#date").value = state.date || "";
+    if (state.date) {
+      range.value = isoMonth(state.date);
+      range.setAttribute("aria-valuetext", fmtDate(state.date));
+    }
+    range.classList.toggle("off", !state.date);
+    $("#date-clear").hidden = !state.date;
+    if (panelMode === "defaut" && !state.sel && !state.person) showDefault();
+    render();
+    if (state.date && scroll) scrollToDate();
+  }
+  function scrollToDate() {
+    if (!state.date || !cur) return;
+    const yy = cur.L.Y(yf(state.date));
+    const sc = $("#scroller");
+    sc.scrollTop = Math.max(0, yy - sc.clientHeight / 2);
   }
 
   // ------------------------------------------------------------------- interactions
@@ -658,9 +792,20 @@
   panel.addEventListener("click", (ev) => {
     const o = ev.target.closest("[data-org]");
     const p = ev.target.closest("[data-person]");
+    const a = ev.target.closest("[data-act]");
     if (o) selectOrg(o.dataset.org);
     else if (p) selectPerson(p.dataset.person);
+    else if (a) panelAction(a.dataset.act);
   });
+  // mémorise les zones dépliées dans la photographie (l'événement toggle ne remonte pas : capture)
+  panel.addEventListener("toggle", (ev) => {
+    const d = ev.target;
+    if (d.dataset && d.dataset.zone) zoneOpen[d.dataset.zone] = d.open;
+  }, true);
+  function panelAction(act) {
+    if (act === "clear-date") setDate(null);
+    else if (act === "all-levels") { state.detail = 3; $("#detail").value = 3; render(); }
+  }
 
   const tip = $("#tooltip");
   $("#chart").addEventListener("mousemove", (ev) => {
@@ -718,6 +863,12 @@
   $("#rel").addEventListener("change", (ev) => { state.rel = ev.target.checked; render(); });
   $("#aff").addEventListener("change", (ev) => { state.aff = ev.target.checked; render(); });
   $("#chains").addEventListener("change", (ev) => { state.chains = ev.target.checked; render(); });
+
+  // photographie à une date
+  $("#date-range").addEventListener("input", (ev) => setDate(monthIso(+ev.target.value)));
+  $("#date").addEventListener("change", (ev) => setDate(ev.target.value || null));
+  $("#date-clear").onclick = () => setDate(null);
+  $("#date-see").onclick = () => selectNone();
 
   // familles et natures
   const famBox = $("#families");

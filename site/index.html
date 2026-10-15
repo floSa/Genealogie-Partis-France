@@ -33,6 +33,19 @@
       <p class="hint">Choisir une zone agrandit cette partie de l'axe et affiche tous les mouvements, y compris les plus petits.</p>
     </section>
 
+    <section id="sec-date">
+      <h2>Voir à la date</h2>
+      <p class="date-out" id="date-out">Aucune date choisie.</p>
+      <input id="date-range" class="off" type="range" min="0" max="827" step="1" value="0" aria-label="Date de la photographie, au mois près, de janvier 1958 à décembre 2026">
+      <div class="detail-labels"><span>1958</span><span>2026</span></div>
+      <div class="row dates">
+        <label>Date <input id="date" type="date" min="1958-01-01" max="2026-12-31"></label>
+        <button id="date-clear" type="button" hidden>Retirer la date</button>
+      </div>
+      <button id="date-see" class="lnk-btn" type="button" hidden>Voir la liste dans le panneau</button>
+      <p class="hint">Trace une ligne sur la frise : les organisations qui existaient ce jour-là restent en couleur, les autres s'estompent.</p>
+    </section>
+
     <section>
       <h2>Niveau de détail</h2>
       <input id="detail" type="range" min="1" max="3" step="1" value="2" aria-label="Niveau de détail">
