@@ -625,9 +625,11 @@
       <section><h3>Personnes rattachées (${memberRows.length})</h3>
         <ul class="rel" id="members">${memberRows.slice(0, 12).join("")}</ul>
         ${memberRows.length > 12 ? `<button class="more" id="more-members">Afficher les ${memberRows.length - 12} autres</button>` : ""}
-      </section>`;
+      </section>
+      ${fixSection(o)}`;
     const more = $("#more-members");
     if (more) more.onclick = () => { $("#members").innerHTML = memberRows.join(""); more.remove(); };
+    wireFix(o);
   }
 
   function showPerson(p) {
@@ -924,6 +926,98 @@
     announce(`${plural(nOrgs, "organisation exportée", "organisations exportées")}${person ? ", avec le parcours de " + person.n : ""}.`);
   }
   $("#export-csv").addEventListener("click", downloadCsv);
+
+  // ----------------------------------------------------------- proposer une correction
+  // Formulaire qui prépare l'entrée à coller dans data/overrides.json. La clé est le titre de la page
+  // Wikipédia (champ `t`). Les valeurs actuelles sont pré-remplies ; rien n'est envoyé nulle part.
+  const ISO_PARTIAL = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+  function fixSection(o) {
+    const v = (x) => esc(x ?? "");
+    return `<section class="fix"><h3>Corriger cette fiche</h3>
+      <button class="more" id="fix-open" type="button" aria-expanded="false" aria-controls="fix-box">Proposer une correction</button>
+      <div id="fix-box" hidden>
+        <p class="hint">Modifiez les valeurs, puis copiez l'entrée JSON et collez-la dans <code>data/overrides.json</code>
+          (en la fusionnant avec les clés existantes). Relancez ensuite <code>python pipeline/run_all.py 7 8 9</code>.</p>
+        <div class="fix-grid">
+          <label for="fx-start">Début</label>
+          <input id="fx-start" type="text" value="${v(o.s)}" placeholder="AAAA, AAAA-MM ou AAAA-MM-JJ" autocomplete="off">
+          <label for="fx-end">Fin <span class="d">(vide si toujours actif)</span></label>
+          <input id="fx-end" type="text" value="${v(o.e)}" placeholder="AAAA, AAAA-MM ou AAAA-MM-JJ" autocomplete="off">
+          <label for="fx-pos">Position <span class="d">(-3 extrême gauche à 3 extrême droite)</span></label>
+          <input id="fx-pos" type="number" min="-3" max="3" step="0.5" value="${o.pv == null ? "" : o.pv}">
+          <label for="fx-tier">Niveau de zoom</label>
+          <select id="fx-tier">${[1, 2, 3].map((n) => `<option value="${n}"${o.tier === n ? " selected" : ""}>${n} - ${["grands partis", "principaux", "détail"][n - 1]}</option>`).join("")}</select>
+        </div>
+        <label class="check"><input id="fx-per" type="checkbox"${o.per ? " checked" : ""}> Organisation périphérique (masquée par défaut)</label>
+        <fieldset class="fix-act"><legend>Page Wikipédia « ${esc(o.t)} »</legend>
+          <label class="check"><input type="radio" name="fx-act" value="none" checked> Garder dans le graphe</label>
+          <label class="check"><input type="radio" name="fx-act" value="exclude"> Demander l'exclusion de la page</label>
+          <label class="check"><input type="radio" name="fx-act" value="include"> Demander l'inclusion forcée de la page</label>
+        </fieldset>
+        <label class="check"><input id="fx-only" type="checkbox"> Ne garder que les champs modifiés</label>
+        <p class="fix-err" id="fx-err" role="alert"></p>
+        <label for="fx-out" class="fix-lbl">Entrée à coller</label>
+        <textarea id="fx-out" readonly rows="11" spellcheck="false"></textarea>
+        <button class="more" id="fx-copy" type="button">Copier l'entrée JSON</button>
+      </div></section>`;
+  }
+
+  // construit l'objet à coller et la liste des erreurs de saisie
+  function buildFix(o) {
+    const err = [];
+    const dateField = (id, label) => {
+      const raw = $(id).value.trim();
+      const bad = raw !== "" && !ISO_PARTIAL.test(raw);
+      $(id).setAttribute("aria-invalid", bad ? "true" : "false");
+      if (bad) err.push(`${label} : format attendu AAAA, AAAA-MM ou AAAA-MM-JJ.`);
+      return raw;
+    };
+    const posRaw = $("#fx-pos").value.trim();
+    const pos = posRaw === "" ? null : Number(posRaw);
+    const posBad = pos != null && (!Number.isFinite(pos) || pos < -3 || pos > 3);
+    $("#fx-pos").setAttribute("aria-invalid", posBad ? "true" : "false");
+    if (posBad) err.push("Position : un nombre entre -3 et 3 est attendu.");
+    const now = {
+      start: dateField("#fx-start", "Début"), end: dateField("#fx-end", "Fin"),
+      position_value: pos, tier: Number($("#fx-tier").value), peripheral: $("#fx-per").checked,
+    };
+    const was = { start: o.s || "", end: o.e || "", position_value: o.pv ?? null, tier: o.tier, peripheral: !!o.per };
+    const only = $("#fx-only").checked;
+    const entry = {};
+    for (const k of Object.keys(now)) if (!only || now[k] !== was[k]) entry[k] = now[k];
+    const act = (document.querySelector('input[name="fx-act"]:checked') || {}).value;
+    const out = {};
+    if (act === "exclude") out.exclude = [o.t];
+    if (act === "include") out.include = [o.t];
+    if (act !== "exclude" && (Object.keys(entry).length || !only)) out.org = { [o.t]: entry };
+    return { json: JSON.stringify(out, null, 2), err };
+  }
+
+  function wireFix(o) {
+    const btn = $("#fix-open"), box = $("#fix-box");
+    if (!btn) return;
+    const refresh = () => {
+      const { json, err } = buildFix(o);
+      $("#fx-out").value = json;
+      $("#fx-err").textContent = err.join(" ");
+    };
+    btn.onclick = () => {
+      const open = box.hidden;
+      box.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) { refresh(); $("#fx-start").focus(); }
+    };
+    box.addEventListener("input", refresh);
+    box.addEventListener("change", refresh);
+    $("#fx-copy").onclick = async () => {
+      refresh();
+      const out = $("#fx-out");
+      const ok = await copyText(out.value);
+      if (!ok) out.select();
+      announce(ok ? "Entrée JSON copiée." : "Sélectionnée : copiez avec Ctrl + C.");
+    };
+  }
 
   // ------------------------------------------------------------------- interactions
   function neighborsForced(id) {

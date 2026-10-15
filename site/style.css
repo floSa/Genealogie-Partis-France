@@ -8,6 +8,7 @@
   --accent: #1f4e8c;
   --accent-soft: #dce8f7;
   --focus: #b4690e;
+  --danger: #b3261e;
   --band-a: rgba(0, 0, 0, 0.025);
   --band-b: rgba(0, 0, 0, 0);
   --grid: rgba(0, 0, 0, 0.07);
@@ -26,6 +27,7 @@
     --accent: #7fb0ee;
     --accent-soft: #263a55;
     --focus: #f0b25a;
+    --danger: #ff8a80;
     --band-a: rgba(255, 255, 255, 0.035);
     --band-b: rgba(255, 255, 255, 0);
     --grid: rgba(255, 255, 255, 0.08);
@@ -180,4 +182,20 @@ svg text { font-family: inherit; }
   .stage { height: 80vh; }
   .top { flex-direction: column; align-items: stretch; gap: 8px; }
   .search { width: 100%; }
+}
+
+/* Proposer une correction */
+.panel code { font-size: 12px; background: var(--bg); border-radius: 4px; padding: 0 4px; }
+.fix-grid { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 8px 0; }
+.fix-grid label, .fix-lbl { font-size: 12.5px; margin-top: 6px; }
+.fix input[type="text"], .fix input[type="number"], .fix select {
+  width: 100%; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg);
+}
+.fix input[aria-invalid="true"] { border-color: var(--danger); outline: 1px solid var(--danger); }
+.fix fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; padding: 4px 10px 6px; }
+.fix legend { font-size: 12.5px; color: var(--muted); padding: 0 4px; }
+.fix-err { color: var(--danger); font-size: 12.5px; min-height: 1em; margin: 4px 0; }
+.fix textarea {
+  display: block; width: 100%; margin-top: 4px; padding: 8px; font: 12px/1.4 ui-monospace, Consolas, monospace;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); resize: vertical;
 }
