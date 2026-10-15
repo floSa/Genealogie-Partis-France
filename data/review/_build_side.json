@@ -1,0 +1,4700 @@
+{
+ "excluded": [
+  [
+   "10 rue de Solférino",
+   "pas_une_organisation"
+  ],
+  [
+   "110 propositions pour la France",
+   "pas_une_organisation"
+  ],
+  [
+   "17e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "21 Avril (expression politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "32e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "33 rue des Vignoles",
+   "pas_une_organisation"
+  ],
+  [
+   "33e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "34e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "35e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "36 Front populaire",
+   "pas_une_organisation"
+  ],
+  [
+   "36e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "37e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "38e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "39e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "40e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "41e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "42e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "48e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "50e congrès national de la SFIO",
+   "pas_une_organisation"
+  ],
+  [
+   "A.D. La guerre de l'ombre",
+   "pas_une_organisation"
+  ],
+  [
+   "Accord de Nouméa",
+   "pas_une_organisation"
+  ],
+  [
+   "Accords de Matignon (1936)",
+   "pas_une_organisation"
+  ],
+  [
+   "Accords de Matignon (1988)",
+   "pas_une_organisation"
+  ],
+  [
+   "Achille Braquelaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Acte II de la décentralisation",
+   "pas_une_organisation"
+  ],
+  [
+   "Adam Rayski",
+   "pas_une_organisation"
+  ],
+  [
+   "Adrien Gouteyron",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Clément Méric",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Cremet",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Faisán",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Fantômas",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Gaymard",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Habache",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Henri Martin",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Ibrahim Ali",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Jeanne",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Maurice Ridard",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Pronnier",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Prot",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Rey-Maupin",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Roland Bertrand-Marcel Cohene",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Schnæbelé",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Servin-Casanova",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Urba",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire Victor Roussel",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire de Plévin",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire de Tarnac",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire de la Sempap",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire des HLM de Paris",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire des assistants parlementaires du Front national au Parlement européen",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire des comptes de campagne de Jean-Luc Mélenchon en 2017",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire des faux électeurs du 3e arrondissement de Paris",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire des ventes d'armes à l'Angola",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire du 8 décembre 2020",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire du casino d'Annemasse",
+   "pas_une_organisation"
+  ],
+  [
+   "Affaire du « détail »",
+   "pas_une_organisation"
+  ],
+  [
+   "Affiche rouge (groupe armé)",
+   "pas_une_organisation"
+  ],
+  [
+   "Afrique-Équatoriale française",
+   "pas_une_organisation"
+  ],
+  [
+   "Agence européenne de garde-frontières et de garde-côtes",
+   "pas_une_organisation"
+  ],
+  [
+   "Aide médicale d'État",
+   "pas_une_organisation"
+  ],
+  [
+   "Aitor Esteban",
+   "pas_une_organisation"
+  ],
+  [
+   "Alain Anziani",
+   "pas_une_organisation"
+  ],
+  [
+   "Alain Fauré",
+   "pas_une_organisation"
+  ],
+  [
+   "Alain Lipietz",
+   "pas_une_organisation"
+  ],
+  [
+   "Alain Rousset",
+   "pas_une_organisation"
+  ],
+  [
+   "Alain Savary",
+   "pas_une_organisation"
+  ],
+  [
+   "Alan Heusaff",
+   "pas_une_organisation"
+  ],
+  [
+   "Albert Bedouce",
+   "pas_une_organisation"
+  ],
+  [
+   "Alberto Núñez Feijóo",
+   "pas_une_organisation"
+  ],
+  [
+   "Alcide Ponga",
+   "pas_une_organisation"
+  ],
+  [
+   "Alexis de Tocqueville",
+   "pas_une_organisation"
+  ],
+  [
+   "Alfred Marie-Jeanne",
+   "pas_une_organisation"
+  ],
+  [
+   "Alfred Rosenberg",
+   "pas_une_organisation"
+  ],
+  [
+   "Alfred Rosmer",
+   "pas_une_organisation"
+  ],
+  [
+   "Alice Sportisse Gomez-Nadal",
+   "pas_une_organisation"
+  ],
+  [
+   "Alliance de la gauche européenne pour les peuples et la planète",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Alliance libre européenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Alliance pour la paix et la liberté",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Alliance progressiste des socialistes et démocrates au Parlement européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Alliance radicale européenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Amadou Lamine-Guèye",
+   "pas_une_organisation"
+  ],
+  [
+   "Amaiur (coalition politique)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Ambroise Croizat",
+   "pas_une_organisation"
+  ],
+  [
+   "Andoni Ortuzar",
+   "pas_une_organisation"
+  ],
+  [
+   "André Billardon",
+   "pas_une_organisation"
+  ],
+  [
+   "André Marty",
+   "pas_une_organisation"
+  ],
+  [
+   "André Rougé",
+   "pas_une_organisation"
+  ],
+  [
+   "André Vallini",
+   "pas_une_organisation"
+  ],
+  [
+   "Angelo Tasca",
+   "pas_une_organisation"
+  ],
+  [
+   "Anne Ferreira",
+   "pas_une_organisation"
+  ],
+  [
+   "Anne-Marie Escoffier",
+   "pas_une_organisation"
+  ],
+  [
+   "Anne-Sophie Pelletier",
+   "pas_une_organisation"
+  ],
+  [
+   "Annette Peulvast-Bergeal",
+   "pas_une_organisation"
+  ],
+  [
+   "Anti-indépendantisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Antoine Martinez (militaire)",
+   "pas_une_organisation"
+  ],
+  [
+   "Antoine Waechter",
+   "pas_une_organisation"
+  ],
+  [
+   "Antoinette Fouque",
+   "pas_une_organisation"
+  ],
+  [
+   "Anton Drexler",
+   "pas_une_organisation"
+  ],
+  [
+   "Apparentement",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Appel du 10 juillet 1940",
+   "pas_une_organisation"
+  ],
+  [
+   "Aralar (parti politique)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Arc républicain",
+   "pas_une_organisation"
+  ],
+  [
+   "Armonia Bordes",
+   "pas_une_organisation"
+  ],
+  [
+   "Arnaud Robinet",
+   "pas_une_organisation"
+  ],
+  [
+   "Askatasuna",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Assemblée consultative provisoire",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée de Corse",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée de Madrid",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée de la République (Portugal)",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée nationale (Bénin)",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée nationale (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Assemblée parlementaire de l'OTAN",
+   "pas_une_organisation"
+  ],
+  [
+   "Association continentale américaine des travailleurs",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Association internationale des travailleurs (anarcho-syndicaliste)",
+   "pas_une_organisation"
+  ],
+  [
+   "Association libre des syndicats allemands",
+   "pas_une_organisation"
+  ],
+  [
+   "Attentat du château de Versailles",
+   "pas_une_organisation"
+  ],
+  [
+   "Auguste Lecœur",
+   "pas_une_organisation"
+  ],
+  [
+   "Augustin Azango",
+   "pas_une_organisation"
+  ],
+  [
+   "Aurore Martin",
+   "pas_une_organisation"
+  ],
+  [
+   "Autogestion",
+   "pas_une_organisation"
+  ],
+  [
+   "Axelle Lemaire",
+   "pas_une_organisation"
+  ],
+  [
+   "B17 Nantes",
+   "pas_une_organisation"
+  ],
+  [
+   "Bakartxo Tejeria",
+   "pas_une_organisation"
+  ],
+  [
+   "Barbara Romagnan",
+   "pas_une_organisation"
+  ],
+  [
+   "Benoît Frachon",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernadette Bourzai",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernadette Vergnaud",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernard Guetta",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernard Gérard (homme politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernard Madrelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Bernard Thibault",
+   "pas_une_organisation"
+  ],
+  [
+   "Bertrand Renouvin",
+   "pas_une_organisation"
+  ],
+  [
+   "Bildu",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Blanquisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Bloc de gauche",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Bloc démocratique sénégalais",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Bloc populaire africain",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Bloc populaire sénégalais",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Bolcheviks",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Boris Taslitzky",
+   "pas_une_organisation"
+  ],
+  [
+   "Boulangisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Brexit",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Brigade anti-sardinards",
+   "pas_une_organisation"
+  ],
+  [
+   "Brigitte Douay",
+   "pas_une_organisation"
+  ],
+  [
+   "British Union of Fascists",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Bruno Mégret",
+   "pas_une_organisation"
+  ],
+  [
+   "Bundestag",
+   "pas_une_organisation"
+  ],
+  [
+   "Bärbel Bas",
+   "pas_une_organisation"
+  ],
+  [
+   "CNT-FTE",
+   "pas_une_organisation"
+  ],
+  [
+   "Camille de Rocca Serra (homme politique, 1954)",
+   "pas_une_organisation"
+  ],
+  [
+   "Carbonarisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Carlos Garaikoetxea",
+   "pas_une_organisation"
+  ],
+  [
+   "Carlos Iturgaiz",
+   "pas_une_organisation"
+  ],
+  [
+   "Carlos Martens Bilongo",
+   "pas_une_organisation"
+  ],
+  [
+   "Catherine Boursier",
+   "pas_une_organisation"
+  ],
+  [
+   "Catherine Guy-Quint",
+   "pas_une_organisation"
+  ],
+  [
+   "Catherine Morin-Desailly",
+   "pas_une_organisation"
+  ],
+  [
+   "Catherine Quéré",
+   "pas_une_organisation"
+  ],
+  [
+   "Catholicisme social",
+   "pas_une_organisation"
+  ],
+  [
+   "Ce soir",
+   "pas_une_organisation"
+  ],
+  [
+   "Centrisme politique en France",
+   "pas_une_organisation"
+  ],
+  [
+   "Chantal Cauquil",
+   "pas_une_organisation"
+  ],
+  [
+   "Charles Josselin",
+   "pas_une_organisation"
+  ],
+  [
+   "Charles Longuet",
+   "pas_une_organisation"
+  ],
+  [
+   "Charles Tillon",
+   "pas_une_organisation"
+  ],
+  [
+   "Charles Trochu",
+   "pas_une_organisation"
+  ],
+  [
+   "Charles Vallin",
+   "pas_une_organisation"
+  ],
+  [
+   "Christian Picquet",
+   "pas_une_organisation"
+  ],
+  [
+   "Christian Sautter",
+   "pas_une_organisation"
+  ],
+  [
+   "Christian Vanneste",
+   "pas_une_organisation"
+  ],
+  [
+   "Christiane Scrivener",
+   "pas_une_organisation"
+  ],
+  [
+   "Christine Poupin",
+   "pas_une_organisation"
+  ],
+  [
+   "Christophe Clergeau",
+   "pas_une_organisation"
+  ],
+  [
+   "Circonscription électorale du Guipuscoa",
+   "pas_une_organisation"
+  ],
+  [
+   "Clarté (journal)",
+   "pas_une_organisation"
+  ],
+  [
+   "Claude Bartolone",
+   "pas_une_organisation"
+  ],
+  [
+   "Claude Cheysson",
+   "pas_une_organisation"
+  ],
+  [
+   "Claude Gruffat",
+   "pas_une_organisation"
+  ],
+  [
+   "Club de Clichy",
+   "pas_une_organisation"
+  ],
+  [
+   "Coalition des gauches",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Comité européen des régions",
+   "pas_une_organisation"
+  ],
+  [
+   "Comité national des écrivains",
+   "pas_une_organisation"
+  ],
+  [
+   "Comité révolutionnaire d'unité et d'action",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Commissaire européen",
+   "pas_une_organisation"
+  ],
+  [
+   "Commissaire européen à l'Économie et à la Productivité",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission Prodi",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission de la Défense nationale et des Forces armées",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission des Affaires culturelles et de l'Éducation",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission des Affaires européennes (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission des Affaires sociales (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission des Affaires économiques (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission des Affaires étrangères (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission du commerce international",
+   "pas_une_organisation"
+  ],
+  [
+   "Commission nationale des comptes de campagne et des financements politiques",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Grand Lac",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Pau Béarn Pyrénées",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Rodez Agglomération",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Seine-Essonne",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Val d'Yerres Val de Seine",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération Versailles Grand Parc",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération du Plateau de Saclay",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération du Saint-Quentinois",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté d'agglomération du Val d'Yerres",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté de communes Alpes d'Azur",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté de communes Côtes de Champagne et Saulx",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté de communes du Grand Châteaudun",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté de communes du Pays Sabolien",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté de communes du canton de Saint-Simon",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté européenne du charbon et de l'acier",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté urbaine Grand Paris Seine et Oise",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté urbaine d'Arras",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté urbaine de Lyon",
+   "pas_une_organisation"
+  ],
+  [
+   "Communauté économique européenne",
+   "pas_une_organisation"
+  ],
+  [
+   "Communisme municipal",
+   "pas_une_organisation"
+  ],
+  [
+   "Compagnonnage anarchiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération des syndicats professionnels français",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération nationale des travailleurs-Solidarité ouvrière",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération nationale du travail (Espagne)",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération nationale du travail (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération nationale du travail - Association internationale des travailleurs",
+   "pas_une_organisation"
+  ],
+  [
+   "Confédération révolutionnaire des anarcho-syndicalistes",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès d'Alfortville",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès d'Aubervilliers",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Bourg-en-Bresse",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Brest",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Créteil",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Dijon",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Grenoble (PS, 1973)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Grenoble (PS, 2000)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Lille (PS)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Limeil-Brévannes",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Liévin",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Marseille (2023)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Nancy",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Nantes",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Pau",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Poitiers",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Reims",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Rennes",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Toulouse (1985)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Toulouse (2012)",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Tours",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Valence",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de Villeurbanne",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès de l'Arche",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès des Républicains de 2021",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès des Républicains de 2025",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès des députés",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès du Bourget",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès du Mans",
+   "pas_une_organisation"
+  ],
+  [
+   "Congrès socialiste (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil de Paris",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil de la métropole de Lyon",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil départemental de Seine-et-Marne",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil départemental de l'Aveyron",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil départemental des Alpes-de-Haute-Provence",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil départemental des Vosges",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional d'Aquitaine",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional d'Auvergne",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional d'Auvergne-Rhône-Alpes",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional d'Île-de-France",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Basse-Normandie",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Bourgogne",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Bourgogne-Franche-Comté",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Bretagne",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Champagne-Ardenne",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Franche-Comté",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Haute-Normandie",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Midi-Pyrénées",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Normandie",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Nouvelle-Aquitaine",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Picardie",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Provence-Alpes-Côte d'Azur",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de Rhône-Alpes",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional de la Guadeloupe",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional des Hauts-de-France",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional des Pays de la Loire",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional du Centre-Val de Loire",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional du Grand Est",
+   "pas_une_organisation"
+  ],
+  [
+   "Conseil régional du Limousin",
+   "pas_une_organisation"
+  ],
+  [
+   "Conservateurs et réformistes européens",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Consultation interne au Parti communiste français pour l'élection présidentielle de 2012",
+   "pas_une_organisation"
+  ],
+  [
+   "Consultation interne au Parti communiste français pour l'élection présidentielle de 2017",
+   "pas_une_organisation"
+  ],
+  [
+   "Controverse autour d'un soutien de François Mitterrand au Front national",
+   "pas_une_organisation"
+  ],
+  [
+   "Convention du Morne-Rouge",
+   "pas_une_organisation"
+  ],
+  [
+   "Convergence démocratique de Catalogne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Convergence et Union",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Coopérative centrale du personnel des mines",
+   "pas_une_organisation"
+  ],
+  [
+   "Courants politiques sous la monarchie de Juillet",
+   "pas_une_organisation"
+  ],
+  [
+   "Crise de 2024 au parti Les Républicains",
+   "pas_une_organisation"
+  ],
+  [
+   "Culte de la personnalité de Maurice Thorez",
+   "pas_une_organisation"
+  ],
+  [
+   "Cécile Duflot",
+   "pas_une_organisation"
+  ],
+  [
+   "Damien Alary",
+   "pas_une_organisation"
+  ],
+  [
+   "Daniel Bensaïd",
+   "pas_une_organisation"
+  ],
+  [
+   "Daniel Delaveau",
+   "pas_une_organisation"
+  ],
+  [
+   "Daniel Dubois (homme politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "Danielle Casanova",
+   "pas_une_organisation"
+  ],
+  [
+   "Danièle Hoffman-Rispal",
+   "pas_une_organisation"
+  ],
+  [
+   "Didier Leroux",
+   "pas_une_organisation"
+  ],
+  [
+   "Didouche Mourad",
+   "pas_une_organisation"
+  ],
+  [
+   "Divers droite",
+   "pas_une_organisation"
+  ],
+  [
+   "Divers gauche",
+   "pas_une_organisation"
+  ],
+  [
+   "Djamila Boupacha",
+   "pas_une_organisation"
+  ],
+  [
+   "Djibo Bakary",
+   "pas_une_organisation"
+  ],
+  [
+   "Dominique Vlasto",
+   "pas_une_organisation"
+  ],
+  [
+   "Dominique de Villepin",
+   "pas_une_organisation"
+  ],
+  [
+   "Droit d'inventaires",
+   "pas_une_organisation"
+  ],
+  [
+   "Décentralisation en France",
+   "pas_une_organisation"
+  ],
+  [
+   "Dédiabolisation du Front national",
+   "pas_une_organisation"
+  ],
+  [
+   "Défense des intérêts économiques",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Démocratie chrétienne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Démocratie nouvelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Démocratie socialiste de Guinée",
+   "pas_de_preuve_france"
+  ],
+  [
+   "E-Politic",
+   "pas_une_organisation"
+  ],
+  [
+   "ETA politico-militaire",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Edgar Longuet",
+   "pas_une_organisation"
+  ],
+  [
+   "Edmond Hervé",
+   "pas_une_organisation"
+  ],
+  [
+   "Eider Mendoza Larrañaga",
+   "pas_une_organisation"
+  ],
+  [
+   "Elkarrekin Podemos",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Emma Fourreau",
+   "pas_une_organisation"
+  ],
+  [
+   "Emma Rafowicz",
+   "pas_une_organisation"
+  ],
+  [
+   "Ericka Bareigts",
+   "pas_une_organisation"
+  ],
+  [
+   "Eugen Fried",
+   "pas_une_organisation"
+  ],
+  [
+   "Eugène Deloncle",
+   "pas_une_organisation"
+  ],
+  [
+   "Eugène Thomas",
+   "pas_une_organisation"
+  ],
+  [
+   "Euskal Herria Bildu",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Euzko Gaztedi Indarra",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Extrême droite",
+   "pas_une_organisation"
+  ],
+  [
+   "Extrême gauche",
+   "pas_une_organisation"
+  ],
+  [
+   "Extrême gauche (groupe parlementaire)",
+   "pas_une_organisation"
+  ],
+  [
+   "Ezker Batua-Berdeak",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Fabrice Leggeri",
+   "pas_une_organisation"
+  ],
+  [
+   "Ferdinand Buisson",
+   "pas_une_organisation"
+  ],
+  [
+   "Fernand David",
+   "pas_une_organisation"
+  ],
+  [
+   "Financement des partis politiques français",
+   "pas_une_organisation"
+  ],
+  [
+   "Forces unies de la jeunesse patriotique",
+   "pas_une_organisation"
+  ],
+  [
+   "Forza Nuova",
+   "pas_de_preuve_france"
+  ],
+  [
+   "France libre",
+   "pas_de_preuve_france"
+  ],
+  [
+   "France nouvelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Francis de Pressensé",
+   "pas_une_organisation"
+  ],
+  [
+   "François Asensi",
+   "pas_une_organisation"
+  ],
+  [
+   "François Brigneau",
+   "pas_une_organisation"
+  ],
+  [
+   "François Rebsamen",
+   "pas_une_organisation"
+  ],
+  [
+   "François de La Rocque",
+   "pas_une_organisation"
+  ],
+  [
+   "Fraternité et unité en politique",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Freie Arbeiter-Union",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Front des gauches de Catalogne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Front national européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Front populaire (Espagne)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Frédéric Nihous",
+   "pas_une_organisation"
+  ],
+  [
+   "Fédération des organisations syndicalistes révolutionnaires du Brésil",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Fédération des syndicats du personnel de la banque et de l'assurance CGT",
+   "pas_une_organisation"
+  ],
+  [
+   "Fédération des travailleurs cadres et techniciens des chemins de fer CGT",
+   "pas_une_organisation"
+  ],
+  [
+   "Fédération des élus du Constantinois",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Fédération ibérique des jeunesses libertaires",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Fédération internationale pour les droits humains",
+   "pas_une_organisation"
+  ],
+  [
+   "Fédération ouvrière régionale argentine",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Fédération ouvrière régionale uruguayenne",
+   "pas_une_organisation"
+  ],
+  [
+   "Fête de Lutte ouvrière",
+   "pas_une_organisation"
+  ],
+  [
+   "Fête de la rose de Frangy-en-Bresse",
+   "pas_une_organisation"
+  ],
+  [
+   "Fête des Bleu-blanc-rouge",
+   "pas_une_organisation"
+  ],
+  [
+   "Gauche : quelle majorité électorale pour 2012 ?",
+   "pas_une_organisation"
+  ],
+  [
+   "Gauche radicale",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Gauche républicaine de Catalogne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Gauche unitaire européenne (1994-1995)",
+   "pas_une_organisation"
+  ],
+  [
+   "Gaullisme de gauche",
+   "pas_une_organisation"
+  ],
+  [
+   "Georges Besse",
+   "pas_une_organisation"
+  ],
+  [
+   "Georges Boulanger",
+   "pas_une_organisation"
+  ],
+  [
+   "Georges Marchais",
+   "pas_une_organisation"
+  ],
+  [
+   "Georges Riché",
+   "pas_une_organisation"
+  ],
+  [
+   "Germaine Peyroles",
+   "pas_une_organisation"
+  ],
+  [
+   "Geroa Bai",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Gil Brial",
+   "pas_une_organisation"
+  ],
+  [
+   "Gilles Pennelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Gorka Urtaran",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Ayrault II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Barnier",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Bayrou",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Bidault II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Blum I",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Blum II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Bérégovoy",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Castex",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Cazeneuve",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Chautemps III",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Chautemps IV",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Cresson",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Fabius",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Fillon II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Fillon III",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Jospin",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Lecornu I",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Mauroy II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Mauroy III",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Raffarin II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Raffarin III",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Ribot V",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Rocard II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Valls I",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Valls II",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement Villepin",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement provisoire de 1848",
+   "pas_une_organisation"
+  ],
+  [
+   "Gouvernement provisoire de la République algérienne",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Droite républicaine",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Ensemble pour la République",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Front national – Rassemblement national",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Horizons et indépendants",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe La France insoumise",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Les Démocrates",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Libertés, indépendants, outre-mer et territoires",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Nouveau Centre",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Rassemblement national (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Rassemblement pour la République",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Rassemblement-Union pour un mouvement populaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe SPD au Bundestag",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe UDI et indépendants",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Groupe Union pour la démocratie française",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe basque au Congrès des députés",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe basque au Sénat (Espagne)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe communiste (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe communiste (Sénat)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe communiste et apparentés",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Groupe confédéral d'Unidas Podemos-En Comú Podem-Galicia en común au Congrès des députés",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe de la Gauche au Parlement européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Groupe des Verts au Parlement européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Groupe des Verts/Alliance libre européenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Groupe des républicains indépendants (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe du Parti populaire européen",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe musulman algérien",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe parlementaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe parlementaire du Parti social français",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe plurinational Sumar au Congrès des députés",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe radical, citoyen et vert",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe radical, républicain, démocrate et progressiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe socialiste (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe Écologie démocratie solidarité",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupe écologiste (Assemblée nationale)",
+   "pas_une_organisation"
+  ],
+  [
+   "Groupement ethnique du Nord",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Gudari Eguna",
+   "pas_une_organisation"
+  ],
+  [
+   "Guillaume Kasbarian",
+   "pas_une_organisation"
+  ],
+  [
+   "Guillaume Peltier",
+   "pas_une_organisation"
+  ],
+  [
+   "Guingamp",
+   "pas_une_organisation"
+  ],
+  [
+   "Gwendoline Delbos-Corfield",
+   "pas_une_organisation"
+  ],
+  [
+   "Gwenegan Bui",
+   "pas_une_organisation"
+  ],
+  [
+   "Généralité de Catalogne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Gérard d'Aboville",
+   "pas_une_organisation"
+  ],
+  [
+   "Hendrik Davi",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Alleg",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Krasucki",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Martin (historien)",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Martin (homme politique, 1927-2015)",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Peña-Ruiz",
+   "pas_une_organisation"
+  ],
+  [
+   "Henri Weber",
+   "pas_une_organisation"
+  ],
+  [
+   "Henry de Lesquen",
+   "pas_une_organisation"
+  ],
+  [
+   "Herri Batasuna",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Histoire de l'Union démocratique bretonne",
+   "pas_une_organisation"
+  ],
+  [
+   "Histoire du Mouvement jeunes communistes de France",
+   "pas_une_organisation"
+  ],
+  [
+   "Homosexualités et socialisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Hubert Védrine",
+   "pas_une_organisation"
+  ],
+  [
+   "Huguette Bouchardeau",
+   "pas_une_organisation"
+  ],
+  [
+   "Hélène Flautre",
+   "pas_une_organisation"
+  ],
+  [
+   "Imanol Pradales",
+   "pas_une_organisation"
+  ],
+  [
+   "Indulgents",
+   "pas_une_organisation"
+  ],
+  [
+   "Indymedia",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Institut de formation national",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Internationale communiste",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Internationale socialiste",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Ione Belarra",
+   "pas_une_organisation"
+  ],
+  [
+   "Ire législature de la Troisième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "Isabelle Thomas",
+   "pas_une_organisation"
+  ],
+  [
+   "Iñigo Urkullu",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacline Mouraud",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacobinisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacques Duclos",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacques Heuclin",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacques Lalié",
+   "pas_une_organisation"
+  ],
+  [
+   "Jacqui Drollet",
+   "pas_une_organisation"
+  ],
+  [
+   "Javier de Andrés",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean Boyer (homme politique, 1937-2025)",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean Catelas",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean Hennessy",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean Poperen",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Baptiste Bienvenu-Martin",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Christophe Bouissou",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-François Voguet",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Guy Talamoni",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Jacob Bicep",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Lin Lacapelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Louis Cottigny",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Luc Mélenchon",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Marie Alexandre",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Marie Cavada",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Marie Le Pen",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Paul Denanot",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Paul Dupré",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Philippe Nilor",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Balligand",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Bel",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Chevènement",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Djaïwé",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Grand",
+   "pas_une_organisation"
+  ],
+  [
+   "Jean-Pierre Plancade",
+   "pas_une_organisation"
+  ],
+  [
+   "Jesús María Leizaola",
+   "pas_une_organisation"
+  ],
+  [
+   "Jeunesses socialistes d'Euskadi",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Johanna Rolland",
+   "pas_une_organisation"
+  ],
+  [
+   "Jokin Bildarratz",
+   "pas_une_organisation"
+  ],
+  [
+   "Jordan Bardella",
+   "pas_une_organisation"
+  ],
+  [
+   "Joseba Agirretxea",
+   "pas_une_organisation"
+  ],
+  [
+   "Joseph Daul",
+   "pas_une_organisation"
+  ],
+  [
+   "José Antonio Ardanza",
+   "pas_une_organisation"
+  ],
+  [
+   "José Ramón Beloki",
+   "pas_une_organisation"
+  ],
+  [
+   "Joël Bruneau",
+   "pas_une_organisation"
+  ],
+  [
+   "Juan Carlos Monedero",
+   "pas_une_organisation"
+  ],
+  [
+   "Juan José Ibarretxe",
+   "pas_une_organisation"
+  ],
+  [
+   "Juan María Aburto",
+   "pas_une_organisation"
+  ],
+  [
+   "Jules Guesde",
+   "pas_une_organisation"
+  ],
+  [
+   "Julie Rechagneux",
+   "pas_une_organisation"
+  ],
+  [
+   "Julien Dray",
+   "pas_une_organisation"
+  ],
+  [
+   "Juliette de Causans",
+   "pas_une_organisation"
+  ],
+  [
+   "Kan bale an ARB",
+   "pas_une_organisation"
+  ],
+  [
+   "Krim Belkacem",
+   "pas_une_organisation"
+  ],
+  [
+   "L'Europe des nations souveraines",
+   "pas_de_preuve_france"
+  ],
+  [
+   "L'Unité",
+   "pas_une_organisation"
+  ],
+  [
+   "L'École et la Nation",
+   "pas_une_organisation"
+  ],
+  [
+   "La France libre (journal socialiste)",
+   "pas_une_organisation"
+  ],
+  [
+   "La Nouvelle Critique (politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "La Rue",
+   "pas_une_organisation"
+  ],
+  [
+   "La Vieille Taupe",
+   "pas_une_organisation"
+  ],
+  [
+   "Larbi Ben M'hidi",
+   "pas_une_organisation"
+  ],
+  [
+   "Lars Klingbeil",
+   "pas_une_organisation"
+  ],
+  [
+   "Le Combat marxiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Le Monde libertaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Le Passager clandestin (maison d'édition)",
+   "pas_une_organisation"
+  ],
+  [
+   "Le Saint-Sauveur",
+   "pas_une_organisation"
+  ],
+  [
+   "Le Temps des conquêtes",
+   "pas_une_organisation"
+  ],
+  [
+   "Les Nouveaux Partisans",
+   "pas_une_organisation"
+  ],
+  [
+   "Leïla Chaibi",
+   "pas_une_organisation"
+  ],
+  [
+   "Libéralisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Ligue des communistes",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Ligue des droits de l'Homme (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Liliane Marchais",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des dirigeants de l'Union soviétique",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques en Belgique",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques en Croatie",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques en Lituanie",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques en Macédoine du Nord",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques en Norvège",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques français disparus",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des partis politiques sous la Troisième République",
+   "pas_une_organisation"
+  ],
+  [
+   "Liste des présidents du conseil départemental des Alpes-Maritimes",
+   "pas_une_organisation"
+  ],
+  [
+   "Loi relative à la limitation des dépenses électorales et à la clarification du financement des activités politiques",
+   "pas_une_organisation"
+  ],
+  [
+   "Lois de 1893 et 1894 sur l'anarchisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Louis Besson",
+   "pas_une_organisation"
+  ],
+  [
+   "Louis Vallon",
+   "pas_une_organisation"
+  ],
+  [
+   "Louise Bodin",
+   "pas_une_organisation"
+  ],
+  [
+   "Luc Mercelina",
+   "pas_une_organisation"
+  ],
+  [
+   "Lucie Leiciague",
+   "pas_une_organisation"
+  ],
+  [
+   "Légitimisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Léo Figuères",
+   "pas_une_organisation"
+  ],
+  [
+   "Léo Lagrange",
+   "pas_une_organisation"
+  ],
+  [
+   "Maintenant le peuple",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Malcontents (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Malin Björk",
+   "pas_une_organisation"
+  ],
+  [
+   "Manfred Weber",
+   "pas_une_organisation"
+  ],
+  [
+   "Manuel de Irujo",
+   "pas_une_organisation"
+  ],
+  [
+   "Maoïsme",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Marc Censi",
+   "pas_une_organisation"
+  ],
+  [
+   "Marie Dauchy",
+   "pas_une_organisation"
+  ],
+  [
+   "Marie-Arlette Carlotti",
+   "pas_une_organisation"
+  ],
+  [
+   "Marie-Claude Vayssade",
+   "pas_une_organisation"
+  ],
+  [
+   "Marie-Hélène Aubert",
+   "pas_une_organisation"
+  ],
+  [
+   "Marie-Pierre Goyetche",
+   "pas_une_organisation"
+  ],
+  [
+   "Marine Le Pen",
+   "pas_une_organisation"
+  ],
+  [
+   "Markel Olano",
+   "pas_une_organisation"
+  ],
+  [
+   "Markus Söder",
+   "pas_une_organisation"
+  ],
+  [
+   "Martine Billard",
+   "pas_une_organisation"
+  ],
+  [
+   "Martine Roure",
+   "pas_une_organisation"
+  ],
+  [
+   "Marxisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Marxisme-léninisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Marylise Lebranchu",
+   "pas_une_organisation"
+  ],
+  [
+   "Mathilde Androuët",
+   "pas_une_organisation"
+  ],
+  [
+   "Mathilde Gabriel-Péri",
+   "pas_une_organisation"
+  ],
+  [
+   "Maud Fontenoy",
+   "pas_une_organisation"
+  ],
+  [
+   "Max Simeoni",
+   "pas_une_organisation"
+  ],
+  [
+   "Messali Hadj",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Dantin",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Destot",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Giraud",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Sala",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Teychenné",
+   "pas_une_organisation"
+  ],
+  [
+   "Michel Vovelle",
+   "pas_une_organisation"
+  ],
+  [
+   "Michèle Striffler",
+   "pas_une_organisation"
+  ],
+  [
+   "Micro-parti politique en France",
+   "pas_une_organisation"
+  ],
+  [
+   "Mohamed Ennafaa",
+   "pas_une_organisation"
+  ],
+  [
+   "Mohamed Hassan Ouazzani",
+   "pas_une_organisation"
+  ],
+  [
+   "Mostefa Ben Boulaïd",
+   "pas_une_organisation"
+  ],
+  [
+   "Moulins Communauté",
+   "pas_une_organisation"
+  ],
+  [
+   "Mouvance autonome en France",
+   "pas_une_organisation"
+  ],
+  [
+   "Mouvance identitaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Mouvement Ettajdid",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Mouvement de libération nationale des Comores",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Mouvement ondulatoire unifié",
+   "pas_une_organisation"
+  ],
+  [
+   "Mouvement politique",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Más Madrid",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Más País",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Mélissa Camara",
+   "pas_une_organisation"
+  ],
+  [
+   "Métropole (intercommunalité française)",
+   "pas_une_organisation"
+  ],
+  [
+   "Métropole Nice Côte d'Azur",
+   "pas_une_organisation"
+  ],
+  [
+   "N'Autre école",
+   "pas_une_organisation"
+  ],
+  [
+   "Nafarroa Bai",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Nathalie Appéré",
+   "pas_une_organisation"
+  ],
+  [
+   "Nathalie Arthaud",
+   "pas_une_organisation"
+  ],
+  [
+   "Nathalie Brizard",
+   "pas_une_organisation"
+  ],
+  [
+   "Nathalie Griesbeck",
+   "pas_une_organisation"
+  ],
+  [
+   "National-Hebdo",
+   "pas_une_organisation"
+  ],
+  [
+   "Nationalisme breton",
+   "pas_une_organisation"
+  ],
+  [
+   "Nationalisme corse",
+   "pas_une_organisation"
+  ],
+  [
+   "Nguyễn Thái Học",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicolas Bergasse",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicolas Metzdorf",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicolas Miguet",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicolas de Condorcet",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicole Ameline",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicole Bricq",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicole Péry",
+   "pas_une_organisation"
+  ],
+  [
+   "Nicole Sanquer",
+   "pas_une_organisation"
+  ],
+  [
+   "Non-inscrit à l'Assemblée nationale",
+   "pas_une_organisation"
+  ],
+  [
+   "Nous les garçons et les filles",
+   "pas_une_organisation"
+  ],
+  [
+   "Nouvelle France (politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "Négociations entre le Front populaire et le Néo-Destour",
+   "pas_une_organisation"
+  ],
+  [
+   "Office européen des brevets",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Oihane Agirregoitia Martínez",
+   "pas_une_organisation"
+  ],
+  [
+   "Organisation pour la sécurité et la coopération en Europe",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Oriol Junqueras",
+   "pas_une_organisation"
+  ],
+  [
+   "Orléanisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Oswald Mosley",
+   "pas_une_organisation"
+  ],
+  [
+   "Ousmane Sembène",
+   "pas_une_organisation"
+  ],
+  [
+   "PP+Cs",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Pablisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Pacte civil de solidarité",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement basque",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement de Catalogne",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement de Galice",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement de Navarre (Espagne)",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement européen",
+   "pas_une_organisation"
+  ],
+  [
+   "Parlement français",
+   "pas_une_organisation"
+  ],
+  [
+   "Parti communiste d'Autriche",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste de l'Union soviétique",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste des terres basques",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste du Kampuchéa",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste roumain",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste tunisien",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti communiste vietnamien",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti conservateur (Royaume-Uni)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti dahoméen de l'unité",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de gauche (Suède)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de l'Alliance des libéraux et des démocrates pour l'Europe",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de l'avant-garde socialiste",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de la gauche européenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de la révolution socialiste",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti de la solidarité et du progrès",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti du peuple algérien",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti du regroupement africain",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti du travail d'Albanie",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti démocrate européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti démocrate européen catalan",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti démocratique dahoméen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti démocratique de Côte d'Ivoire – Rassemblement démocratique africain",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti fédéraliste européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti libéral-démocrate (Allemagne)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti national libéral (Roumanie)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti national-socialiste des travailleurs allemands",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti ouvrier allemand",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti ouvrier social-démocrate de Russie",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti politique",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti politique européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti populaire (Espagne)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti populaire basque",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti populaire de Galice",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti populaire européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti progressiste nigérien",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti républicain dahoméen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti social-démocrate d'Allemagne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti social-démocrate malgache",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti social-démocrate suédois des travailleurs",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste (Sénégal)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste d'Albanie",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste des Comores",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste du Pays basque-Gauche basque-PSOE",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti socialiste sénégalais",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti sénégalais d'action socialiste",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti travailliste (Royaume-Uni)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Parti vert européen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Pascale Gruny",
+   "pas_une_organisation"
+  ],
+  [
+   "Patricia Chagnon",
+   "pas_une_organisation"
+  ],
+  [
+   "Patrick Hetzel",
+   "pas_une_organisation"
+  ],
+  [
+   "Patrick Rimbert",
+   "pas_une_organisation"
+  ],
+  [
+   "Patriotes pour l'Europe",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Patriotes.eu",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Paul Bastid",
+   "pas_une_organisation"
+  ],
+  [
+   "Paul Brousse",
+   "pas_une_organisation"
+  ],
+  [
+   "Pernando Barrena",
+   "pas_une_organisation"
+  ],
+  [
+   "Pervenche Berès",
+   "pas_une_organisation"
+  ],
+  [
+   "Philip Schyle",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Duron",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Folliot",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Gomès",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Hardouin",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Juvin",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Kemel",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Martin (homme politique, 1953)",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Martinez",
+   "pas_une_organisation"
+  ],
+  [
+   "Philippe Richert",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Aliker",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Baudin",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Fauchon",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Poggioli",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Renaudel",
+   "pas_une_organisation"
+  ],
+  [
+   "Pierre Semard",
+   "pas_une_organisation"
+  ],
+  [
+   "Podemos (parti espagnol)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Pol Pot",
+   "pas_une_organisation"
+  ],
+  [
+   "Politburo du Parti communiste de l'Union soviétique",
+   "pas_une_organisation"
+  ],
+  [
+   "Politique en Corse",
+   "pas_une_organisation"
+  ],
+  [
+   "Possibilisme (politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "Pouvanaa Oopa",
+   "pas_une_organisation"
+  ],
+  [
+   "Premier ministre français",
+   "pas_une_organisation"
+  ],
+  [
+   "Premier secrétaire du Parti socialiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire citoyenne de 2011",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire citoyenne de 2017",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire française de la droite et du centre de 2016",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle française de l'écologie de 2016",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle française de l'écologie de 2021",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle socialiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle socialiste française de 1995",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle socialiste française de 2006",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle socialiste française de 2021",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle socialiste française de 2026",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle écologiste française de 2001",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle écologiste française de 2006",
+   "pas_une_organisation"
+  ],
+  [
+   "Primaire présidentielle écologiste française de 2011",
+   "pas_une_organisation"
+  ],
+  [
+   "Prix Tournesol",
+   "pas_une_organisation"
+  ],
+  [
+   "Procès de Burgos",
+   "pas_une_organisation"
+  ],
+  [
+   "Programme commun de la gauche",
+   "pas_une_organisation"
+  ],
+  [
+   "Progressisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Projet Blum-Viollette",
+   "pas_une_organisation"
+  ],
+  [
+   "Président de la Commission européenne",
+   "pas_une_organisation"
+  ],
+  [
+   "Rabah Bitat",
+   "pas_une_organisation"
+  ],
+  [
+   "Radio libertaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Radu Câmpeanu",
+   "pas_une_organisation"
+  ],
+  [
+   "Rafik Smati",
+   "pas_une_organisation"
+  ],
+  [
+   "Rassemblement démocratique (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Rassemblement démocratique centrafricain",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Rassemblement démocratique dahoméen",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Rassemblement démocratique du peuple comorien",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Rassemblement populaire pour le progrès",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Raymond Péricat",
+   "pas_une_organisation"
+  ],
+  [
+   "Renaud Camus",
+   "pas_une_organisation"
+  ],
+  [
+   "Renew Europe",
+   "pas_de_preuve_france"
+  ],
+  [
+   "René Dumont",
+   "pas_une_organisation"
+  ],
+  [
+   "René Piquet",
+   "pas_une_organisation"
+  ],
+  [
+   "René Teulade",
+   "pas_une_organisation"
+  ],
+  [
+   "Riksdag (Suède)",
+   "pas_une_organisation"
+  ],
+  [
+   "Robert Bourgeois (général)",
+   "pas_une_organisation"
+  ],
+  [
+   "Robert Fabre",
+   "pas_une_organisation"
+  ],
+  [
+   "Robert Marjolin",
+   "pas_une_organisation"
+  ],
+  [
+   "Robert Navarro",
+   "pas_une_organisation"
+  ],
+  [
+   "Roger-Gérard Schwartzenberg",
+   "pas_une_organisation"
+  ],
+  [
+   "Roland Ries",
+   "pas_une_organisation"
+  ],
+  [
+   "Romain Grau",
+   "pas_une_organisation"
+  ],
+  [
+   "Réalisme socialiste en France",
+   "pas_une_organisation"
+  ],
+  [
+   "Réformateurs démocrates sociaux",
+   "pas_une_organisation"
+  ],
+  [
+   "Régis de L'Estourbeillon",
+   "pas_une_organisation"
+  ],
+  [
+   "Rémi Lefebvre",
+   "pas_une_organisation"
+  ],
+  [
+   "République",
+   "pas_une_organisation"
+  ],
+  [
+   "Réunion administrative des sénateurs ne figurant sur la liste d'aucun groupe",
+   "pas_une_organisation"
+  ],
+  [
+   "Révolution (hebdomadaire)",
+   "pas_une_organisation"
+  ],
+  [
+   "Sabine Herold",
+   "pas_une_organisation"
+  ],
+  [
+   "Safia Otokoré",
+   "pas_une_organisation"
+  ],
+  [
+   "Salima Yenbou",
+   "pas_une_organisation"
+  ],
+  [
+   "Sandra Regol",
+   "pas_une_organisation"
+  ],
+  [
+   "Sarreguemines évolution",
+   "pas_une_organisation"
+  ],
+  [
+   "Saïd Mohamed Ben Chech Abdallah Cheikh",
+   "pas_une_organisation"
+  ],
+  [
+   "Secrétaire général",
+   "pas_une_organisation"
+  ],
+  [
+   "Secrétaire national des Écologistes",
+   "pas_une_organisation"
+  ],
+  [
+   "Sections socialistes universitaires",
+   "pas_une_organisation"
+  ],
+  [
+   "Segi",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Serge Depaquit",
+   "pas_une_organisation"
+  ],
+  [
+   "Seybah Dagoma",
+   "pas_une_organisation"
+  ],
+  [
+   "Simon Sutour",
+   "pas_une_organisation"
+  ],
+  [
+   "Siècle des Lumières",
+   "pas_une_organisation"
+  ],
+  [
+   "Social-libéralisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Social-écologie",
+   "pas_une_organisation"
+  ],
+  [
+   "Socialisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Socialisme ou barbarie",
+   "pas_une_organisation"
+  ],
+  [
+   "Soirées de famille",
+   "pas_une_organisation"
+  ],
+  [
+   "Soledad Estorach Esterri",
+   "pas_une_organisation"
+  ],
+  [
+   "Solidarisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Solidarity Federation",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Solidarité internationale antifasciste",
+   "pas_une_organisation"
+  ],
+  [
+   "Sophie Auconie",
+   "pas_une_organisation"
+  ],
+  [
+   "Sophie Binet",
+   "pas_une_organisation"
+  ],
+  [
+   "Sophie Dessus",
+   "pas_une_organisation"
+  ],
+  [
+   "Souverainisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Stefan Löfven",
+   "pas_une_organisation"
+  ],
+  [
+   "Stéphane Saint-André",
+   "pas_une_organisation"
+  ],
+  [
+   "Sumar (parti politique)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Sylvain Pabouty",
+   "pas_une_organisation"
+  ],
+  [
+   "Sylvie Goulard",
+   "pas_une_organisation"
+  ],
+  [
+   "Sébastien Gegauff",
+   "pas_une_organisation"
+  ],
+  [
+   "Ségolène Royal",
+   "pas_une_organisation"
+  ],
+  [
+   "Sénat (Espagne)",
+   "pas_une_organisation"
+  ],
+  [
+   "Sénat (France)",
+   "pas_une_organisation"
+  ],
+  [
+   "Sénat (Roumanie)",
+   "pas_une_organisation"
+  ],
+  [
+   "Sénat de la Communauté",
+   "pas_une_organisation"
+  ],
+  [
+   "Thierry Cornillet",
+   "pas_une_organisation"
+  ],
+  [
+   "Thierry Repentin",
+   "pas_une_organisation"
+  ],
+  [
+   "Tiqqun",
+   "pas_une_organisation"
+  ],
+  [
+   "Travailleuses, travailleurs",
+   "pas_une_organisation"
+  ],
+  [
+   "Tripartisme",
+   "pas_une_organisation"
+  ],
+  [
+   "Témoignages",
+   "pas_une_organisation"
+  ],
+  [
+   "U Ribombu",
+   "pas_une_organisation"
+  ],
+  [
+   "UMPS (politique)",
+   "pas_une_organisation"
+  ],
+  [
+   "Unai Hualde",
+   "pas_une_organisation"
+  ],
+  [
+   "Union Movement",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union chrétienne-sociale en Bavière",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union cycliste internationale",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union des républiques socialistes soviétiques",
+   "pas_une_organisation"
+  ],
+  [
+   "Union démocratique dahoméenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union démocratique des Comores",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union démocratique et sociale gabonaise",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union européenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union française de l'information",
+   "pas_une_organisation"
+  ],
+  [
+   "Union interparlementaire",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union libre des travailleurs d'Allemagne",
+   "pas_une_organisation"
+  ],
+  [
+   "Union nationale interfédérale des œuvres et organismes privés non lucratifs sanitaires et sociaux",
+   "pas_une_organisation"
+  ],
+  [
+   "Union pour la majorité présidentielle (Djibouti)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union progressiste dahoméenne",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union progressiste sénégalaise",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Union syndicaliste libertaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Université ouvrière de Paris",
+   "pas_une_organisation"
+  ],
+  [
+   "VIIIe législature de la Troisième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "Valents",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Valéria Faure-Muntian",
+   "pas_une_organisation"
+  ],
+  [
+   "Valérie Fourneyron",
+   "pas_une_organisation"
+  ],
+  [
+   "Vincent-Marie Viénot de Vaublanc",
+   "pas_une_organisation"
+  ],
+  [
+   "Việt Nam Quốc Dân Đảng",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Voie démocratique et sociale",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Volt Europa",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Vox (parti politique)",
+   "pas_de_preuve_france"
+  ],
+  [
+   "Véronique Mathieu",
+   "pas_une_organisation"
+  ],
+  [
+   "Walter Baier",
+   "pas_une_organisation"
+  ],
+  [
+   "William Chervy",
+   "pas_une_organisation"
+  ],
+  [
+   "Wolfgang Kubicki",
+   "pas_une_organisation"
+  ],
+  [
+   "XIIe congrès du Front national",
+   "pas_une_organisation"
+  ],
+  [
+   "XIVe congrès du Front national",
+   "pas_une_organisation"
+  ],
+  [
+   "XIe législature de la Troisième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "XVIIe législature de la Cinquième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "XVIe législature de la Troisième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "XVe législature de la Troisième République française",
+   "pas_une_organisation"
+  ],
+  [
+   "Yann Goulet",
+   "pas_une_organisation"
+  ],
+  [
+   "Yannick Vaugrenard",
+   "pas_une_organisation"
+  ],
+  [
+   "Yves Frémion",
+   "pas_une_organisation"
+  ],
+  [
+   "Yvon Collin",
+   "pas_une_organisation"
+  ],
+  [
+   "Zeth Höglund",
+   "pas_une_organisation"
+  ],
+  [
+   "Écologie politique",
+   "pas_une_organisation"
+  ],
+  [
+   "Économie & Politique",
+   "pas_une_organisation"
+  ],
+  [
+   "Éditions Agone",
+   "pas_une_organisation"
+  ],
+  [
+   "Éditions du Monde libertaire",
+   "pas_une_organisation"
+  ],
+  [
+   "Édouard Daladier",
+   "pas_une_organisation"
+  ],
+  [
+   "Édouard Martin (syndicaliste)",
+   "pas_une_organisation"
+  ],
+  [
+   "Élection présidentielle française de 1848",
+   "pas_une_organisation"
+  ],
+  [
+   "Élection présidentielle française de 1969",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections législatives françaises de 1849",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections législatives françaises de 2007",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections législatives françaises de 2022",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1921",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1924",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1927",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1929",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1932",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1935",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 1938",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections sénatoriales françaises de 2026",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections territoriales polynésiennes de 2008",
+   "pas_une_organisation"
+  ],
+  [
+   "Élections territoriales polynésiennes de 2013",
+   "pas_une_organisation"
+  ],
+  [
+   "Élie Aboud",
+   "pas_une_organisation"
+  ],
+  [
+   "Élisabeth Morin-Chartier",
+   "pas_une_organisation"
+  ],
+  [
+   "Éléphant du Parti socialiste",
+   "pas_une_organisation"
+  ],
+  [
+   "Émile Zuccarelli",
+   "pas_une_organisation"
+  ],
+  [
+   "Émilienne Galicier",
+   "pas_une_organisation"
+  ],
+  [
+   "Éric Andrieu",
+   "pas_une_organisation"
+  ],
+  [
+   "Éric Minardi",
+   "pas_une_organisation"
+  ],
+  [
+   "Établissement public de coopération intercommunale",
+   "pas_une_organisation"
+  ],
+  [
+   "Établissement public territorial Plaine Commune",
+   "pas_une_organisation"
+  ]
+ ],
+ "unresolved_edges": [
+  [
+   "A Cuncolta Naziunalista",
+   "split_into",
+   "Chjama per l'indipendenza",
+   "CPI (1989)"
+  ],
+  [
+   "Alternative rouge et verte",
+   "merged_from",
+   "Pierre Juquin",
+   "Nouvelle gauche"
+  ],
+  [
+   "Batasuna",
+   "merged_into",
+   "Socialiste Abertzaleak",
+   "Socialiste Abertzaleak (avant l'interdiction de 2003)"
+  ],
+  [
+   "Calédonie ensemble",
+   "affiliated_to",
+   "2012",
+   "Union des démocrates et indépendants (2012-2022)"
+  ],
+  [
+   "Calédonie ensemble",
+   "affiliated_to",
+   "2022",
+   "Union des démocrates et indépendants (2012-2022)"
+  ],
+  [
+   "Calédonie ensemble",
+   "affiliated_to",
+   "2022",
+   "Horizons (depuis 2022)"
+  ],
+  [
+   "Centre national des indépendants et paysans",
+   "merged_from",
+   "Action républicaine et sociale (Quatrième République)",
+   "ARS (1954)"
+  ],
+  [
+   "Centre national des indépendants et paysans",
+   "affiliated_to",
+   "Liste des listes aux élections européennes de 2019 en France",
+   "LAF (2019)"
+  ],
+  [
+   "Club de 1789",
+   "split_into",
+   "Feuillants",
+   "Feuillants"
+  ],
+  [
+   "Corsica Libera",
+   "merged_from",
+   "Partitu sucialistu per l'indipendenza",
+   "PSI"
+  ],
+  [
+   "Corsica Libera",
+   "merged_from",
+   "Strada dritta",
+   "SD"
+  ],
+  [
+   "Eusko Alkartasuna",
+   "affiliated_to",
+   "Euskal Herria Bildu",
+   "EH Bildu"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Front des forces socialistes",
+   "FFS (1963)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Mouvement pour la démocratie en Algérie",
+   "MDA (1982)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Mouvement algérien pour la justice et le développement",
+   "MAJD (1990)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Alliance nationale républicaine",
+   "ANR (1995)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Rassemblement national démocratique (Algérie)",
+   "RND (1997)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "split_into",
+   "Front El Moustakbal",
+   "FM (2012)"
+  ],
+  [
+   "Front de libération nationale (Algérie)",
+   "affiliated_to",
+   "Alliance présidentielle (Algérie)",
+   "Alliance présidentielle"
+  ],
+  [
+   "Front européen de libération",
+   "split_from",
+   "Union Movement",
+   "Union Movement"
+  ],
+  [
+   "Fédération d'action nationale et européenne",
+   "affiliated_to",
+   "Groupes nationalistes révolutionnaires",
+   "Groupes nationalistes révolutionnaires (1976)"
+  ],
+  [
+   "Générations NC",
+   "affiliated_to",
+   "2020",
+   "Les Loyalistes (depuis 2020)"
+  ],
+  [
+   "Générations NC",
+   "affiliated_to",
+   "2022",
+   "Union loyaliste (2022)"
+  ],
+  [
+   "Générations NC",
+   "affiliated_to",
+   "2022",
+   "Ensemble ! (2022-2023)"
+  ],
+  [
+   "Générations NC",
+   "affiliated_to",
+   "2023",
+   "Ensemble ! (2022-2023)"
+  ],
+  [
+   "Indipendenza",
+   "merged_from",
+   "Partitu per l'indipendenza",
+   "PPI"
+  ],
+  [
+   "Indipendenza",
+   "merged_from",
+   "Associu per a suvranità",
+   "APS"
+  ],
+  [
+   "Indipendenza",
+   "merged_from",
+   "Cullettivu naziunale",
+   "Cullettivu naziunale"
+  ],
+  [
+   "La Convention",
+   "coalition_of",
+   "Fédération progressiste",
+   "FP (depuis 2025)"
+  ],
+  [
+   "Le Mouvement de la ruralité",
+   "split_into",
+   "Résilience - Rurale et Humaniste",
+   "RRH (2023)"
+  ],
+  [
+   "Les Nouveaux Démocrates",
+   "merged_from",
+   "Groupe Écologie démocratie solidarité",
+   "Écologie démocratie solidarité"
+  ],
+  [
+   "Les Patriotes (parti politique)",
+   "split_into",
+   "Franck de Lapersonne",
+   "La Gauche patriote (2019)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2019",
+   "L'Avenir en confiance (2019-2022)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2022",
+   "L'Avenir en confiance (2019-2022)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2020",
+   "Les Loyalistes (depuis 2020)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2022",
+   "Union loyaliste (2022)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2022",
+   "Ensemble ! (2022)"
+  ],
+  [
+   "Les Républicains calédoniens",
+   "affiliated_to",
+   "2022",
+   "Renaissance (2022- )"
+  ],
+  [
+   "Ligue des justes",
+   "successor",
+   "Ligue des communistes",
+   "Ligue des communistes"
+  ],
+  [
+   "Mouvement pour le triomphe des libertés démocratiques",
+   "predecessor",
+   "Parti du peuple algérien",
+   "Parti du peuple algérien"
+  ],
+  [
+   "Mouvement pour le triomphe des libertés démocratiques",
+   "successor",
+   "Mouvement national algérien (guerre d'Algérie)",
+   "Mouvement national algérien"
+  ],
+  [
+   "Nouveau Parti anticapitaliste",
+   "successor",
+   "NPA – Révolutionnaires",
+   "NPA – Révolutionnaires"
+  ],
+  [
+   "Paolistes",
+   "predecessor",
+   "Nationaux corses",
+   "20px Nationaux corses"
+  ],
+  [
+   "Paolistes",
+   "successor",
+   "Premier Empire",
+   "Impériaux (en partie)"
+  ],
+  [
+   "Paolistes",
+   "successor",
+   "Royal Corsican Rangers",
+   "Royal Corsican Rangers (en partie)"
+  ],
+  [
+   "Parti agraire et paysan français",
+   "merged_into",
+   "Parti agraire (France)",
+   "Parti agraire"
+  ],
+  [
+   "Parti autonomiste breton",
+   "affiliated_to",
+   "Comité central des minorités nationales de France",
+   "Comité central des minorités nationales de France"
+  ],
+  [
+   "Parti communiste (France, 1919)",
+   "split_from",
+   "Confédération générale du travail",
+   "Aile gauche (pacifiste et révolutionnaire) de la CGT"
+  ],
+  [
+   "Parti communiste (France, 1919)",
+   "predecessor",
+   "Confédération générale du travail",
+   "Confédération générale du travail"
+  ],
+  [
+   "Parti communiste algérien",
+   "successor",
+   "Parti de l'avant-garde socialiste",
+   "Parti de l'avant-garde socialiste"
+  ],
+  [
+   "Parti communiste internationaliste",
+   "merged_from",
+   "Groupe Octobre",
+   "Groupe Octobre"
+  ],
+  [
+   "Parti de l'Ordre",
+   "merged_from",
+   "Parti de la Résistance",
+   "Parti de la Résistance"
+  ],
+  [
+   "Parti de l'Ordre",
+   "merged_from",
+   "Légitimisme",
+   "et d'autres partis légitimistes"
+  ],
+  [
+   "Parti français (Corse)",
+   "predecessor",
+   "Nationaux corses",
+   "20px Nationaux corses"
+  ],
+  [
+   "Parti français (Corse)",
+   "successor",
+   "Premier Empire",
+   "Impériaux (majorité)"
+  ],
+  [
+   "Parti français (Corse)",
+   "successor",
+   "Bonapartisme",
+   "Bonapartistes (majorité)"
+  ],
+  [
+   "Parti français (Corse)",
+   "successor",
+   "Armée des émigrés",
+   "Armée des émigrés (en partie)"
+  ],
+  [
+   "Parti français (Corse)",
+   "affiliated_to",
+   "Thermidorien",
+   "Thermidoriens (après 1794)"
+  ],
+  [
+   "Parti français (Corse)",
+   "affiliated_to",
+   "Comité de salut public",
+   "Comité de salut public (après 1792)"
+  ],
+  [
+   "Parti français (Corse)",
+   "affiliated_to",
+   "Directoire",
+   "Directoire (après 1795)"
+  ],
+  [
+   "Parti populaire uni",
+   "split_from",
+   "Parti démocrate de Saint-Martin",
+   "Parti démocrate"
+  ],
+  [
+   "Parti populaire uni",
+   "affiliated_to",
+   "Démocrates unis (Saint-Martin)",
+   "Démocrates unis (2018-2019)"
+  ],
+  [
+   "Parti socialiste (France)",
+   "split_into",
+   "Fédération progressiste",
+   "FP (2022)"
+  ],
+  [
+   "Parti socialiste (France)",
+   "affiliated_to",
+   "Programme commun de la gauche",
+   "Programme commun (1972-1977)"
+  ],
+  [
+   "Partitu Corsu per u Sucialisimu",
+   "split_from",
+   "Partitu di u Populu Corsu",
+   "PPC"
+  ],
+  [
+   "Partitu di a Nazione Corsa",
+   "merged_from",
+   "A Scelta Nova",
+   "A Scelta Nova"
+  ],
+  [
+   "Partitu di a Nazione Corsa",
+   "merged_from",
+   "A Mossa Naziunale",
+   ""
+  ],
+  [
+   "Rassemblement du peuple français",
+   "split_into",
+   "Action républicaine et sociale (Quatrième République)",
+   "ARS (1952)"
+  ],
+  [
+   "Rassemblement pour la Calédonie",
+   "affiliated_to",
+   "2013",
+   "UCF (2013-2015)"
+  ],
+  [
+   "Rassemblement pour la Calédonie",
+   "affiliated_to",
+   "2015",
+   "UCF (2013-2015)"
+  ],
+  [
+   "Rassemblement pour la Calédonie",
+   "affiliated_to",
+   "2015",
+   "Les Républicains de Nouvelle-Calédonie (2015-2017)"
+  ],
+  [
+   "Rassemblement pour la Calédonie",
+   "affiliated_to",
+   "2017",
+   "Les Républicains de Nouvelle-Calédonie (2015-2017)"
+  ],
+  [
+   "Rassemblement pour la Calédonie",
+   "affiliated_to",
+   "2017",
+   "Les Républicains calédoniens (2017)"
+  ],
+  [
+   "Républicains modérés (Deuxième République)",
+   "merged_from",
+   "Républicains français sous la monarchie de Juillet",
+   "Parti républicain"
+  ],
+  [
+   "Républicains modérés (Deuxième République)",
+   "merged_into",
+   "Gauche républicaine (1871-1885)",
+   "- Gauche républicaine"
+  ],
+  [
+   "Républicains sociaux",
+   "merged_from",
+   "Groupe Rassemblement pour la République",
+   "URAS"
+  ],
+  [
+   "République solidaire",
+   "successor",
+   "Dominique de Villepin",
+   "La France humaniste"
+  ],
+  [
+   "Section française de l'Internationale ouvrière",
+   "split_into",
+   "PSAS",
+   "PSAS (1930)"
+  ],
+  [
+   "Section française de l'Internationale ouvrière",
+   "split_into",
+   "Bloc démocratique sénégalais",
+   "BDS (1948)"
+  ],
+  [
+   "Tapura huiraatira",
+   "affiliated_to",
+   "Alliance autonomiste (Amui Tatou)",
+   "Amui Tatou"
+  ],
+  [
+   "Union démocratique bretonne",
+   "split_from",
+   "Mouvement pour l'organisation de la Bretagne",
+   "Mouvement pour l'organisation de la Bretagne"
+  ],
+  [
+   "Union démocratique du Manifeste algérien",
+   "predecessor",
+   "Fédération des élus du Constantinois",
+   "Fédération des élus du Constantinois"
+  ],
+  [
+   "Union démocratique du Manifeste algérien",
+   "predecessor",
+   "Amis du manifeste et de la liberté",
+   "Amis du manifeste et de la liberté"
+  ],
+  [
+   "Union démocratique du travail",
+   "merged_into",
+   "Union travailliste",
+   "UT (1971)"
+  ],
+  [
+   "Union démocratique du travail",
+   "merged_into",
+   "Mouvement gaulliste populaire",
+   "MGP (1982)"
+  ],
+  [
+   "Union démocratique et socialiste de la Résistance",
+   "merged_from",
+   "Ceux de la Résistance",
+   "Dissidents CDLR"
+  ],
+  [
+   "Union pour la nouvelle République",
+   "affiliated_to",
+   "Droite républicaine",
+   "Droite républicaine - droite radicale"
+  ],
+  [
+   "Union pour la nouvelle République",
+   "affiliated_to",
+   "Droite (politique)",
+   "Droite républicaine - droite radicale"
+  ],
+  [
+   "Écologie Solidarité",
+   "affiliated_to",
+   "Pays de la Loire",
+   "Majorité régionale des Pays de la Loire (2010-2015)"
+  ],
+  [
+   "Écologie au centre",
+   "merged_from",
+   "Jean-Marc Governatori",
+   "La France en action (2011)"
+  ],
+  [
+   "Écologie au centre",
+   "coalition_of",
+   "Jean-Marc Governatori",
+   "La France en action"
+  ],
+  [
+   "Étoile nord-africaine",
+   "successor",
+   "Parti du peuple algérien",
+   "Parti du peuple algérien"
+  ]
+ ],
+ "dropped_scope": [
+  [
+   "Centre gauche (groupe parlementaire)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Christianisme social",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Groupe Les Indépendants – République et territoires",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Groupe Union centriste (Sénat)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Indépendants d'action populaire",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Opposition dynastique",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Parti du mouvement",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Parti nationaliste (Troisième République)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Polynésiens ensemble",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Radical indépendant",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Royalisme en France au XIXe siècle",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Républicain et social",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Socialistes indépendants",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Société des amis du peuple",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Tiers parti (Second Empire)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Union démocratique (groupe parlementaire)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Union libérale (Second Empire)",
+   "sans_date_ancien_ou_groupe_parlementaire"
+  ],
+  [
+   "Action libérale populaire",
+   "1919-11-30"
+  ],
+  [
+   "Action populaire nationale d'Alsace",
+   "1935"
+  ],
+  [
+   "Action socialiste et révolutionnaire",
+   "1957"
+  ],
+  [
+   "Adsao",
+   "1932-01"
+  ],
+  [
+   "Aide-toi, le ciel t'aidera (société)",
+   "1834"
+  ],
+  [
+   "Alliance communiste révolutionnaire",
+   "1902"
+  ],
+  [
+   "Alliance communiste-anarchiste",
+   "1910"
+  ],
+  [
+   "Alliance socialiste républicaine",
+   "1885"
+  ],
+  [
+   "Association des bleus de Bretagne",
+   null
+  ],
+  [
+   "Association démocratique des amis de la Constitution",
+   null
+  ],
+  [
+   "Association nationale républicaine (France)",
+   "1903-11-01"
+  ],
+  [
+   "Bloc d'action nigérien",
+   "1956-11-19"
+  ],
+  [
+   "Centre d'action des gauches indépendantes",
+   "1957"
+  ],
+  [
+   "Cercle communiste démocratique",
+   "1934"
+  ],
+  [
+   "Club de 1789",
+   "1791"
+  ],
+  [
+   "Club des feuillants",
+   null
+  ],
+  [
+   "Comité central socialiste révolutionnaire",
+   "1914"
+  ],
+  [
+   "Comité d'action socialiste",
+   "1943"
+  ],
+  [
+   "Comité de vigilance des intellectuels antifascistes",
+   "1939"
+  ],
+  [
+   "Comité féminin",
+   null
+  ],
+  [
+   "Comité national des femmes socialistes",
+   null
+  ],
+  [
+   "Comité républicain d'action démocratique et sociale",
+   null
+  ],
+  [
+   "Comité révolutionnaire central",
+   "1898"
+  ],
+  [
+   "Comités de défense paysanne",
+   "1939"
+  ],
+  [
+   "Croix-de-Feu",
+   "1936"
+  ],
+  [
+   "Enragés",
+   "1794"
+  ],
+  [
+   "Francs-tireurs et partisans",
+   null
+  ],
+  [
+   "Front de la liberté (France)",
+   null
+  ],
+  [
+   "Front européen de libération",
+   "1954"
+  ],
+  [
+   "Front lorrain",
+   "1939"
+  ],
+  [
+   "Front national (1934)",
+   "1940"
+  ],
+  [
+   "Front national (Résistance)",
+   "1949"
+  ],
+  [
+   "Front national ouvrier paysan",
+   "1934"
+  ],
+  [
+   "Front révolutionnaire national",
+   "1944"
+  ],
+  [
+   "Fédération communiste anarchiste",
+   "1914-08"
+  ],
+  [
+   "Fédération communiste libertaire (1934-1936)",
+   "1936"
+  ],
+  [
+   "Fédération communiste libertaire (1953-1957)",
+   "1957"
+  ],
+  [
+   "Fédération des gauches",
+   null
+  ],
+  [
+   "Fédération des travailleurs socialistes de France",
+   "1902"
+  ],
+  [
+   "Gauche révolutionnaire (1935-1938)",
+   "1938-06"
+  ],
+  [
+   "Groupe Barta",
+   null
+  ],
+  [
+   "Groupe des droites",
+   "1919"
+  ],
+  [
+   "Groupe des républicains de gouvernement",
+   "1898"
+  ],
+  [
+   "Groupe régionaliste breton",
+   "1927-09"
+  ],
+  [
+   "Groupe socialiste révolutionnaire",
+   "1905"
+  ],
+  [
+   "Indépendants d'action économique, sociale et paysanne",
+   "1936"
+  ],
+  [
+   "Indépendants de droite",
+   "1924"
+  ],
+  [
+   "Indépendants de gauche",
+   "1936"
+  ],
+  [
+   "Indépendants républicains",
+   "1942"
+  ],
+  [
+   "Jeunesse antisémitique",
+   null
+  ],
+  [
+   "Jeunesse populaire française",
+   "1942"
+  ],
+  [
+   "Jeunesse royaliste",
+   "1901"
+  ],
+  [
+   "Jeunesses patriotes",
+   "1936"
+  ],
+  [
+   "Le Faisceau",
+   "1928"
+  ],
+  [
+   "Le Sillon",
+   "1910"
+  ],
+  [
+   "Libéraux (Restauration)",
+   "1824"
+  ],
+  [
+   "Ligue antimilitariste",
+   null
+  ],
+  [
+   "Ligue communiste (1930)",
+   "1936"
+  ],
+  [
+   "Ligue de défense paysanne de la Meuse",
+   "1939"
+  ],
+  [
+   "Ligue de la patrie française",
+   "1909"
+  ],
+  [
+   "Ligue de pensée française",
+   null
+  ],
+  [
+   "Ligue des antipatriotes",
+   null
+  ],
+  [
+   "Ligue des justes",
+   "1847"
+  ],
+  [
+   "Ligue des patriotes",
+   "1939"
+  ],
+  [
+   "Ligue française",
+   null
+  ],
+  [
+   "Ligue fédéraliste de Bretagne",
+   "1930"
+  ],
+  [
+   "Ligue républicaine nationale",
+   "1927"
+  ],
+  [
+   "Ligues anarchistes",
+   null
+  ],
+  [
+   "Monarchiens",
+   "1791-06-18"
+  ],
+  [
+   "Montagne (1849)",
+   "1852"
+  ],
+  [
+   "Montagne (Révolution française)",
+   "1795"
+  ],
+  [
+   "Mouvement de la paix",
+   null
+  ],
+  [
+   "Mouvement de libération du peuple",
+   "1957"
+  ],
+  [
+   "Mouvement national révolutionnaire",
+   "1941"
+  ],
+  [
+   "Mouvement national-syndicaliste",
+   "1944"
+  ],
+  [
+   "Mouvement social révolutionnaire",
+   "1944"
+  ],
+  [
+   "Organisation Pensée Bataille",
+   "1953"
+  ],
+  [
+   "Organisation spéciale (France)",
+   "1944"
+  ],
+  [
+   "Paolistes",
+   "1796"
+  ],
+  [
+   "Parti agraire national",
+   null
+  ],
+  [
+   "Parti alsacien ouvrier et paysan",
+   "1939-07"
+  ],
+  [
+   "Parti autonomiste breton",
+   "1931"
+  ],
+  [
+   "Parti communiste (France, 1919)",
+   "1921"
+  ],
+  [
+   "Parti d'action corse",
+   "1927"
+  ],
+  [
+   "Parti de l'Ordre",
+   "1852"
+  ],
+  [
+   "Parti fasciste révolutionnaire",
+   "1945"
+  ],
+  [
+   "Parti franciste",
+   "1945"
+  ],
+  [
+   "Parti français (Corse)",
+   "1796"
+  ],
+  [
+   "Parti français national-collectiviste",
+   "1944"
+  ],
+  [
+   "Parti frontiste",
+   null
+  ],
+  [
+   "Parti national breton",
+   "1944"
+  ],
+  [
+   "Parti nationaliste breton",
+   "1914"
+  ],
+  [
+   "Parti ouvrier français",
+   "1902"
+  ],
+  [
+   "Parti populaire français",
+   "1945-02-22"
+  ],
+  [
+   "Parti progressiste congolais",
+   null
+  ],
+  [
+   "Parti républicain agraire et social",
+   "1940"
+  ],
+  [
+   "Parti républicain de réorganisation nationale",
+   null
+  ],
+  [
+   "Parti républicain d’unité populaire",
+   "1947"
+  ],
+  [
+   "Parti républicain syndicaliste",
+   null
+  ],
+  [
+   "Parti social-national",
+   "1936"
+  ],
+  [
+   "Parti socialiste unitaire (France)",
+   "1954"
+  ],
+  [
+   "Plaine (Révolution française)",
+   "1795-11-02"
+  ],
+  [
+   "Rassemblement démocratique révolutionnaire",
+   "1948"
+  ],
+  [
+   "Rassemblement national français",
+   "1957"
+  ],
+  [
+   "Rassemblement national populaire",
+   "1944-08-17"
+  ],
+  [
+   "Société des droits de l'homme",
+   "1835"
+  ],
+  [
+   "Société des républicaines révolutionnaires",
+   "1793"
+  ],
+  [
+   "Société des saisons",
+   "1839"
+  ],
+  [
+   "Solidarité française",
+   "1939"
+  ],
+  [
+   "Troisième force (Troisième République)",
+   "1934-11"
+  ],
+  [
+   "Ultraroyalistes (France)",
+   "1830"
+  ],
+  [
+   "Union anarchiste",
+   "1939"
+  ],
+  [
+   "Union communiste (organisation politique)",
+   "1939"
+  ],
+  [
+   "Union des Nigériens indépendants et sympathisants",
+   "1957"
+  ],
+  [
+   "Union des chrétiens progressistes",
+   "1950"
+  ],
+  [
+   "Union des gauches",
+   "1893"
+  ],
+  [
+   "Union fédérale des étudiants",
+   "1938"
+  ],
+  [
+   "Union populaire algérienne",
+   null
+  ],
+  [
+   "Union populaire républicaine de la Gironde",
+   "1930"
+  ],
+  [
+   "Union régionaliste bretonne",
+   "1945"
+  ],
+  [
+   "Union républicaine et démocratique",
+   "1932"
+  ],
+  [
+   "Union républicaine lorraine",
+   null
+  ],
+  [
+   "Étoile nord-africaine",
+   "1937-01-26"
+  ]
+ ]
+}
