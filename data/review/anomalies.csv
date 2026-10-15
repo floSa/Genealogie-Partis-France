@@ -1,13 +1,23 @@
 ﻿gravite,type,objet,detail
 moyenne,adhesion_apres_dissolution,Alain Robert (homme politique) @ Centre national des indépendants et paysans,debut 1981 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Bertrand Motte @ Centre national des indépendants et paysans,debut 1975 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,François Schleiter @ Centre national des indépendants et paysans,debut 1973 / fin du parti 1966-02-02
 moyenne,adhesion_apres_dissolution,Gilbert Collard @ Centre national des indépendants et paysans,debut 2024 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Gilles Bourdouleix @ Centre national des indépendants et paysans,debut 2009 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Gilles Bourdouleix @ Centre national des indépendants et paysans,debut 2009-10-24 / fin du parti 1966-02-02
 moyenne,adhesion_apres_dissolution,Hervé Novelli @ Centre national des indépendants et paysans,debut 1981 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Jacques Fouchier @ Centre national des indépendants et paysans,debut 1979 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Jacques Féron @ Centre national des indépendants et paysans,debut 1987 / fin du parti 1966-02-02
 moyenne,adhesion_apres_dissolution,Jean Fabry @ Union républicaine (France),debut 1936 / fin du parti 1885
 moyenne,adhesion_apres_dissolution,Jean-Marie Alexandre @ Mouvement des citoyens (France),debut 2018 / fin du parti 2003-04-25
 moyenne,adhesion_apres_dissolution,Jean-Marie Alexandre @ Mouvement des citoyens (France),debut 2018-11-12 / fin du parti 2003-04-25
 moyenne,adhesion_apres_dissolution,Jérôme Rivière @ Centre national des indépendants et paysans,debut 1995 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Olivier d'Ormesson (homme politique) @ Centre national des indépendants et paysans,debut 1996 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Philippe Malaud @ Centre national des indépendants et paysans,debut 1980 / fin du parti 1966-02-02
 moyenne,adhesion_apres_dissolution,Pierre de Bénouville @ Union pour la défense de la République,debut 1970 / fin du parti 1968-06-30
 moyenne,adhesion_apres_dissolution,Serge Dassault @ Centre national des indépendants et paysans,debut 1974 / fin du parti 1966-02-02
+moyenne,adhesion_apres_dissolution,Yvon Briant @ Centre national des indépendants et paysans,debut 1990 / fin du parti 1966-02-02
+moyenne,enfant_ne_avant_son_parent,"Via, la voie du peuple",enfant 2001-02-27 < parent Union pour un mouvement populaire 2002-04-23
 moyenne,organisation_isolee_importante,Action directe,aucune relation org-org
 moyenne,organisation_isolee_importante,Actions antifascistes en France,aucune relation org-org
 moyenne,organisation_isolee_importante,Ai'a Api,aucune relation org-org
@@ -35,7 +45,6 @@ moyenne,organisation_isolee_importante,Le Mouvement de la ruralité,aucune relat
 moyenne,organisation_isolee_importante,Les Identitaires,aucune relation org-org
 moyenne,organisation_isolee_importante,Les Jeunes Socialistes,aucune relation org-org
 moyenne,organisation_isolee_importante,Ligue communiste internationale (quatrième internationaliste),aucune relation org-org
-moyenne,organisation_isolee_importante,Ligue de la Jeune République,aucune relation org-org
 moyenne,organisation_isolee_importante,Ligue savoisienne,aucune relation org-org
 moyenne,organisation_isolee_importante,Ligue trotskyste de France,aucune relation org-org
 moyenne,organisation_isolee_importante,Motivés !,aucune relation org-org
@@ -132,23 +141,34 @@ faible,adhesion_avant_fondation,Alain Madelin @ Parti républicain (France),debu
 faible,adhesion_avant_fondation,Alain Madelin @ Union pour la démocratie française,debut 1964 / parti 1978-02-01
 faible,adhesion_avant_fondation,Alain Madelin @ Union pour un mouvement populaire,debut 1964 / parti 2002-04-23
 faible,adhesion_avant_fondation,Alphonse de Lamartine @ Républicains modérés,debut 1848 / parti 1871
+faible,adhesion_avant_fondation,Charles Sitzenstuhl @ Les Républicains,debut 2006 / parti 2015-05-30
+faible,adhesion_avant_fondation,Cécile Duflot @ Les Écologistes,debut 2006-11-16 / parti 2010-11-13
 faible,adhesion_avant_fondation,Dominique Bussereau @ Les Républicains,debut 2002 / parti 2015-05-30
 faible,adhesion_avant_fondation,Emmanuel Macron @ Mouvement des citoyens (France),debut 1990 / parti 1993-05-01
+faible,adhesion_avant_fondation,Eva Joly @ Les Écologistes,debut 2008 / parti 2010-11-13
 faible,adhesion_avant_fondation,Francis Perrin (physicien) @ Parti socialiste (France),debut 1920 / parti 1969
 faible,adhesion_avant_fondation,Francis Ponge @ Renaissance (parti),debut 1919 / parti 2016-04-06
 faible,adhesion_avant_fondation,Franck Riester @ Les Républicains,debut 2002 / parti 2015-05-30
 faible,adhesion_avant_fondation,Georges Frêche @ Mouvement communiste français marxiste-léniniste,debut 1964 / parti 1966
 faible,adhesion_avant_fondation,Georges Sarre @ Mouvement républicain et citoyen,debut 1993 / parti 2003-01-25
+faible,adhesion_avant_fondation,Gwendoline Delbos-Corfield @ Les Écologistes,debut 2004 / parti 2010-11-13
+faible,adhesion_avant_fondation,Gérard Longuet @ Groupe Les Républicains (Sénat),debut 2009 / parti 2015
+faible,adhesion_avant_fondation,Henri de Raincourt @ Groupe Les Républicains (Sénat),debut 2008 / parti 2015
 faible,adhesion_avant_fondation,Irma Rapuzzi @ Parti socialiste (France),debut 1965 / parti 1969
 faible,adhesion_avant_fondation,Jacques Bardoux @ Fédération nationale des républicains indépendants,debut 1951 / parti 1962-12-02
 faible,adhesion_avant_fondation,Jacques Le Goff @ Parti socialiste unifié (France),debut 1958 / parti 1960-04-03
 faible,adhesion_avant_fondation,Jean Lecanuet @ Centre des démocrates sociaux,debut 1966-04-23 / parti 1976-05-21
+faible,adhesion_avant_fondation,Jean-Claude Gaudin @ Groupe Les Républicains (Sénat),debut 2011 / parti 2015
+faible,adhesion_avant_fondation,Jean-François Probst @ Groupe Les Républicains (Sénat),debut 1983 / parti 2015
 faible,adhesion_avant_fondation,Jean-François Revel @ Convention des institutions républicaines,debut 1960 / parti 1964-06-11
+faible,adhesion_avant_fondation,Jean-Louis Roumégas @ Les Écologistes,debut 2008-03-30 / parti 2010-11-13
 faible,adhesion_avant_fondation,Jean-Luc Laurent @ Mouvement républicain et citoyen,debut 1993 / parti 2003-01-25
+faible,adhesion_avant_fondation,Josselin de Rohan @ Groupe Les Républicains (Sénat),debut 2002 / parti 2015
 faible,adhesion_avant_fondation,Karim Zéribi @ Mouvement des citoyens (France),debut 1990 / parti 1993-05-01
 faible,adhesion_avant_fondation,Laurent Marcangeli @ Les Républicains,debut 2002 / parti 2015-05-30
 faible,adhesion_avant_fondation,Lionel Jospin @ Parti communiste internationaliste (lambertiste),debut 1965 / parti 1981
 faible,adhesion_avant_fondation,Louis Vallon @ Rassemblement pour la France,debut 1947 / parti 1999-11-21
+faible,adhesion_avant_fondation,Marc Sangnier @ Le Sillon,debut 1894 / parti 1898
 faible,adhesion_avant_fondation,Marcel Rigout @ Convention pour une alternative progressiste,debut 1992 / parti 1994
 faible,adhesion_avant_fondation,Marielle Gallo @ Mouvement des citoyens (France),debut 1990 / parti 1993-05-01
 faible,adhesion_avant_fondation,Messali Hadj @ Mouvement national algérien (parti),debut 1926-03-02 / parti 1954-11-01
@@ -157,11 +177,13 @@ faible,adhesion_avant_fondation,Nathalie Delattre @ Mouvement radical,debut 2014
 faible,adhesion_avant_fondation,Olivier Carré (homme politique) @ Les Républicains,debut 2002 / parti 2015-05-30
 faible,adhesion_avant_fondation,Olivier d'Ormesson (homme politique) @ Centre national des indépendants et paysans,debut 1947 / parti 1949-01-06
 faible,adhesion_avant_fondation,Padrig Montauzier @ Strollad ar Vro,debut 1970 / parti 1972
+faible,adhesion_avant_fondation,Paul Midy @ Union pour un mouvement populaire,debut 2000 / parti 2002-04-23
 faible,adhesion_avant_fondation,Paul Rivet @ Union progressiste (France),debut 1948 / parti 1950-12-09
 faible,adhesion_avant_fondation,Pierre Cazeneuve @ Allons Enfants (parti politique),debut 2013 / parti 2015-05-05
 faible,adhesion_avant_fondation,Pierre Poujade @ Rassemblement du peuple français,debut 1944 / parti 1947-04-14
 faible,adhesion_avant_fondation,Rachida Dati @ Les Républicains,debut 2006 / parti 2015-05-30
 faible,adhesion_avant_fondation,Robert Spieler @ Parti des forces nouvelles (France),debut 1970 / parti 1974-11-09
+faible,adhesion_avant_fondation,Roch Wamytan @ Front de libération nationale kanak et socialiste,debut 1979 / parti 1984
 faible,date_scission_differente_de_la_fondation_de_l_enfant,Alliance centriste,scission 2017 / fondation 2009-06-27
 faible,date_scission_differente_de_la_fondation_de_l_enfant,Cap21,scission 2010 / fondation 1996-10-28
 faible,date_scission_differente_de_la_fondation_de_l_enfant,Centre national des indépendants et paysans,scission 1967 / fondation 1949-01-06
@@ -189,6 +211,7 @@ faible,date_scission_differente_de_la_fondation_de_l_enfant,Union des droites po
 faible,date_scission_differente_de_la_fondation_de_l_enfant,Union républicaine (France),scission 1905 / fondation 1871-02
 faible,relations_multiples_entre_deux_organisations,Organisation révolutionnaire anarchiste / Union des travailleurs communistes libertaires,"split,succession"
 faible,relations_multiples_entre_deux_organisations,Parti socialiste unifié (France) / Union des groupes et clubs socialistes,"split,succession"
+faible,relations_multiples_entre_deux_organisations,Union pour la démocratie française / Les Centristes - Le Nouveau Centre,"split,succession"
 faible,relations_multiples_entre_deux_organisations,Union pour la démocratie française / Union pour un mouvement populaire,"merge,split"
 faible,sans_date_de_fondation,Alternative socialiste (France),
 faible,sans_date_de_fondation,Brezona,

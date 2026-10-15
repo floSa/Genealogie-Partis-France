@@ -2169,6 +2169,10 @@
    "pas_une_organisation"
   ],
   [
+   "Liste des dirigeants de la Corse",
+   "pas_une_organisation"
+  ],
+  [
    "Liste des partis politiques en Belgique",
    "pas_une_organisation"
   ],
@@ -2986,6 +2990,18 @@
   ],
   [
    "Président de la Commission européenne",
+   "pas_une_organisation"
+  ],
+  [
+   "Président du Parlement basque",
+   "pas_une_organisation"
+  ],
+  [
+   "Président du Parlement de Navarre",
+   "pas_une_organisation"
+  ],
+  [
+   "Président du Parlement européen",
    "pas_une_organisation"
   ],
   [
@@ -4419,10 +4435,6 @@
   [
    "Le Faisceau",
    "1928"
-  ],
-  [
-   "Le Sillon",
-   "1910"
   ],
   [
    "Libéraux (Restauration)",
