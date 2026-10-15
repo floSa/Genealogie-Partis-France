@@ -433,6 +433,7 @@
     drawAxis(L, W, LEFT);
     updateCounts(vis.length);
     updateSnapshot();
+    scheduleHash();
   }
 
   // ligne horizontale à la date choisie, avec la date écrite à droite
@@ -720,9 +721,8 @@
   const validIso = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v || "") && !Number.isNaN(Date.parse(v));
   const clampDate = (v) => (v < DATE_MIN ? DATE_MIN : v > DATE_MAX ? DATE_MAX : v);
 
-  // fixe (ou retire, avec null) la date de la photographie
-  function setDate(iso, { scroll = true } = {}) {
-    state.date = iso && validIso(iso) ? clampDate(iso) : null;
+  // aligne le curseur, le champ et le bouton sur state.date
+  function syncDateControls() {
     const range = $("#date-range");
     $("#date").value = state.date || "";
     if (state.date) {
@@ -731,6 +731,11 @@
     }
     range.classList.toggle("off", !state.date);
     $("#date-clear").hidden = !state.date;
+  }
+  // fixe (ou retire, avec null) la date de la photographie
+  function setDate(iso, { scroll = true } = {}) {
+    state.date = iso && validIso(iso) ? clampDate(iso) : null;
+    syncDateControls();
     if (panelMode === "defaut" && !state.sel && !state.person) showDefault();
     render();
     if (state.date && scroll) scrollToDate();
@@ -741,6 +746,130 @@
     const sc = $("#scroller");
     sc.scrollTop = Math.max(0, yy - sc.clientHeight / 2);
   }
+
+  // ------------------------------------------------------------- liens permanents
+  // L'état de la vue est écrit dans le fragment d'URL (#zone=g&detail=3&...) avec replaceState : on
+  // ne crée pas d'entrée d'historique à chaque réglage. Seules les valeurs différentes des valeurs par
+  // défaut sont écrites, pour garder l'adresse courte.
+  const OPT_NAMES = { per: "etrangeres", rel: "relations", aff: "coalitions", pres: "presidences", chains: "lignees" };
+  const OPT_DEFAULT = ["rel", "pres", "chains"];
+  const sameList = (a, b) => a.length === b.length && a.every((x) => b.includes(x));
+
+  function encodeState() {
+    const q = new URLSearchParams();
+    if (state.wing !== "all") q.set("zone", state.wing);
+    if (state.detail !== 2) q.set("detail", state.detail);
+    if (state.ppy !== 22) q.set("echelle", state.ppy);
+    if (state.y0 !== 1958) q.set("de", state.y0);
+    if (state.y1 !== 2027) q.set("a", state.y1);
+    if (state.fam.size) q.set("familles", [...state.fam].sort().join(","));
+    const kinds = [...state.kinds].sort();
+    if (!sameList(kinds, KIND_DEFAULT_ON)) q.set("natures", kinds.join(","));
+    const opts = Object.keys(OPT_NAMES).filter((k) => state[k]);
+    if (!sameList(opts, OPT_DEFAULT)) q.set("options", opts.map((k) => OPT_NAMES[k]).join(","));
+    if (state.sel) q.set("org", state.sel);
+    if (state.person) q.set("personne", state.person);
+    if (state.date) q.set("date", state.date);
+    return q.toString().replace(/%3A/g, ":").replace(/%2C/g, ",");
+  }
+
+  let hashTimer = null, lastHash = "";
+  function writeHash() {
+    clearTimeout(hashTimer);
+    const h = encodeState();
+    lastHash = h;
+    if (h === location.hash.slice(1)) return;
+    try {
+      history.replaceState(null, "", location.pathname + location.search + (h ? "#" + h : ""));
+    } catch (e) { /* adresse non modifiable (aperçu, navigateur restrictif) : on ignore */ }
+  }
+  // écriture différée : un curseur déplacé en continu ne déclenche qu'une écriture
+  function scheduleHash() {
+    clearTimeout(hashTimer);
+    hashTimer = setTimeout(writeHash, 200);
+  }
+
+  // aligne tous les contrôles de la barre latérale sur state
+  function syncControls() {
+    document.querySelectorAll("#wings button").forEach((b) => b.classList.toggle("on", b.dataset.wing === state.wing));
+    $("#detail").value = state.detail;
+    $("#ppy").value = state.ppy;
+    $("#y0").value = state.y0;
+    $("#y1").value = state.y1;
+    $("#presidents").checked = state.pres;
+    for (const k of ["per", "rel", "aff", "chains"]) $("#" + k).checked = state[k];
+    document.querySelectorAll("#families .chip").forEach((b) => b.classList.toggle("on", state.fam.has(b.dataset.fam)));
+    document.querySelectorAll("#kinds input").forEach((i) => { i.checked = state.kinds.has(i.dataset.kind); });
+    syncDateControls();
+  }
+
+  // lit le fragment d'URL et applique l'état ; renvoie false s'il ne contient pas de réglage
+  function applyHash() {
+    const raw = location.hash.replace(/^#/, "");
+    if (!raw.includes("=")) return false;
+    const q = new URLSearchParams(raw);
+    const num = (k, lo, hi, def) => {
+      const v = q.has(k) ? Number(q.get(k)) : NaN;
+      return Number.isFinite(v) ? Math.max(lo, Math.min(hi, Math.round(v))) : def;
+    };
+    const list = (k) => (q.get(k) || "").split(",").filter(Boolean);
+    state.wing = q.get("zone") in WINGS ? q.get("zone") : "all";
+    state.detail = num("detail", 1, 3, 2);
+    state.ppy = num("echelle", 8, 80, 22);
+    state.y0 = num("de", 1958, 2026, 1958);
+    state.y1 = Math.max(state.y0 + 1, num("a", 1959, 2027, 2027));
+    state.fam = new Set(list("familles").filter((f) => famCount.has(f)));
+    state.kinds = q.has("natures") ? new Set(list("natures").filter((k) => k in KIND_LABEL)) : new Set(KIND_DEFAULT_ON);
+    const opts = q.has("options") ? list("options") : OPT_DEFAULT.map((k) => OPT_NAMES[k]);
+    for (const k of Object.keys(OPT_NAMES)) state[k] = opts.includes(OPT_NAMES[k]);
+    const date = q.get("date");
+    state.date = validIso(date) ? clampDate(date) : null;
+    state.sel = null; state.person = null; forced = new Set();
+    syncControls();
+    const org = O.get(q.get("org")), pers = P.get(q.get("personne"));
+    if (org && org.t0 != null) selectOrg(org.id);
+    else if (pers) selectPerson(pers.id);
+    else {
+      showDefault();
+      render();
+      const sc = $("#scroller");
+      if (state.date) scrollToDate(); else sc.scrollTop = 0;
+    }
+    return true;
+  }
+  // un fragment modifié à la main (ou collé) dans l'onglet déjà ouvert est appliqué ; nos propres
+  // écritures passent par replaceState et ne déclenchent pas cet événement
+  window.addEventListener("hashchange", () => {
+    if (location.hash.slice(1) !== lastHash) applyHash();
+  });
+
+  // ---------------------------------------------------------------- copie dans le presse-papiers
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* repli ci-dessous */ }
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    ta.remove();
+    return ok;
+  }
+  // message court à côté des boutons d'outils, annoncé par la région role="status"
+  let statusTimer = null;
+  function announce(msg) {
+    const st = $("#status");
+    st.textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { st.textContent = ""; }, 4000);
+  }
+  $("#copy-link").addEventListener("click", async () => {
+    writeHash();
+    const ok = await copyText(location.href);
+    if (ok) announce("Lien copié.");
+    else { announce("Copie automatique impossible."); window.prompt("Copiez ce lien :", location.href); }
+  });
 
   // ------------------------------------------------------------------- interactions
   function neighborsForced(id) {
@@ -949,6 +1078,6 @@
   let rt;
   new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 120); }).observe($("#scroller"));
 
-  showDefault();
-  render();
+  // démarrage : un lien permanent restaure la vue, sinon vue par défaut
+  if (!applyHash()) { showDefault(); render(); }
 })();

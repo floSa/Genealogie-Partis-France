@@ -55,6 +55,10 @@ button { cursor: pointer; }
 .brand h1 { margin: 0; font-size: 18px; font-weight: 650; letter-spacing: 0.1px; }
 .brand .sub { margin: 0; color: var(--muted); font-size: 12.5px; }
 .search { position: relative; width: min(460px, 46vw); }
+.tools { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tools button { border: 1px solid var(--line); background: var(--bg); border-radius: 8px; padding: 7px 12px; }
+.tools button:hover { background: var(--accent-soft); }
+.status { color: var(--muted); font-size: 12.5px; }
 .search input {
   width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px;
   background: var(--bg);
