@@ -165,6 +165,8 @@
   };
   let forced = new Set();
   let geom = new Map(); // id -> {x, w, y0, y1}
+  let barEls = new Map(); // id -> élément SVG de la barre (rempli à chaque dessin)
+  let focusId = null; // dernière barre ayant reçu le focus (tabindex roulant)
   let cur = null; // dernier rendu
 
   // ------------------------------------------------------------------------ visibilité
@@ -274,6 +276,8 @@
     const vis = orgs.filter(isVisible);
     const L = computeLayout(vis, innerW, LEFT);
     const H = TOP + (state.y1 - state.y0) * state.ppy + 40;
+    // le redessin remplace les barres : on note celle qui a le focus pour le lui rendre ensuite
+    const refocus = svg.contains(document.activeElement) && document.activeElement.classList.contains("bar") ? document.activeElement.dataset.id : null;
     svg.setAttribute("width", W);
     svg.setAttribute("height", H);
     svg.replaceChildren();
@@ -372,9 +376,22 @@
     // barres
     const labelBoxes = [];
     const sorted = [...vis].sort((a, b) => b.imp - a.imp);
-    for (const o of vis) {
+    // ordre chronologique : c'est l'ordre de lecture et de navigation au clavier. Une seule barre est
+    // dans l'ordre de tabulation (tabindex roulant) : la sélection, sinon la dernière focalisée, sinon
+    // la première ; les flèches passent d'une barre à l'autre.
+    const byTime = [...vis].sort((a, b) => a.t0 - b.t0 || (a.px ?? 9) - (b.px ?? 9) || a.n.localeCompare(b.n, "fr"));
+    const tabId = [state.sel, focusId].find((id) => id && geom.has(id)) || (byTime[0] && byTime[0].id);
+    barEls = new Map();
+    for (const o of byTime) {
       const g = geom.get(o.id);
-      const bar = el("g", { class: "bar", tabindex: 0, role: "button", "data-id": o.id, "aria-label": `${o.n}, ${span(o.s, o.e, o.st === "actif")}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}` }, gBars);
+      const bar = el("g", {
+        class: "bar", tabindex: o.id === tabId ? 0 : -1, role: "button", "data-id": o.id,
+        "aria-pressed": state.sel === o.id ? "true" : "false",
+        "aria-label": `${o.n}, ${KIND_SINGLE[o.k] || ""}, ${span(o.s, o.e, o.st === "actif")}, position ${o.pv == null ? (o.px != null ? "estimée : " : "") : ""}${o.px != null ? posWord(o.px) : "non renseignée"}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}`,
+      }, gBars);
+      barEls.set(o.id, bar);
+      // anneau de focus clavier (visible même sur une barre estompée ou très fine)
+      el("rect", { class: "ring", x: g.x - 4, y: g.ya - 4, width: g.w + 8, height: g.yb - g.ya + 8, rx: 6 }, bar);
       const rect = el("rect", {
         class: "body", x: g.x, y: g.ya, width: g.w, height: g.yb - g.ya, rx: 3,
         fill: o.color, "fill-opacity": o.est ? 0.38 : 0.92,
@@ -429,11 +446,26 @@
     // ligne de la photographie à une date, tracée par-dessus
     if (td != null && td >= state.y0 && td <= state.y1) drawDateLine(gPath, L, W, RIGHT);
 
-    cur = { L, W, H, count: vis.length, edges: nEdges, vis };
+    cur = { L, W, H, count: vis.length, edges: nEdges, vis, order: byTime.map((o) => o.id) };
+    if (refocus && barEls.has(refocus)) barEls.get(refocus).focus({ preventScroll: true });
     drawAxis(L, W, LEFT);
     updateCounts(vis.length);
     updateSnapshot();
+    syncAria();
     scheduleHash();
+  }
+
+  // attributs d'accessibilité qui suivent l'état : boutons à bascule et valeurs lisibles des curseurs
+  function syncAria() {
+    document.querySelectorAll("#wings button, #families .chip").forEach((b) => b.setAttribute("aria-pressed", String(b.classList.contains("on"))));
+    $("#detail").setAttribute("aria-valuetext", ["Grands partis", "Principaux", "Tous"][state.detail - 1]);
+    $("#ppy").setAttribute("aria-valuetext", `${state.ppy} pixels par année`);
+  }
+  // message lu par les lecteurs d'écran, sans affichage (région role="status" masquée)
+  function srAnnounce(msg) {
+    const r = $("#sr-status");
+    r.textContent = "";
+    setTimeout(() => { r.textContent = msg; }, 50);
   }
 
   // ligne horizontale à la date choisie, avec la date écrite à droite
@@ -555,6 +587,7 @@
         <p>Cliquez sur une barre pour voir un parti, ses scissions, fusions, ses fondateurs et dirigeants. Cliquez sur un nom de personne pour suivre son parcours à travers les partis.</p>
         <p>Choisissez une zone du spectre à gauche pour agrandir cette partie de l'axe et faire apparaître les petits mouvements.</p>
         <p>Ctrl + molette sur la frise pour changer l'échelle du temps.</p>
+        <p>Au clavier : Tab pour entrer dans la frise, flèches pour passer d'une organisation à l'autre, Entrée pour ouvrir sa fiche, Échap pour retirer la sélection.</p>
         <p>Le champ « Voir à la date » trace une ligne sur la frise et liste les organisations qui existaient ce jour-là.</p>
       </section>
       <section><h3>Sources et limites</h3>
@@ -1030,6 +1063,7 @@
     state.sel = id; state.person = null;
     forced = neighborsForced(id);
     showOrg(O.get(id));
+    srAnnounce(`Fiche affichée : ${O.get(id).n}`);
     render();
     if (scroll) scrollToOrg(id);
   }
@@ -1037,20 +1071,24 @@
     state.person = id; state.sel = null;
     forced = new Set((orgsByPers.get(id) || []).map((e) => e.o));
     showPerson(P.get(id));
+    srAnnounce(`Parcours affiché : ${P.get(id).n}`);
     render();
     const first = (orgsByPers.get(id) || []).map((e) => O.get(e.o)).filter((o) => o && o.t0 != null).sort((a, b) => a.t0 - b.t0)[0];
     if (first) scrollToOrg(first.id);
   }
   function selectNone() {
+    const had = state.sel || state.person;
     state.sel = null; state.person = null; forced = new Set();
     showDefault();
     render();
+    if (had) srAnnounce("Sélection retirée");
   }
   function scrollToOrg(id) {
     const g = geom.get(id);
     if (!g) return;
     const sc = $("#scroller");
-    sc.scrollTo({ top: Math.max(0, g.ya - 140), behavior: "smooth" });
+    const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sc.scrollTo({ top: Math.max(0, g.ya - 140), behavior: calme ? "auto" : "smooth" });
     const cx = g.x + g.w / 2;
     if (cx < sc.scrollLeft || cx > sc.scrollLeft + sc.clientWidth) sc.scrollTo({ left: Math.max(0, cx - sc.clientWidth / 2) });
   }
@@ -1060,18 +1098,61 @@
     if (bar) selectOrg(bar.dataset.id, false);
     else if (state.sel || state.person) selectNone();
   });
-  $("#chart").addEventListener("keydown", (ev) => {
-    if ((ev.key === "Enter" || ev.key === " ") && ev.target.classList.contains("bar")) {
-      ev.preventDefault();
-      selectOrg(ev.target.dataset.id, false);
+  // Clavier : Tab entre dans la frise, flèches haut/bas = organisation précédente ou suivante dans
+  // le temps, flèches gauche/droite = voisine la plus proche sur l'axe pendant la même période,
+  // Début/Fin = première ou dernière, Entrée ou Espace = ouvrir la fiche, Échap = retirer la sélection.
+  function focusBar(id) {
+    const b = barEls.get(id);
+    if (!b) return;
+    b.focus();
+    b.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+  function sideNeighbor(id, dir) {
+    const g = geom.get(id);
+    if (!g) return null;
+    const cx = g.x + g.w / 2;
+    let best = null, bd = Infinity;
+    for (const other of cur.order) {
+      const q = geom.get(other);
+      if (other === id || !q || q.yb < g.ya || q.ya > g.yb) continue; // doit exister pendant la même période
+      const dx = (q.x + q.w / 2 - cx) * dir;
+      if (dx <= 0.5) continue;
+      const d = dx + Math.abs(q.ya - g.ya) * 0.02;
+      if (d < bd) { bd = d; best = other; }
     }
+    return best;
+  }
+  $("#chart").addEventListener("focusin", (ev) => {
+    const b = ev.target.closest && ev.target.closest(".bar");
+    if (!b) return;
+    focusId = b.dataset.id;
+    barEls.forEach((el2) => el2.setAttribute("tabindex", el2 === b ? "0" : "-1"));
+  });
+  $("#chart").addEventListener("keydown", (ev) => {
+    const bar = ev.target.closest && ev.target.closest(".bar");
+    if (!bar || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    const id = bar.dataset.id, order = cur.order, i = order.indexOf(id);
+    let next = null;
+    switch (ev.key) {
+      case "Enter": case " ": ev.preventDefault(); selectOrg(id, false); return;
+      case "Escape": if (state.sel || state.person) { ev.preventDefault(); selectNone(); } return;
+      case "ArrowDown": next = order[Math.min(order.length - 1, i + 1)]; break;
+      case "ArrowUp": next = order[Math.max(0, i - 1)]; break;
+      case "ArrowRight": next = sideNeighbor(id, 1); break;
+      case "ArrowLeft": next = sideNeighbor(id, -1); break;
+      case "Home": next = order[0]; break;
+      case "End": next = order[order.length - 1]; break;
+      default: return;
+    }
+    ev.preventDefault();
+    if (next && next !== id) focusBar(next);
   });
   panel.addEventListener("click", (ev) => {
     const o = ev.target.closest("[data-org]");
     const p = ev.target.closest("[data-person]");
     const a = ev.target.closest("[data-act]");
-    if (o) selectOrg(o.dataset.org);
-    else if (p) selectPerson(p.dataset.person);
+    if (o) { selectOrg(o.dataset.org); panel.focus({ preventScroll: true }); }
+    else if (p) { selectPerson(p.dataset.person); panel.focus({ preventScroll: true }); }
     else if (a) panelAction(a.dataset.act);
   });
   // mémorise les zones dépliées dans la photographie (l'événement toggle ne remonte pas : capture)
@@ -1181,9 +1262,15 @@
   // recherche
   const q = $("#q"), res = $("#results");
   let resItems = [], resCur = -1;
+  // liste de résultats ouverte ou fermée, signalée au lecteur d'écran (combobox)
+  const setRes = (open) => {
+    res.hidden = !open;
+    q.setAttribute("aria-expanded", String(open));
+    if (!open) q.removeAttribute("aria-activedescendant");
+  };
   function search() {
     const s = norm(q.value.trim());
-    if (s.length < 2) { res.hidden = true; return; }
+    if (s.length < 2) { setRes(false); return; }
     const hits = [];
     for (const o of orgs) {
       const i = o.search.indexOf(s);
@@ -1196,14 +1283,14 @@
     hits.sort((a, b) => a.score - b.score);
     resItems = hits.slice(0, 14);
     res.innerHTML = resItems.map((h, i) => h.type === "org"
-      ? `<li data-i="${i}"><span>${esc(h.o.n)}</span><span class="tag">${esc(KIND_SINGLE[h.o.k] || "")}${h.o.s ? ", " + h.o.s.slice(0, 4) : ""}</span></li>`
-      : `<li data-i="${i}"><span>${esc(h.p.n)}</span><span class="tag">personne${h.p.b ? ", né en " + h.p.b.slice(0, 4) : ""}</span></li>`).join("") || '<li><span class="tag">Aucun résultat</span></li>';
-    res.hidden = false; resCur = -1;
+      ? `<li role="option" id="res-${i}" data-i="${i}"><span>${esc(h.o.n)}</span><span class="tag">${esc(KIND_SINGLE[h.o.k] || "")}${h.o.s ? ", " + h.o.s.slice(0, 4) : ""}</span></li>`
+      : `<li role="option" id="res-${i}" data-i="${i}"><span>${esc(h.p.n)}</span><span class="tag">personne${h.p.b ? ", né en " + h.p.b.slice(0, 4) : ""}</span></li>`).join("") || '<li role="presentation"><span class="tag">Aucun résultat</span></li>';
+    setRes(true); resCur = -1;
   }
   function choose(i) {
     const h = resItems[i];
     if (!h) return;
-    res.hidden = true; q.value = "";
+    setRes(false); q.value = "";
     if (h.type === "org") {
       const o = h.o;
       if (o.t0 == null) { showOrg(o); return; }
@@ -1216,15 +1303,27 @@
     if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
       ev.preventDefault();
       resCur = (resCur + (ev.key === "ArrowDown" ? 1 : -1) + items.length) % Math.max(1, items.length);
-      items.forEach((x, i) => x.classList.toggle("cur", i === resCur));
+      items.forEach((x, i) => { x.classList.toggle("cur", i === resCur); x.setAttribute("aria-selected", String(i === resCur)); });
+      if (items[resCur]) q.setAttribute("aria-activedescendant", items[resCur].id);
     } else if (ev.key === "Enter") choose(resCur >= 0 ? resCur : 0);
-    else if (ev.key === "Escape") res.hidden = true;
+    else if (ev.key === "Escape") setRes(false);
   });
   res.addEventListener("mousedown", (ev) => { const li = ev.target.closest("li[data-i]"); if (li) choose(+li.dataset.i); });
-  document.addEventListener("click", (ev) => { if (!ev.target.closest(".search")) res.hidden = true; });
+  document.addEventListener("click", (ev) => { if (!ev.target.closest(".search")) setRes(false); });
 
   let rt;
   new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 120); }).observe($("#scroller"));
+
+  // liens d'évitement (boutons : un lien « # » modifierait le fragment d'URL qui porte l'état)
+  document.querySelector(".skip-links").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button");
+    if (!b) return;
+    const to = b.dataset.skip;
+    if (to === "chart") {
+      const bar = $("#chart .bar[tabindex='0']") || $("#chart .bar");
+      if (bar) bar.focus(); else $("#scroller").focus();
+    } else $("#" + to).focus();
+  });
 
   // démarrage : un lien permanent restaure la vue, sinon vue par défaut
   if (!applyHash()) { showDefault(); render(); }

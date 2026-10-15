@@ -4,17 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Partis politiques français depuis 1958</title>
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="skip-links">
+  <button type="button" data-skip="filters">Aller aux filtres</button>
+  <button type="button" data-skip="chart">Aller à la frise</button>
+  <button type="button" data-skip="panel">Aller à la fiche</button>
+</div>
 <header class="top">
   <div class="brand">
     <h1>Partis et mouvements politiques français</h1>
     <p class="sub">Ve République, 1958 à aujourd'hui</p>
   </div>
   <div class="search">
-    <input id="q" type="search" placeholder="Chercher un parti, un sigle ou une personne" autocomplete="off" aria-label="Recherche">
-    <ul id="results" class="results" hidden></ul>
+    <input id="q" type="search" placeholder="Chercher un parti, un sigle ou une personne" autocomplete="off" aria-label="Recherche d'un parti, d'un sigle ou d'une personne"
+      role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="results" aria-haspopup="listbox">
+    <ul id="results" class="results" role="listbox" aria-label="Résultats de recherche" hidden></ul>
   </div>
   <div class="tools">
     <button id="copy-link" type="button">Copier le lien</button>
@@ -24,7 +31,7 @@
 </header>
 
 <div class="layout">
-  <aside class="filters" id="filters" aria-label="Filtres">
+  <aside class="filters" id="filters" aria-label="Filtres" tabindex="-1">
     <section>
       <h2>Zone du spectre</h2>
       <div class="wings" id="wings" role="group" aria-label="Zone du spectre politique">
@@ -105,15 +112,17 @@
     </section>
   </aside>
 
-  <main class="stage" id="stage">
+  <main class="stage" id="stage" aria-label="Frise chronologique">
     <div class="axis-top" id="axis-top"><svg id="axis" width="100%" height="46" role="img" aria-label="Axe politique"></svg></div>
-    <div class="scroller" id="scroller">
-      <svg id="chart" role="group" aria-label="Frise chronologique des partis"></svg>
+    <div class="scroller" id="scroller" tabindex="-1">
+      <p id="chart-help" class="sr-only">Une organisation par barre, classées par date de fondation. Flèches haut et bas : organisation précédente ou suivante. Flèches gauche et droite : voisine sur l'axe. Entrée : ouvrir la fiche. Échap : retirer la sélection.</p>
+      <svg id="chart" role="group" aria-label="Frise chronologique des partis" aria-describedby="chart-help"></svg>
     </div>
     <div class="tooltip" id="tooltip" hidden></div>
   </main>
 
-  <aside class="panel" id="panel" aria-live="polite"></aside>
+  <aside class="panel" id="panel" role="region" aria-label="Fiche détaillée" tabindex="-1"></aside>
+  <div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
 </div>
 
 <script src="data.js"></script>
