@@ -429,7 +429,7 @@
     // ligne de la photographie à une date, tracée par-dessus
     if (td != null && td >= state.y0 && td <= state.y1) drawDateLine(gPath, L, W, RIGHT);
 
-    cur = { L, W, H, count: vis.length, edges: nEdges };
+    cur = { L, W, H, count: vis.length, edges: nEdges, vis };
     drawAxis(L, W, LEFT);
     updateCounts(vis.length);
     updateSnapshot();
@@ -870,6 +870,60 @@
     if (ok) announce("Lien copié.");
     else { announce("Copie automatique impossible."); window.prompt("Copiez ce lien :", location.href); }
   });
+
+  // ------------------------------------------------------------------------ export CSV
+  const STATUS_LABEL = { actif: "toujours actif", dissous: "dissous", fusionne: "a fusionné", transforme: "transformé" };
+  // une cellule CSV : guillemets doublés si besoin, et apostrophe devant les valeurs qu'un tableur
+  // lirait comme une formule (= + @ -) pour éviter l'injection de formule
+  function csvCell(v) {
+    let t = v == null ? "" : String(v);
+    if (/^[=+@\t\r]/.test(t) || /^-(?![\d.,]+$)/.test(t)) t = "'" + t;
+    return /[;"\r\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  }
+  const csvRow = (cells) => cells.map(csvCell).join(";");
+  function posText(o) {
+    if (o.pv != null) return posWord(o.pv);
+    return o.px != null ? `${posWord(o.px)} (estimée)` : "non positionnée";
+  }
+
+  // Le fichier contient les organisations actuellement dessinées et, si une personne est
+  // sélectionnée, un second bloc avec son parcours. Séparateur point-virgule, UTF-8 avec BOM
+  // (pour qu'Excel lise bien les accents), fins de ligne CRLF.
+  function buildCsv() {
+    const td = state.date ? yf(state.date) : null;
+    const lines = [];
+    const head = ["Nom", "Nature", "Début", "Fin", "Statut", "Position", "Familles", "Lien Wikipédia"];
+    if (td != null) head.push(`Active le ${fmtDate(state.date)}`);
+    lines.push(csvRow(head));
+    const rows = [...((cur && cur.vis) || [])].sort((a, b) => a.t0 - b.t0 || a.n.localeCompare(b.n, "fr"));
+    for (const o of rows) {
+      const cells = [o.n, KIND_SINGLE[o.k] || o.k, o.s || "", o.e || "", STATUS_LABEL[o.st] || o.st, posText(o),
+        o.fam.map((f) => FAMILY_LABEL[f] || f).join(" / "), o.url];
+      if (td != null) cells.push(isActiveAt(o, td) ? "oui" : "non");
+      lines.push(csvRow(cells));
+    }
+    const p = state.person && P.get(state.person);
+    if (p) {
+      lines.push("", csvRow([`Parcours de ${p.n}`]), csvRow(["Rôle", "Organisation", "Début", "Fin"]));
+      const path = [...(orgsByPers.get(p.id) || [])].filter((e) => O.get(e.o))
+        .sort((a, b) => (a.s || O.get(a.o).s || "9999").localeCompare(b.s || O.get(b.o).s || "9999"));
+      for (const e of path) lines.push(csvRow([ROLE_LABEL[e.r] || e.r, O.get(e.o).n, e.s || "", e.e || ""]));
+    }
+    return { text: lines.join("\r\n") + "\r\n", nOrgs: rows.length, person: p || null };
+  }
+  function downloadCsv() {
+    const { text, nOrgs, person } = buildCsv();
+    const blob = new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `partis-affiches-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    announce(`${plural(nOrgs, "organisation exportée", "organisations exportées")}${person ? ", avec le parcours de " + person.n : ""}.`);
+  }
+  $("#export-csv").addEventListener("click", downloadCsv);
 
   // ------------------------------------------------------------------- interactions
   function neighborsForced(id) {
