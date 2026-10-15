@@ -32,6 +32,11 @@
     },
     "Internationale situationniste": {
       "tier": 3
+    },
+    "Les Écologistes": {
+      "start": "2010-11-13",
+      "_pourquoi": "La page couvre Les Verts (1984) puis EELV (2010) puis Les Écologistes (2023) ; Les Verts a sa propre page jusqu'en 2010 : on fait commencer cette entité en 2010 pour que les deux barres se suivent (chevauchement de 26 ans sinon)."
     }
-  }
+  },
+  "lineages": []
 }

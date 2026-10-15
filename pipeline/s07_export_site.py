@@ -55,7 +55,8 @@ def main():
         if e["layer"] == "org_org":
             oe.append({"ty": e["type"], "s": e["source"], "t": e["target"], "d": e.get("date"),
                        "st": e.get("start"), "en": e.get("end"), "c": 1 if e["confidence"].startswith("confirmee") else 0,
-                       "dc": 1 if e.get("declared_by_source") else 0})
+                       "dc": 1 if e.get("declared_by_source") else 0,
+                       "w": 1 if "wikidata" in e["confidence"] else 0})
         else:
             pe.append({"p": e["source"], "o": e["target"], "r": e["type"], "s": e["start"], "e": e["end"],
                        "l": (e.get("label") or "")[:90]})

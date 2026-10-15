@@ -22,6 +22,7 @@ import csv
 import json
 import math
 import re
+import shutil
 import unicodedata
 from collections import Counter, defaultdict
 
@@ -90,6 +91,13 @@ def wd_date(v):
     if mo == "01" and d == "01":
         return y  # 1er janvier : precision annuelle probable
     return f"{y}-{mo}-{d}"
+
+
+def strip_key(s: str) -> str:
+    """Cle de rapprochement : minuscules, sans accents ni parentheses ni ponctuation."""
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().lower()
+    s = re.sub(r"\([^)]*\)", " ", s)
+    return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
 def wp_url(title):
@@ -572,6 +580,49 @@ def main():
             e["sides"].add(side)
             e["evid"].append({"page": t, "field": rel["field"], "start": rel["start"], "end": rel["end"], "raw": rel["raw"]})
 
+    # relations declarees dans Wikidata (seconde source independante) : confirment ou completent
+    n_wd_new = n_wd_conf = 0
+    wdr_path = RAW / "wd_relations.json"
+    if wdr_path.exists():
+        qid_node = {rec["qid"]: node_of[t] for t, rec in recs.items() if rec.get("qid")}
+        wd_keys = {"P155": ("succession", 1), "P1365": ("succession", 1), "P156": ("succession", 0),
+                   "P1366": ("succession", 0), "P807": ("split", 1)}
+        for r in json.loads(wdr_path.read_text(encoding="utf-8"))["relations"]:
+            a, b = qid_node.get(r["a"]), qid_node.get(r["b"])
+            if not a or not b or a == b or r["prop"] not in wd_keys:
+                continue
+            typ, reverse = wd_keys[r["prop"]]
+            key = (typ, b, a) if reverse else (typ, a, b)  # 'a suit b' => b -> a ; 'a suivi par b' => a -> b
+            existed = key in raw_edges
+            if not existed and typ == "succession":
+                # Wikidata emploie 'suivi par' pour des scissions ou des filiations larges : une
+                # succession (renommage) ne peut pas chevaucher son predecesseur de plus de 2 ans
+                ra = next((x for x in recs.values() if node_of[x["title"]] == key[1]), None)
+                rb = next((x for x in recs.values() if node_of[x["title"]] == key[2]), None)
+                if ra and rb and ra["start"] and rb["start"]:
+                    end_a = year_of(ra["end"]) or 2026
+                    end_b = year_of(rb["end"]) or 2026
+                    overlap = min(end_a, end_b) - max(year_of(ra["start"]), year_of(rb["start"]))
+                    if overlap > 2 or year_of(rb["start"]) < year_of(ra["start"]):
+                        continue
+            e = raw_edges[key]
+            e["sides"].add("wd")
+            e["evid"].append({"page": "Wikidata", "field": r["prop"], "start": None, "end": None,
+                              "raw": f"{r['a']} {r['prop']} {r['b']}"})
+            n_wd_conf += existed
+            n_wd_new += not existed
+    print(f"relations Wikidata : {n_wd_conf} confirment une relation de Wikipedia, {n_wd_new} sont nouvelles")
+
+    def confidence_of(sides):
+        pages = sides & {"src", "dst"}
+        if len(pages) == 2:
+            return "confirmee_2_pages"
+        if pages and "wd" in sides:
+            return "confirmee_page_et_wikidata"
+        if "wd" in sides:
+            return "wikidata_seule"
+        return "une_page"
+
     edges = []
     for (typ, a, b), e in raw_edges.items():
         starts = [x["start"] for x in e["evid"] if x["start"]]
@@ -588,8 +639,8 @@ def main():
             "date": date if typ != "affiliation" else None,
             "start": min(starts) if starts and typ == "affiliation" else None,
             "end": max(ends) if ends and typ == "affiliation" and any(x["end"] != x["start"] for x in e["evid"]) else None,
-            "confidence": "confirmee_2_pages" if len(e["sides"]) == 2 else "une_page",
-            "evidence": [{"page": x["page"], "champ": x["field"], "texte": x["raw"]} for x in e["evid"]][:4],
+            "confidence": confidence_of(e["sides"]),
+            "evidence": [{"page": x["page"], "champ": x["field"], "texte": x["raw"]} for x in e["evid"]][:5],
             "declared_by_source": "src" in e["sides"],
             "flags": flags,
         }
@@ -768,6 +819,74 @@ def main():
         node.update(ov)
         nodes_org.append(node)
 
+    # courants internes rattaches a leur parti d'apres leur categorie : « Courant du Parti socialiste »
+    by_key = defaultdict(list)
+    for n in nodes_org:
+        if n["kind"] == "current":
+            continue
+        for k in {strip_key(n["title"]), strip_key(n["name"])} | {strip_key(a) for a in n["abbreviations"]}:
+            if k:
+                by_key[k].append(n["id"])
+    n_current = 0
+    for n in nodes_org:
+        parent = None
+        for c in n["wikipedia_categories"]:
+            m = re.match(r"^Courant (?:du|de la|de l'|des|de) (.+)$", c)
+            if m:
+                cands = by_key.get(strip_key(m.group(1)), [])
+                if len(cands) == 1 and cands[0] != n["id"]:
+                    parent, cat = cands[0], c
+                    break
+        if parent:
+            edges.append({
+                "type": "current_of", "source": n["id"], "target": parent, "date": None, "start": n.get("start"), "end": n.get("end"),
+                "confidence": "categorie", "evidence": [{"page": n["title"], "champ": "categorie", "texte": cat}],
+                "declared_by_source": False, "flags": [],
+            })
+            if n["kind"] != "current":
+                n["flags"].append("courant_rattache_par_categorie")
+            n_current += 1
+    print("courants rattaches a un parti:", n_current)
+
+    # lignees : suites de changements de nom (successions qui se suivent sans chevauchement)
+    def yfrac(iso):
+        if not iso:
+            return None
+        return int(iso[:4]) + ((int(iso[5:7]) - 1) / 12 if len(iso) >= 7 else 0)
+
+    by_node = {n["id"]: n for n in nodes_org}
+    nxt, prv = {}, {}
+    forced = overrides.get("lineages", [])
+    title_id = {n["title"]: n["id"] for n in nodes_org}
+    for grp in forced:  # lignees imposees a la main (liste de titres dans l'ordre)
+        for a_t, b_t in zip(grp, grp[1:]):
+            a_i, b_i = title_id.get(a_t), title_id.get(b_t)
+            if a_i and b_i and a_i not in nxt and b_i not in prv:
+                nxt[a_i], prv[b_i] = b_i, a_i
+    succ = [e for e in edges if e["type"] == "succession" and e["source"] in by_node and e["target"] in by_node]
+    rank = lambda e: ("wikidata" in e["confidence"] or e["confidence"].startswith("confirmee"), e.get("declared_by_source"))
+    for e in sorted(succ, key=rank, reverse=True):
+        if not (e.get("declared_by_source") or e["confidence"].startswith("confirmee") or "wikidata" in e["confidence"]):
+            continue
+        a, b = by_node[e["source"]], by_node[e["target"]]
+        a0, a1, b0, b1 = yfrac(a["start"]), yfrac(a["end"]) or 2026.8, yfrac(b["start"]), yfrac(b["end"]) or 2026.8
+        if a0 is None or b0 is None or b0 < a0 or min(a1, b1) - max(a0, b0) > 2:
+            continue
+        if a["id"] in nxt or b["id"] in prv or a["id"] == b["id"]:
+            continue
+        nxt[a["id"]], prv[b["id"]] = b["id"], a["id"]
+    n_lineages = 0
+    for head in [i for i in by_node if i not in prv and i in nxt]:
+        chain, cur, guard = [], head, set()
+        while cur and cur not in guard:
+            guard.add(cur)
+            chain.append(cur)
+            cur = nxt.get(cur)
+        for i, nid in enumerate(chain):
+            by_node[nid]["lineage"] = {"id": head, "index": i, "size": len(chain)}
+        n_lineages += 1
+    print("lignees de changements de nom :", n_lineages)
+
     # position deduite des organisations voisines (membres d'une coalition, scission, successeur)
     # pour celles qui n'ont ni position, ni famille permettant de l'estimer
     FAM_WITH_POS = {"trotskiste", "communiste", "maoiste", "anarchiste_libertaire", "extreme_gauche_autre",
@@ -815,6 +934,8 @@ def main():
         person_edges.append({"person": pid, "org": oid, "role": role, "start": start, "end": end,
                              "sources": [source], "label": label})
 
+    leaders_rows = json.loads((G / "leaders_raw.json").read_text(encoding="utf-8")) if (G / "leaders_raw.json").exists() else []
+    table_people = {ps.resolve(x["person"]) for x in leaders_rows}
     for pr in people_raw:
         t = pr["title"]
         if t in title_to_nid:
@@ -857,7 +978,7 @@ def main():
             found = True
         wd = wde.get(pr.get("qid") or "", {})
         looks_person = pr.get("has_infobox") or pr.get("born") or wd.get("born")
-        if found and not re.fullmatch(r"[\d\s\-–]+", t) and looks_person:
+        if (found or t in table_people) and not re.fullmatch(r"[\d\s\-–]+", t) and looks_person:
             people_nodes[pid] = {
                 "id": pid, "type": "person", "title": t, "name": t.split(" (")[0],
                 "qid": pr.get("qid"), "url": wp_url(t),
@@ -880,7 +1001,43 @@ def main():
             if pid in people_nodes:
                 add_pedge(pid, n["id"], "leader", None, None, "wikipedia_infobox_parti_chef", l.get("title_label", ""))
 
-    # dedoublonnage des aretes personne-organisation
+    # dirigeants successifs lus dans les tableaux des pages de partis (s04d)
+    n_tab = 0
+    for x in leaders_rows:
+        oid = title_to_nid.get(ps.resolve(x["party"]))
+        pid = "per:" + slug(ps.resolve(x["person"]))
+        if oid and pid in people_nodes:
+            add_pedge(pid, oid, "leader", x["start"], x["end"], "wikipedia_tableau_dirigeants", x["role"])
+            n_tab += 1
+    print("mandats de dirigeants lus dans les tableaux :", n_tab)
+
+    # dedoublonnage des aretes personne-organisation : les mandats successifs d'un dirigeant
+    # (meme personne, meme parti, annees de debut differentes) restent distincts
+    def fuse(m, e):
+        m["sources"] = list(dict.fromkeys(m["sources"] + e["sources"]))
+        if sum(1 for x in (e["start"], e["end"]) if x) > sum(1 for x in (m["start"], m["end"]) if x):
+            m["start"], m["end"] = e["start"], e["end"]
+        elif not m["start"] and e["start"]:
+            m["start"] = e["start"]
+        if e.get("label") and not m.get("label"):
+            m["label"] = e["label"]
+
+    stints = defaultdict(list)
+    rest = []
+    for e in person_edges:
+        if e["role"] != "leader":
+            rest.append(e)
+            continue
+        lst = stints[(e["person"], e["org"])]
+        y = (e["start"] or "")[:4]
+        for m in lst:
+            my = (m["start"] or "")[:4]
+            if (y and my and y == my) or (not y and lst) or (y and not my):
+                fuse(m, e)
+                break
+        else:
+            lst.append({**e, "sources": list(e["sources"])})
+    person_edges = rest + [m for lst in stints.values() for m in lst]
     merged = {}
     for e in person_edges:
         k = (e["person"], e["org"], e["role"])
@@ -960,6 +1117,12 @@ def main():
     G.mkdir(parents=True, exist_ok=True)
     REVIEW.mkdir(parents=True, exist_ok=True)
     nodes_all = nodes_org + people_list
+    # copie de la construction precedente, pour le rapport de changements (s09_diff_builds.py)
+    snap = ROOT / "data" / "snapshots"
+    snap.mkdir(parents=True, exist_ok=True)
+    for fname in ("nodes.json", "edges.json"):
+        if (G / fname).exists():
+            shutil.copy2(G / fname, snap / ("previous_" + fname))
     (G / "nodes.json").write_text(json.dumps(nodes_all, ensure_ascii=False, indent=1), encoding="utf-8")
     all_edges = [dict(e, id=f"e{i}", layer="org_org") for i, e in enumerate(edges)] + [
         {"id": f"p{i}", "layer": "person_org", "type": e["role"], "source": e["person"], "target": e["org"],

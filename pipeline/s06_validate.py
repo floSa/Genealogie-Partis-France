@@ -276,7 +276,8 @@ def main():
         f"Organisations : {len(orgs)} (coeur 1958+ : {scope.get('coeur',0)}, ancetres anterieurs : {scope.get('ancetre',0)})",
         f"Personnes : {len(people)} ; aretes personne-organisation : {len(pe)} ({dict(ptype)})",
         f"Aretes organisation-organisation : {len(oe)} ({dict(etype)})",
-        f"  dont confirmees par les deux pages : {conf.get('confirmee_2_pages',0)} ; par une seule page : {conf.get('une_page',0)}",
+        f"  confiance : deux pages {conf.get('confirmee_2_pages',0)} ; une page et Wikidata {conf.get('confirmee_page_et_wikidata',0)} ; "
+        f"une seule page {conf.get('une_page',0)} ; Wikidata seul {conf.get('wikidata_seule',0)}",
         "",
         "## Completude des champs (organisations)",
         f"- date de fondation : {has_start}/{len(orgs)} ({100*has_start//max(1,len(orgs))} %)",
