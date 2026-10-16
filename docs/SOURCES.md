@@ -129,7 +129,7 @@ locale du wikitexte de chaque page est dans `data/raw/pages.sqlite` (table `page
 
 | Source | Fichiers | Usage | Citation |
 |---|---|---|---|
-| ParlGov (parlgov.org) | `view_party.csv`, `party.csv`, `view_election.csv` (dossier `parlgov-development_csv-utf-8`) | partis français, voix et sièges aux législatives et européennes depuis 1958, position gauche-droite composite | Döring, Holger et Philip Manow, *Parliaments and governments database (ParlGov)*, parlgov.org (version de développement) ; conditions d'utilisation à confirmer sur le site avant toute diffusion |
+| ParlGov (parlgov.org) | `view_party.csv`, `party.csv`, `view_election.csv` (dossier `parlgov-development_csv-utf-8`) | partis français, voix et sièges aux législatives et européennes depuis 1958, position gauche-droite composite | Döring, Holger et Philip Manow, *Parliaments and Governments Database (ParlGov), Release 2024*, Harvard Dataverse, doi:10.7910/DVN/2VZ5ZC ; cette publication est sous licence CC0 1.0 (vérifié sur Harvard Dataverse le 18 octobre 2026) ; nos fichiers viennent de la version « development » du site, dont la licence n'est pas écrite, et sont cités comme la version publiée |
 | Chapel Hill Expert Survey (chesdata.eu) | `1999-2024_CHES_dataset_meansV2.csv` | position gauche-droite (`lrgen`), économique (`lrecon`) et société (`galtan`) par année d'enquête | Rovny, Polk, Bakker, Hooghe, Jolly, Marks, Steenbergen et Vachudova, 2025, « The 2024 Chapel Hill Expert Survey on political party positioning in Europe : Twenty-five years of party positional data », *Electoral Studies* 97, doi:10.1016/j.electstud.2025.102981 |
 
 Les fichiers sont dans `data/external/`. Rapprochement (`s04e_external_data.py`) : page Wikipédia anglaise
