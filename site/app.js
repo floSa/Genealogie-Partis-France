@@ -115,6 +115,9 @@
       else if (o.st === "actif") o.t1 = NOW;
       else { o.t1 = o.t0 + 3; o.endUnknown = true; }
     } else o.t1 = null;
+    // intervalle pendant lequel l'organisation est comptée comme active (photographie à une date) :
+    // celui de la barre dessinée ; sans date de fin et toujours active, elle l'est jusqu'à aujourd'hui
+    o.a1 = o.t0 == null ? null : (o.st === "actif" && !o.e) ? Infinity : o.t1;
     const b = (() => {
       if (o.pv != null) return { x: o.pv, est: o.ps === "relations" };
       for (const f of o.fam) if (f in FAM_POS) return { x: FAM_POS[f], est: true };
@@ -158,9 +161,12 @@
   const state = {
     detail: 2, wing: "all", ppy: 22, y0: 1958, y1: 2027, fam: new Set(), kinds: new Set(KIND_DEFAULT_ON),
     per: false, rel: true, aff: false, pres: true, chains: true, sel: null, person: null,
+    date: null, // date de la photographie (ISO complète) ou null
   };
   let forced = new Set();
   let geom = new Map(); // id -> {x, w, y0, y1}
+  let barEls = new Map(); // id -> élément SVG de la barre (rempli à chaque dessin)
+  let focusId = null; // dernière barre ayant reçu le focus (tabindex roulant)
   let cur = null; // dernier rendu
 
   // ------------------------------------------------------------------------ visibilité
@@ -170,16 +176,23 @@
     if (o.px == null) return false;
     return o.px >= lo && o.px <= hi;
   }
+  // filtres de contenu (nature, famille, zone, étrangères), sans le niveau de détail
+  function passesFilters(o) {
+    if (o.t0 == null) return false;
+    if (!state.per && o.per) return false;
+    if (!state.kinds.has(o.k)) return false;
+    if (state.fam.size && !o.fam.some((f) => state.fam.has(f))) return false;
+    return inWing(o);
+  }
   function isVisible(o) {
     if (o.t0 == null || o.t1 < state.y0 || o.t0 > state.y1) return false;
     if (o.t1 < DOMAIN_START) return false;
     if (forced.has(o.id)) return true;
-    if (!state.per && o.per) return false;
-    if (!state.kinds.has(o.k)) return false;
     if (o.tier > state.detail) return false;
-    if (state.fam.size && !o.fam.some((f) => state.fam.has(f))) return false;
-    return inWing(o);
+    return passesFilters(o);
   }
+  // l'organisation existe-t-elle à l'instant t (année décimale) ?
+  const isActiveAt = (o, t) => o.t0 != null && o.t0 <= t && o.a1 >= t;
 
   // -------------------------------------------------------------------------- mise en page
   function computeLayout(vis, innerW, left) {
@@ -257,12 +270,16 @@
   function render() {
     const scroller = $("#scroller");
     const svg = $("#chart");
-    const W = Math.max(520, scroller.clientWidth - 4);
-    const LEFT = 84, RIGHT = 18;
+    // petit écran : marge gauche réduite, sans noms de présidents, largeur minimale plus faible
+    const narrow = scroller.clientWidth < 640;
+    const W = Math.max(narrow ? 380 : 520, scroller.clientWidth - 4);
+    const LEFT = narrow ? 34 : 84, RIGHT = 18;
     const innerW = W - LEFT - RIGHT;
     const vis = orgs.filter(isVisible);
     const L = computeLayout(vis, innerW, LEFT);
     const H = TOP + (state.y1 - state.y0) * state.ppy + 40;
+    // le redessin remplace les barres : on note celle qui a le focus pour le lui rendre ensuite
+    const refocus = svg.contains(document.activeElement) && document.activeElement.classList.contains("bar") ? document.activeElement.dataset.id : null;
     svg.setAttribute("width", W);
     svg.setAttribute("height", H);
     svg.replaceChildren();
@@ -282,7 +299,7 @@
         const ya = L.Y(Math.max(a, state.y0)), yb = L.Y(Math.min(b, state.y1));
         if (yb <= ya) return;
         el("rect", { x: LEFT - 4, y: ya, width: W - LEFT + 4, height: yb - ya, fill: i % 2 ? "var(--band-b)" : "var(--band-a)" }, gBg);
-        if (yb - ya > 60) {
+        if (yb - ya > 60 && !narrow) {
           const t = el("text", { x: 70, y: (ya + yb) / 2, class: "yr", "text-anchor": "middle", transform: `rotate(-90 70 ${(ya + yb) / 2})` }, gBg);
           t.textContent = name;
         }
@@ -311,6 +328,9 @@
     const gPath = el("g", {}, svg);
 
     const hl = highlightSet();
+    const td = state.date ? yf(state.date) : null;
+    // estompée si hors de la sélection, ou inexistante à la date de la photographie
+    const dimmed = (o) => (hl && !hl.has(o.id)) || (td != null && !isActiveAt(o, td));
     const link = (x1, y1, x2, y2) => {
       const mx = (x1 + x2) / 2;
       return `M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}`;
@@ -351,16 +371,29 @@
         "stroke-opacity": e.ty === "affiliation" ? 0.45 : 0.6,
         "stroke-dasharray": e.ty === "succession" ? "5 3" : e.ty === "affiliation" ? "1 3" : "",
       }, gEdges);
-      if (hl && !(hl.has(e.s) && hl.has(e.t))) path.setAttribute("class", "dim");
+      if ((hl && !(hl.has(e.s) && hl.has(e.t))) || (td != null && !(isActiveAt(a, td) && isActiveAt(b, td)))) path.setAttribute("class", "dim");
       nEdges++;
     }
 
     // barres
     const labelBoxes = [];
     const sorted = [...vis].sort((a, b) => b.imp - a.imp);
-    for (const o of vis) {
+    // ordre chronologique : c'est l'ordre de lecture et de navigation au clavier. Une seule barre est
+    // dans l'ordre de tabulation (tabindex roulant) : la sélection, sinon la dernière focalisée, sinon
+    // la première ; les flèches passent d'une barre à l'autre.
+    const byTime = [...vis].sort((a, b) => a.t0 - b.t0 || (a.px ?? 9) - (b.px ?? 9) || a.n.localeCompare(b.n, "fr"));
+    const tabId = [state.sel, focusId].find((id) => id && geom.has(id)) || (byTime[0] && byTime[0].id);
+    barEls = new Map();
+    for (const o of byTime) {
       const g = geom.get(o.id);
-      const bar = el("g", { class: "bar", tabindex: 0, role: "button", "data-id": o.id, "aria-label": `${o.n}, ${span(o.s, o.e, o.st === "actif")}` }, gBars);
+      const bar = el("g", {
+        class: "bar", tabindex: o.id === tabId ? 0 : -1, role: "button", "data-id": o.id,
+        "aria-pressed": state.sel === o.id ? "true" : "false",
+        "aria-label": `${o.n}, ${KIND_SINGLE[o.k] || ""}, ${span(o.s, o.e, o.st === "actif")}, position ${o.pv == null ? (o.px != null ? "estimée : " : "") : ""}${o.px != null ? posWord(o.px) : "non renseignée"}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}`,
+      }, gBars);
+      barEls.set(o.id, bar);
+      // anneau de focus clavier (visible même sur une barre estompée ou très fine)
+      el("rect", { class: "ring", x: g.x - 4, y: g.ya - 4, width: g.w + 8, height: g.yb - g.ya + 8, rx: 6 }, bar);
       const rect = el("rect", {
         class: "body", x: g.x, y: g.ya, width: g.w, height: g.yb - g.ya, rx: 3,
         fill: o.color, "fill-opacity": o.est ? 0.38 : 0.92,
@@ -370,7 +403,7 @@
       if (state.sel === o.id) {
         el("rect", { x: g.x - 3, y: g.ya - 3, width: g.w + 6, height: g.yb - g.ya + 6, rx: 5, fill: "none", stroke: "var(--focus)", "stroke-width": 2.5 }, bar);
       }
-      if (hl && !hl.has(o.id)) bar.setAttribute("class", "bar dim");
+      if (dimmed(o)) bar.setAttribute("class", "bar dim");
     }
     // étiquettes (placement glouton : les plus importants d'abord)
     for (const o of sorted) {
@@ -385,7 +418,7 @@
       labelBoxes.push(box);
       const t = el("text", { class: "lbl", x: bx, y: by, "font-weight": o.tier === 1 || forcedLabel ? 650 : 400, "font-size": fs }, gLbl);
       t.textContent = txt;
-      if (hl && !hl.has(o.id)) t.setAttribute("class", "lbl dim");
+      if (dimmed(o)) t.setAttribute("class", "lbl dim");
     }
     // repères de renommage sur les barres (FN -> RN, UMP -> LR...) : trait et nom, au zoom suffisant
     for (const o of vis) {
@@ -412,10 +445,38 @@
 
     // parcours d'une personne
     if (state.person) drawPersonPath(gPath, L);
+    // ligne de la photographie à une date, tracée par-dessus
+    if (td != null && td >= state.y0 && td <= state.y1) drawDateLine(gPath, L, W, RIGHT);
 
-    cur = { L, W, H, count: vis.length, edges: nEdges };
+    cur = { L, W, H, count: vis.length, edges: nEdges, vis, order: byTime.map((o) => o.id) };
+    if (refocus && barEls.has(refocus)) barEls.get(refocus).focus({ preventScroll: true });
     drawAxis(L, W, LEFT);
     updateCounts(vis.length);
+    updateSnapshot();
+    syncAria();
+    scheduleHash();
+  }
+
+  // attributs d'accessibilité qui suivent l'état : boutons à bascule et valeurs lisibles des curseurs
+  function syncAria() {
+    document.querySelectorAll("#wings button, #families .chip").forEach((b) => b.setAttribute("aria-pressed", String(b.classList.contains("on"))));
+    $("#detail").setAttribute("aria-valuetext", ["Grands partis", "Principaux", "Tous"][state.detail - 1]);
+    $("#ppy").setAttribute("aria-valuetext", `${state.ppy} pixels par année`);
+  }
+  // message lu par les lecteurs d'écran, sans affichage (région role="status" masquée)
+  function srAnnounce(msg) {
+    const r = $("#sr-status");
+    r.textContent = "";
+    setTimeout(() => { r.textContent = msg; }, 50);
+  }
+
+  // ligne horizontale à la date choisie, avec la date écrite à droite
+  function drawDateLine(parent, L, W, RIGHT) {
+    const yy = L.Y(yf(state.date));
+    const g = el("g", { class: "dateline", "pointer-events": "none" }, parent);
+    el("line", { x1: 28, x2: W - RIGHT, y1: yy, y2: yy, stroke: "var(--accent)", "stroke-width": 2 }, g);
+    const t = el("text", { class: "lbl", x: W - RIGHT - 4, y: yy - 6, "text-anchor": "end", "font-size": 12, "font-weight": 650 }, g);
+    t.textContent = fmtDate(state.date);
   }
 
   function labelText(o) {
@@ -470,13 +531,16 @@
     const ax = $("#axis");
     ax.setAttribute("width", W);
     ax.replaceChildren();
-    for (const [v, name] of POS_NAMES) {
-      if (v < L.lo || v > L.hi) continue;
+    // axe étroit : noms abrégés, écrits sur deux niveaux pour ne pas se chevaucher
+    const tight = W < 640 && state.wing === "all";
+    const SHORT = ["Ext. g.", "Gauche", "C. gauche", "Centre", "C. droit", "Droite", "Ext. d."];
+    POS_NAMES.forEach(([v, name], i) => {
+      if (v < L.lo || v > L.hi) return;
       const xx = L.xs(v);
       el("line", { x1: xx, x2: xx, y1: 30, y2: 46, stroke: "var(--muted)" }, ax);
-      const t = el("text", { x: xx, y: 22, "text-anchor": "middle", class: "yr", "font-size": 12 }, ax);
-      t.textContent = name;
-    }
+      const t = el("text", { x: xx, y: tight ? 12 + (i % 2) * 12 : 22, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 12 }, ax);
+      t.textContent = tight ? SHORT[i] : name;
+    });
     const grad = el("defs", {}, ax);
     const lg = el("linearGradient", { id: "axg", x1: 0, x2: 1, y1: 0, y2: 0 }, grad);
     for (let i = 0; i <= 12; i++) {
@@ -485,8 +549,8 @@
     }
     el("rect", { x: LEFT, y: 36, width: W - LEFT - 18, height: 5, rx: 2.5, fill: "url(#axg)" }, ax);
     if (state.wing === "all") {
-      const t = el("text", { x: L.xs(3.85), y: 22, "text-anchor": "middle", class: "yr", "font-size": 12 }, ax);
-      t.textContent = "Non positionné";
+      const t = el("text", { x: L.xs(3.85), y: tight ? 24 : 22, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 12 }, ax);
+      t.textContent = tight ? "N. pos." : "Non positionné";
     }
   }
 
@@ -496,7 +560,7 @@
     $("#detail-count").innerHTML = `${n} organisations affichées sur ${total}. ` +
       (nodate ? `<button class="lnk" id="nodate">${nodate} sans date de fondation</button> ne sont pas dessinées.` : "");
     const b = $("#nodate");
-    if (b) b.onclick = () => showNoDate();
+    if (b) b.onclick = () => { showNoDate(); setPane("panel", true); };
   }
 
   // ---------------------------------------------------------------------- panneau
@@ -504,7 +568,16 @@
   const orgLink = (id, label) => `<button class="lnk" data-org="${esc(id)}">${esc(label ?? O.get(id)?.n ?? id)}</button>`;
   const perLink = (id, label) => `<button class="lnk" data-person="${esc(id)}">${esc(label ?? P.get(id)?.n ?? id)}</button>`;
 
+  // ce que montre le panneau : "defaut" (accueil ou photographie), ou une fiche
+  let panelMode = "defaut";
+  let snapHtml = ""; // dernier HTML de la photographie, pour ne pas reconstruire à l'identique
+  const zoneOpen = {}; // zones dépliées par l'utilisateur dans la photographie
+
   function showDefault() {
+    panelMode = "defaut";
+    if (state.date) { showSnapshot(); return; }
+    snapHtml = "";
+    delete panel.dataset.snap;
     const total = orgs.length, np = people.length;
     const m = D.meta || {};
     panel.innerHTML = `
@@ -519,6 +592,8 @@
         <p>Cliquez sur une barre pour voir un parti, ses scissions, fusions, ses fondateurs et dirigeants. Cliquez sur un nom de personne pour suivre son parcours à travers les partis.</p>
         <p>Choisissez une zone du spectre à gauche pour agrandir cette partie de l'axe et faire apparaître les petits mouvements.</p>
         <p>Ctrl + molette sur la frise pour changer l'échelle du temps.</p>
+        <p>Au clavier : Tab pour entrer dans la frise, flèches pour passer d'une organisation à l'autre, Entrée pour ouvrir sa fiche, Échap pour retirer la sélection.</p>
+        <p>Le champ « Voir à la date » trace une ligne sur la frise et liste les organisations qui existaient ce jour-là.</p>
       </section>
       <section><h3>Sources et limites</h3>
         <p class="src">Données extraites automatiquement de Wikipédia en français (texte sous licence CC BY-SA 4.0) et de Wikidata (CC0). Les positions gauche-droite sont celles que déclare Wikipédia, ou une estimation par famille politique, signalée par un contour en pointillés. Les dates sont souvent limitées à l'année.</p>
@@ -527,6 +602,7 @@
   }
 
   function showNoDate() {
+    panelMode = "autre"; delete panel.dataset.snap;
     const list = orgs.filter((o) => o.t0 == null).sort((a, b) => b.imp - a.imp);
     panel.innerHTML = `<h2>Sans date de fondation</h2><p class="meta">${list.length} organisations dont Wikipédia ne donne pas la date.</p>
       <ul class="rel">${list.map((o) => `<li>${orgLink(o.id)} <span class="d">${esc(KIND_SINGLE[o.k] || "")}</span></li>`).join("")}</ul>`;
@@ -538,6 +614,7 @@
   }
 
   function showOrg(o) {
+    panelMode = "autre"; delete panel.dataset.snap;
     const out = relOut.get(o.id) || [], inn = relIn.get(o.id) || [];
     const row = (id, txt, e) => `<li>${txt ? esc(txt) + " " : ""}${orgLink(id)}<span class="d">${e}</span></li>`;
     const dt = (e) => (e ? span(e.d || e.st, e.en, !e.en) : "");
@@ -586,12 +663,15 @@
       <section><h3>Personnes rattachées (${memberRows.length})</h3>
         <ul class="rel" id="members">${memberRows.slice(0, 12).join("")}</ul>
         ${memberRows.length > 12 ? `<button class="more" id="more-members">Afficher les ${memberRows.length - 12} autres</button>` : ""}
-      </section>`;
+      </section>
+      ${fixSection(o)}`;
     const more = $("#more-members");
     if (more) more.onclick = () => { $("#members").innerHTML = memberRows.join(""); more.remove(); };
+    wireFix(o);
   }
 
   function showPerson(p) {
+    panelMode = "autre"; delete panel.dataset.snap;
     const rows = [...(orgsByPers.get(p.id) || [])].filter((e) => O.get(e.o))
       .sort((a, b) => (a.s || O.get(a.o).s || "9999").localeCompare(b.s || O.get(b.o).s || "9999"));
     const life = p.b || p.d ? `${p.b ? fmtDate(p.b) : "?"} - ${p.d ? fmtDate(p.d) : ""}` : "";
@@ -608,6 +688,405 @@
     $("#clear-person").onclick = () => selectNone();
   }
 
+  // ------------------------------------------------------- photographie à une date
+  const ZONES = [
+    ["xg", "Extrême gauche"], ["g", "Gauche"], ["c", "Centre"], ["d", "Droite"], ["xd", "Extrême droite"], ["np", "Non positionné"],
+  ];
+  // zone du spectre d'une organisation (mêmes bornes que le zoom par zone)
+  function zoneOf(o) {
+    const v = o.px;
+    if (v == null) return "np";
+    if (v < -2.35) return "xg";
+    if (v < -0.65) return "g";
+    if (v <= 0.65) return "c";
+    if (v < 2.35) return "d";
+    return "xd";
+  }
+  // organisations actives à la date choisie, groupées par zone. On respecte les filtres de contenu
+  // (nature, famille, zone, étrangères) mais pas le niveau de détail : `hidden` compte celles qui
+  // existent mais ne sont pas dessinées à ce niveau.
+  function snapshot() {
+    const t = yf(state.date);
+    const groups = new Map(ZONES.map(([k]) => [k, []]));
+    let total = 0, hidden = 0;
+    for (const o of orgs) {
+      if (!passesFilters(o) || !isActiveAt(o, t)) continue;
+      groups.get(zoneOf(o)).push(o);
+      total++;
+      if (o.tier > state.detail) hidden++;
+    }
+    for (const l of groups.values()) l.sort((a, b) => b.imp - a.imp);
+    return { t, groups, total, hidden };
+  }
+  const plural = (n, un, plus) => `${n} ${n > 1 ? plus : un}`;
+
+  function showSnapshot() {
+    const sn = snapshot();
+    const when = fmtDate(state.date);
+    const zonesHtml = ZONES.map(([k, name]) => {
+      const list = sn.groups.get(k);
+      if (!list.length) return "";
+      const open = zoneOpen[k] ?? list.length <= 15;
+      const rows = list.map((o) => `<li>${orgLink(o.id)}<span class="d">${esc(KIND_SINGLE[o.k] || "")}, ${esc(span(o.s, o.e, o.st === "actif"))}${o.endUnknown ? " (fin inconnue)" : ""}${o.tier > state.detail ? ", non dessinée" : ""}</span></li>`);
+      return `<details data-zone="${k}"${open ? " open" : ""}><summary>${esc(name)} (${list.length})</summary><ul class="rel">${rows.join("")}</ul></details>`;
+    }).join("");
+    snapHtml = `
+      <h2>Photographie au ${esc(when)}</h2>
+      <p class="meta">${plural(sn.total, "organisation active", "organisations actives")} à cette date, d'après les dates de fondation et de fin de chaque fiche.</p>
+      <div class="stats zones">${ZONES.map(([k, name]) => `<div><b>${sn.groups.get(k).length}</b><span>${esc(name)}</span></div>`).join("")}</div>
+      ${sn.hidden ? `<p class="hint">${plural(sn.hidden, "organisation n'est pas dessinée", "organisations ne sont pas dessinées")} au niveau de détail actuel. <button class="lnk" data-act="all-levels">Afficher tous les niveaux</button></p>` : ""}
+      <section><h3>Organisations actives</h3>${zonesHtml || "<p>Aucune organisation ne correspond aux filtres actuels à cette date.</p>"}</section>
+      <p class="src">Une organisation dont la fin est inconnue est comptée sur la durée tracée (trois ans). Les dates données à l'année près sont comptées au 1er janvier.</p>
+      <button class="more" data-act="clear-date">Retirer la date</button>`;
+    if (panel.dataset.snap !== snapHtml) { panel.innerHTML = snapHtml; panel.dataset.snap = snapHtml; }
+  }
+  // mise à jour après chaque dessin : texte du bloc « Voir à la date » et, si le panneau montre la
+  // photographie, sa liste
+  function updateSnapshot() {
+    const out = $("#date-out"), see = $("#date-see");
+    if (!state.date) {
+      out.textContent = "Aucune date choisie.";
+      see.hidden = true;
+      return;
+    }
+    const sn = snapshot();
+    out.textContent = `${fmtDate(state.date)} : ${plural(sn.total, "organisation active", "organisations actives")}.`;
+    see.hidden = false;
+    if (panelMode === "defaut" && !state.sel && !state.person) showSnapshot();
+  }
+
+  const DATE_MIN = "1958-01-01", DATE_MAX = "2026-12-31";
+  const monthIso = (i) => `${1958 + Math.floor(i / 12)}-${String(i % 12 + 1).padStart(2, "0")}-01`;
+  const isoMonth = (iso) => (+iso.slice(0, 4) - 1958) * 12 + (+iso.slice(5, 7) - 1);
+  const validIso = (v) => /^\d{4}-\d{2}-\d{2}$/.test(v || "") && !Number.isNaN(Date.parse(v));
+  const clampDate = (v) => (v < DATE_MIN ? DATE_MIN : v > DATE_MAX ? DATE_MAX : v);
+
+  // aligne le curseur, le champ et le bouton sur state.date
+  function syncDateControls() {
+    const range = $("#date-range");
+    $("#date").value = state.date || "";
+    if (state.date) {
+      range.value = isoMonth(state.date);
+      range.setAttribute("aria-valuetext", fmtDate(state.date));
+    }
+    range.classList.toggle("off", !state.date);
+    $("#date-clear").hidden = !state.date;
+  }
+  // fixe (ou retire, avec null) la date de la photographie
+  function setDate(iso, { scroll = true } = {}) {
+    state.date = iso && validIso(iso) ? clampDate(iso) : null;
+    syncDateControls();
+    if (panelMode === "defaut" && !state.sel && !state.person) showDefault();
+    render();
+    if (state.date && scroll) scrollToDate();
+  }
+  function scrollToDate() {
+    if (!state.date || !cur) return;
+    const yy = cur.L.Y(yf(state.date));
+    const sc = $("#scroller");
+    sc.scrollTop = Math.max(0, yy - sc.clientHeight / 2);
+  }
+
+  // ------------------------------------------------------------- liens permanents
+  // L'état de la vue est écrit dans le fragment d'URL (#zone=g&detail=3&...) avec replaceState : on
+  // ne crée pas d'entrée d'historique à chaque réglage. Seules les valeurs différentes des valeurs par
+  // défaut sont écrites, pour garder l'adresse courte.
+  const OPT_NAMES = { per: "etrangeres", rel: "relations", aff: "coalitions", pres: "presidences", chains: "lignees" };
+  const OPT_DEFAULT = ["rel", "pres", "chains"];
+  const sameList = (a, b) => a.length === b.length && a.every((x) => b.includes(x));
+
+  function encodeState() {
+    const q = new URLSearchParams();
+    if (state.wing !== "all") q.set("zone", state.wing);
+    if (state.detail !== 2) q.set("detail", state.detail);
+    if (state.ppy !== 22) q.set("echelle", state.ppy);
+    if (state.y0 !== 1958) q.set("de", state.y0);
+    if (state.y1 !== 2027) q.set("a", state.y1);
+    if (state.fam.size) q.set("familles", [...state.fam].sort().join(","));
+    const kinds = [...state.kinds].sort();
+    if (!sameList(kinds, KIND_DEFAULT_ON)) q.set("natures", kinds.join(","));
+    const opts = Object.keys(OPT_NAMES).filter((k) => state[k]);
+    if (!sameList(opts, OPT_DEFAULT)) q.set("options", opts.map((k) => OPT_NAMES[k]).join(","));
+    if (state.sel) q.set("org", state.sel);
+    if (state.person) q.set("personne", state.person);
+    if (state.date) q.set("date", state.date);
+    return q.toString().replace(/%3A/g, ":").replace(/%2C/g, ",");
+  }
+
+  let hashTimer = null, lastHash = "";
+  function writeHash() {
+    clearTimeout(hashTimer);
+    const h = encodeState();
+    lastHash = h;
+    if (h === location.hash.slice(1)) return;
+    try {
+      history.replaceState(null, "", location.pathname + location.search + (h ? "#" + h : ""));
+    } catch (e) { /* adresse non modifiable (aperçu, navigateur restrictif) : on ignore */ }
+  }
+  // écriture différée : un curseur déplacé en continu ne déclenche qu'une écriture
+  function scheduleHash() {
+    clearTimeout(hashTimer);
+    hashTimer = setTimeout(writeHash, 200);
+  }
+
+  // aligne tous les contrôles de la barre latérale sur state
+  function syncControls() {
+    document.querySelectorAll("#wings button").forEach((b) => b.classList.toggle("on", b.dataset.wing === state.wing));
+    $("#detail").value = state.detail;
+    $("#ppy").value = state.ppy;
+    $("#y0").value = state.y0;
+    $("#y1").value = state.y1;
+    $("#presidents").checked = state.pres;
+    for (const k of ["per", "rel", "aff", "chains"]) $("#" + k).checked = state[k];
+    document.querySelectorAll("#families .chip").forEach((b) => b.classList.toggle("on", state.fam.has(b.dataset.fam)));
+    document.querySelectorAll("#kinds input").forEach((i) => { i.checked = state.kinds.has(i.dataset.kind); });
+    syncDateControls();
+  }
+
+  // lit le fragment d'URL et applique l'état ; renvoie false s'il ne contient pas de réglage
+  function applyHash() {
+    const raw = location.hash.replace(/^#/, "");
+    if (!raw.includes("=")) return false;
+    const q = new URLSearchParams(raw);
+    const num = (k, lo, hi, def) => {
+      const v = q.has(k) ? Number(q.get(k)) : NaN;
+      return Number.isFinite(v) ? Math.max(lo, Math.min(hi, Math.round(v))) : def;
+    };
+    const list = (k) => (q.get(k) || "").split(",").filter(Boolean);
+    state.wing = q.get("zone") in WINGS ? q.get("zone") : "all";
+    state.detail = num("detail", 1, 3, 2);
+    state.ppy = num("echelle", 8, 80, 22);
+    state.y0 = num("de", 1958, 2026, 1958);
+    state.y1 = Math.max(state.y0 + 1, num("a", 1959, 2027, 2027));
+    state.fam = new Set(list("familles").filter((f) => famCount.has(f)));
+    state.kinds = q.has("natures") ? new Set(list("natures").filter((k) => k in KIND_LABEL)) : new Set(KIND_DEFAULT_ON);
+    const opts = q.has("options") ? list("options") : OPT_DEFAULT.map((k) => OPT_NAMES[k]);
+    for (const k of Object.keys(OPT_NAMES)) state[k] = opts.includes(OPT_NAMES[k]);
+    const date = q.get("date");
+    state.date = validIso(date) ? clampDate(date) : null;
+    state.sel = null; state.person = null; forced = new Set();
+    syncControls();
+    const org = O.get(q.get("org")), pers = P.get(q.get("personne"));
+    if (org && org.t0 != null) selectOrg(org.id);
+    else if (pers) selectPerson(pers.id);
+    else {
+      showDefault();
+      render();
+      const sc = $("#scroller");
+      if (state.date) scrollToDate(); else sc.scrollTop = 0;
+    }
+    return true;
+  }
+  // un fragment modifié à la main (ou collé) dans l'onglet déjà ouvert est appliqué ; nos propres
+  // écritures passent par replaceState et ne déclenchent pas cet événement
+  window.addEventListener("hashchange", () => {
+    if (location.hash.slice(1) !== lastHash) applyHash();
+  });
+
+  // ---------------------------------------------------------------- copie dans le presse-papiers
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { /* repli ci-dessous */ }
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", "");
+    ta.style.cssText = "position:fixed;top:0;left:0;opacity:0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    ta.remove();
+    return ok;
+  }
+  // message court à côté des boutons d'outils, annoncé par la région role="status"
+  let statusTimer = null;
+  function announce(msg) {
+    const st = $("#status");
+    st.textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { st.textContent = ""; }, 4000);
+  }
+  $("#copy-link").addEventListener("click", async () => {
+    writeHash();
+    const ok = await copyText(location.href);
+    if (ok) announce("Lien copié.");
+    else { announce("Copie automatique impossible."); window.prompt("Copiez ce lien :", location.href); }
+  });
+
+  // ------------------------------------------------------------------------ export CSV
+  const STATUS_LABEL = { actif: "toujours actif", dissous: "dissous", fusionne: "a fusionné", transforme: "transformé" };
+  // une cellule CSV : guillemets doublés si besoin, et apostrophe devant les valeurs qu'un tableur
+  // lirait comme une formule (= + @ -) pour éviter l'injection de formule
+  function csvCell(v) {
+    let t = v == null ? "" : String(v);
+    if (/^[=+@\t\r]/.test(t) || /^-(?![\d.,]+$)/.test(t)) t = "'" + t;
+    return /[;"\r\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+  }
+  const csvRow = (cells) => cells.map(csvCell).join(";");
+  function posText(o) {
+    if (o.pv != null) return posWord(o.pv);
+    return o.px != null ? `${posWord(o.px)} (estimée)` : "non positionnée";
+  }
+
+  // Le fichier contient les organisations actuellement dessinées et, si une personne est
+  // sélectionnée, un second bloc avec son parcours. Séparateur point-virgule, UTF-8 avec BOM
+  // (pour qu'Excel lise bien les accents), fins de ligne CRLF.
+  function buildCsv() {
+    const td = state.date ? yf(state.date) : null;
+    const lines = [];
+    const head = ["Nom", "Nature", "Début", "Fin", "Statut", "Position", "Familles", "Lien Wikipédia"];
+    if (td != null) head.push(`Active le ${fmtDate(state.date)}`);
+    lines.push(csvRow(head));
+    const rows = [...((cur && cur.vis) || [])].sort((a, b) => a.t0 - b.t0 || a.n.localeCompare(b.n, "fr"));
+    for (const o of rows) {
+      const cells = [o.n, KIND_SINGLE[o.k] || o.k, o.s || "", o.e || "", STATUS_LABEL[o.st] || o.st, posText(o),
+        o.fam.map((f) => FAMILY_LABEL[f] || f).join(" / "), o.url];
+      if (td != null) cells.push(isActiveAt(o, td) ? "oui" : "non");
+      lines.push(csvRow(cells));
+    }
+    const p = state.person && P.get(state.person);
+    if (p) {
+      lines.push("", csvRow([`Parcours de ${p.n}`]), csvRow(["Rôle", "Organisation", "Début", "Fin"]));
+      const path = [...(orgsByPers.get(p.id) || [])].filter((e) => O.get(e.o))
+        .sort((a, b) => (a.s || O.get(a.o).s || "9999").localeCompare(b.s || O.get(b.o).s || "9999"));
+      for (const e of path) lines.push(csvRow([ROLE_LABEL[e.r] || e.r, O.get(e.o).n, e.s || "", e.e || ""]));
+    }
+    return { text: lines.join("\r\n") + "\r\n", nOrgs: rows.length, person: p || null };
+  }
+  function downloadCsv() {
+    const { text, nOrgs, person } = buildCsv();
+    const blob = new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `partis-affiches-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    announce(`${plural(nOrgs, "organisation exportée", "organisations exportées")}${person ? ", avec le parcours de " + person.n : ""}.`);
+  }
+  $("#export-csv").addEventListener("click", downloadCsv);
+
+  // ----------------------------------------------------------- proposer une correction
+  // Formulaire qui prépare l'entrée à coller dans data/overrides.json. La clé est le titre de la page
+  // Wikipédia (champ `t`). Les valeurs actuelles sont pré-remplies ; rien n'est envoyé nulle part.
+  const ISO_PARTIAL = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+  function fixSection(o) {
+    const v = (x) => esc(x ?? "");
+    return `<section class="fix"><h3>Corriger cette fiche</h3>
+      <button class="more" id="fix-open" type="button" aria-expanded="false" aria-controls="fix-box">Proposer une correction</button>
+      <div id="fix-box" hidden>
+        <p class="hint">Modifiez les valeurs, puis copiez l'entrée JSON et collez-la dans <code>data/overrides.json</code>
+          (en la fusionnant avec les clés existantes). Relancez ensuite <code>python pipeline/run_all.py 7 8 9</code>.</p>
+        <div class="fix-grid">
+          <label for="fx-start">Début</label>
+          <input id="fx-start" type="text" value="${v(o.s)}" placeholder="AAAA, AAAA-MM ou AAAA-MM-JJ" autocomplete="off">
+          <label for="fx-end">Fin <span class="d">(vide si toujours actif)</span></label>
+          <input id="fx-end" type="text" value="${v(o.e)}" placeholder="AAAA, AAAA-MM ou AAAA-MM-JJ" autocomplete="off">
+          <label for="fx-pos">Position <span class="d">(-3 extrême gauche à 3 extrême droite)</span></label>
+          <input id="fx-pos" type="number" min="-3" max="3" step="0.5" value="${o.pv == null ? "" : o.pv}">
+          <label for="fx-tier">Niveau de zoom</label>
+          <select id="fx-tier">${[1, 2, 3].map((n) => `<option value="${n}"${o.tier === n ? " selected" : ""}>${n} - ${["grands partis", "principaux", "détail"][n - 1]}</option>`).join("")}</select>
+        </div>
+        <label class="check"><input id="fx-per" type="checkbox"${o.per ? " checked" : ""}> Organisation périphérique (masquée par défaut)</label>
+        <fieldset class="fix-act"><legend>Page Wikipédia « ${esc(o.t)} »</legend>
+          <label class="check"><input type="radio" name="fx-act" value="none" checked> Garder dans le graphe</label>
+          <label class="check"><input type="radio" name="fx-act" value="exclude"> Demander l'exclusion de la page</label>
+          <label class="check"><input type="radio" name="fx-act" value="include"> Demander l'inclusion forcée de la page</label>
+        </fieldset>
+        <label class="check"><input id="fx-only" type="checkbox"> Ne garder que les champs modifiés</label>
+        <p class="fix-err" id="fx-err" role="alert"></p>
+        <label for="fx-out" class="fix-lbl">Entrée à coller</label>
+        <textarea id="fx-out" readonly rows="11" spellcheck="false"></textarea>
+        <button class="more" id="fx-copy" type="button">Copier l'entrée JSON</button>
+      </div></section>`;
+  }
+
+  // construit l'objet à coller et la liste des erreurs de saisie
+  function buildFix(o) {
+    const err = [];
+    const dateField = (id, label) => {
+      const raw = $(id).value.trim();
+      const bad = raw !== "" && !ISO_PARTIAL.test(raw);
+      $(id).setAttribute("aria-invalid", bad ? "true" : "false");
+      if (bad) err.push(`${label} : format attendu AAAA, AAAA-MM ou AAAA-MM-JJ.`);
+      return raw;
+    };
+    const posRaw = $("#fx-pos").value.trim();
+    const pos = posRaw === "" ? null : Number(posRaw);
+    const posBad = pos != null && (!Number.isFinite(pos) || pos < -3 || pos > 3);
+    $("#fx-pos").setAttribute("aria-invalid", posBad ? "true" : "false");
+    if (posBad) err.push("Position : un nombre entre -3 et 3 est attendu.");
+    const now = {
+      start: dateField("#fx-start", "Début"), end: dateField("#fx-end", "Fin"),
+      position_value: pos, tier: Number($("#fx-tier").value), peripheral: $("#fx-per").checked,
+    };
+    const was = { start: o.s || "", end: o.e || "", position_value: o.pv ?? null, tier: o.tier, peripheral: !!o.per };
+    const only = $("#fx-only").checked;
+    const entry = {};
+    for (const k of Object.keys(now)) if (!only || now[k] !== was[k]) entry[k] = now[k];
+    const act = (document.querySelector('input[name="fx-act"]:checked') || {}).value;
+    const out = {};
+    if (act === "exclude") out.exclude = [o.t];
+    if (act === "include") out.include = [o.t];
+    if (act !== "exclude" && (Object.keys(entry).length || !only)) out.org = { [o.t]: entry };
+    return { json: JSON.stringify(out, null, 2), err };
+  }
+
+  function wireFix(o) {
+    const btn = $("#fix-open"), box = $("#fix-box");
+    if (!btn) return;
+    const refresh = () => {
+      const { json, err } = buildFix(o);
+      $("#fx-out").value = json;
+      $("#fx-err").textContent = err.join(" ");
+    };
+    btn.onclick = () => {
+      const open = box.hidden;
+      box.hidden = !open;
+      btn.setAttribute("aria-expanded", String(open));
+      if (open) { refresh(); $("#fx-start").focus(); }
+    };
+    box.addEventListener("input", refresh);
+    box.addEventListener("change", refresh);
+    $("#fx-copy").onclick = async () => {
+      refresh();
+      const out = $("#fx-out");
+      const ok = await copyText(out.value);
+      if (!ok) out.select();
+      announce(ok ? "Entrée JSON copiée." : "Sélectionnée : copiez avec Ctrl + C.");
+    };
+  }
+
+  // ---------------------------------------------------- panneaux repliables (petits écrans)
+  // Sous 860 px, les filtres et la fiche sont repliés : le bouton « Filtres » ouvre un panneau plein
+  // écran sous l'en-tête, « Fiche » un volet en bas ; un seul est ouvert à la fois.
+  const narrowMq = window.matchMedia("(max-width: 860px)");
+  const PANES = { filters: $("#filters"), panel: $("#panel") };
+  const PANE_BTN = { filters: $("#toggle-filters"), panel: $("#toggle-panel") };
+  function setPane(name, open, { focus = false } = {}) {
+    if (!narrowMq.matches) return;
+    const other = name === "filters" ? "panel" : "filters";
+    PANES[name].classList.toggle("open", open);
+    if (open) PANES[other].classList.remove("open");
+    for (const k of Object.keys(PANES)) PANE_BTN[k].setAttribute("aria-expanded", String(PANES[k].classList.contains("open")));
+    if (focus) (open ? PANES[name] : PANE_BTN[name]).focus({ preventScroll: true });
+  }
+  for (const k of Object.keys(PANE_BTN)) {
+    PANE_BTN[k].addEventListener("click", () => setPane(k, !PANES[k].classList.contains("open"), { focus: true }));
+  }
+  // échap referme le panneau ouvert (sauf si une autre commande a déjà utilisé la touche)
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Escape" || ev.defaultPrevented) return;
+    const open = Object.keys(PANES).find((k) => PANES[k].classList.contains("open"));
+    if (open) setPane(open, false, { focus: true });
+  });
+  // en revenant à une grande fenêtre, tout est de nouveau visible : on oublie les états « ouvert »
+  narrowMq.addEventListener("change", () => {
+    for (const k of Object.keys(PANES)) { PANES[k].classList.remove("open"); PANE_BTN[k].setAttribute("aria-expanded", "false"); }
+  });
+  // l'axe du haut suit le défilement horizontal de la frise
+  $("#scroller").addEventListener("scroll", () => { $("#axis-top").scrollLeft = $("#scroller").scrollLeft; }, { passive: true });
+
   // ------------------------------------------------------------------- interactions
   function neighborsForced(id) {
     const s = new Set([id]);
@@ -619,6 +1098,8 @@
     state.sel = id; state.person = null;
     forced = neighborsForced(id);
     showOrg(O.get(id));
+    setPane("panel", true);
+    srAnnounce(`Fiche affichée : ${O.get(id).n}`);
     render();
     if (scroll) scrollToOrg(id);
   }
@@ -626,20 +1107,25 @@
     state.person = id; state.sel = null;
     forced = new Set((orgsByPers.get(id) || []).map((e) => e.o));
     showPerson(P.get(id));
+    setPane("panel", true);
+    srAnnounce(`Parcours affiché : ${P.get(id).n}`);
     render();
     const first = (orgsByPers.get(id) || []).map((e) => O.get(e.o)).filter((o) => o && o.t0 != null).sort((a, b) => a.t0 - b.t0)[0];
     if (first) scrollToOrg(first.id);
   }
   function selectNone() {
+    const had = state.sel || state.person;
     state.sel = null; state.person = null; forced = new Set();
     showDefault();
     render();
+    if (had) srAnnounce("Sélection retirée");
   }
   function scrollToOrg(id) {
     const g = geom.get(id);
     if (!g) return;
     const sc = $("#scroller");
-    sc.scrollTo({ top: Math.max(0, g.ya - 140), behavior: "smooth" });
+    const calme = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    sc.scrollTo({ top: Math.max(0, g.ya - 140), behavior: calme ? "auto" : "smooth" });
     const cx = g.x + g.w / 2;
     if (cx < sc.scrollLeft || cx > sc.scrollLeft + sc.clientWidth) sc.scrollTo({ left: Math.max(0, cx - sc.clientWidth / 2) });
   }
@@ -647,20 +1133,74 @@
   $("#chart").addEventListener("click", (ev) => {
     const bar = ev.target.closest(".bar");
     if (bar) selectOrg(bar.dataset.id, false);
-    else if (state.sel || state.person) selectNone();
+    else if (state.sel || state.person) { selectNone(); setPane("panel", false); }
+  });
+  // Clavier : Tab entre dans la frise, flèches haut/bas = organisation précédente ou suivante dans
+  // le temps, flèches gauche/droite = voisine la plus proche sur l'axe pendant la même période,
+  // Début/Fin = première ou dernière, Entrée ou Espace = ouvrir la fiche, Échap = retirer la sélection.
+  function focusBar(id) {
+    const b = barEls.get(id);
+    if (!b) return;
+    b.focus();
+    b.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+  function sideNeighbor(id, dir) {
+    const g = geom.get(id);
+    if (!g) return null;
+    const cx = g.x + g.w / 2;
+    let best = null, bd = Infinity;
+    for (const other of cur.order) {
+      const q = geom.get(other);
+      if (other === id || !q || q.yb < g.ya || q.ya > g.yb) continue; // doit exister pendant la même période
+      const dx = (q.x + q.w / 2 - cx) * dir;
+      if (dx <= 0.5) continue;
+      const d = dx + Math.abs(q.ya - g.ya) * 0.02;
+      if (d < bd) { bd = d; best = other; }
+    }
+    return best;
+  }
+  $("#chart").addEventListener("focusin", (ev) => {
+    const b = ev.target.closest && ev.target.closest(".bar");
+    if (!b) return;
+    focusId = b.dataset.id;
+    barEls.forEach((el2) => el2.setAttribute("tabindex", el2 === b ? "0" : "-1"));
   });
   $("#chart").addEventListener("keydown", (ev) => {
-    if ((ev.key === "Enter" || ev.key === " ") && ev.target.classList.contains("bar")) {
-      ev.preventDefault();
-      selectOrg(ev.target.dataset.id, false);
+    const bar = ev.target.closest && ev.target.closest(".bar");
+    if (!bar || ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    const id = bar.dataset.id, order = cur.order, i = order.indexOf(id);
+    let next = null;
+    switch (ev.key) {
+      case "Enter": case " ": ev.preventDefault(); selectOrg(id, false); return;
+      case "Escape": if (state.sel || state.person) { ev.preventDefault(); selectNone(); } return;
+      case "ArrowDown": next = order[Math.min(order.length - 1, i + 1)]; break;
+      case "ArrowUp": next = order[Math.max(0, i - 1)]; break;
+      case "ArrowRight": next = sideNeighbor(id, 1); break;
+      case "ArrowLeft": next = sideNeighbor(id, -1); break;
+      case "Home": next = order[0]; break;
+      case "End": next = order[order.length - 1]; break;
+      default: return;
     }
+    ev.preventDefault();
+    if (next && next !== id) focusBar(next);
   });
   panel.addEventListener("click", (ev) => {
     const o = ev.target.closest("[data-org]");
     const p = ev.target.closest("[data-person]");
-    if (o) selectOrg(o.dataset.org);
-    else if (p) selectPerson(p.dataset.person);
+    const a = ev.target.closest("[data-act]");
+    if (o) { selectOrg(o.dataset.org); panel.focus({ preventScroll: true }); }
+    else if (p) { selectPerson(p.dataset.person); panel.focus({ preventScroll: true }); }
+    else if (a) panelAction(a.dataset.act);
   });
+  // mémorise les zones dépliées dans la photographie (l'événement toggle ne remonte pas : capture)
+  panel.addEventListener("toggle", (ev) => {
+    const d = ev.target;
+    if (d.dataset && d.dataset.zone) zoneOpen[d.dataset.zone] = d.open;
+  }, true);
+  function panelAction(act) {
+    if (act === "clear-date") setDate(null);
+    else if (act === "all-levels") { state.detail = 3; $("#detail").value = 3; render(); }
+  }
 
   const tip = $("#tooltip");
   $("#chart").addEventListener("mousemove", (ev) => {
@@ -719,6 +1259,12 @@
   $("#aff").addEventListener("change", (ev) => { state.aff = ev.target.checked; render(); });
   $("#chains").addEventListener("change", (ev) => { state.chains = ev.target.checked; render(); });
 
+  // photographie à une date
+  $("#date-range").addEventListener("input", (ev) => setDate(monthIso(+ev.target.value)));
+  $("#date").addEventListener("change", (ev) => setDate(ev.target.value || null));
+  $("#date-clear").onclick = () => setDate(null);
+  $("#date-see").onclick = () => { selectNone(); setPane("panel", true, { focus: true }); };
+
   // familles et natures
   const famBox = $("#families");
   [...famCount.entries()].sort((a, b) => b[1] - a[1]).forEach(([f, n]) => {
@@ -753,9 +1299,15 @@
   // recherche
   const q = $("#q"), res = $("#results");
   let resItems = [], resCur = -1;
+  // liste de résultats ouverte ou fermée, signalée au lecteur d'écran (combobox)
+  const setRes = (open) => {
+    res.hidden = !open;
+    q.setAttribute("aria-expanded", String(open));
+    if (!open) q.removeAttribute("aria-activedescendant");
+  };
   function search() {
     const s = norm(q.value.trim());
-    if (s.length < 2) { res.hidden = true; return; }
+    if (s.length < 2) { setRes(false); return; }
     const hits = [];
     for (const o of orgs) {
       const i = o.search.indexOf(s);
@@ -768,17 +1320,17 @@
     hits.sort((a, b) => a.score - b.score);
     resItems = hits.slice(0, 14);
     res.innerHTML = resItems.map((h, i) => h.type === "org"
-      ? `<li data-i="${i}"><span>${esc(h.o.n)}</span><span class="tag">${esc(KIND_SINGLE[h.o.k] || "")}${h.o.s ? ", " + h.o.s.slice(0, 4) : ""}</span></li>`
-      : `<li data-i="${i}"><span>${esc(h.p.n)}</span><span class="tag">personne${h.p.b ? ", né en " + h.p.b.slice(0, 4) : ""}</span></li>`).join("") || '<li><span class="tag">Aucun résultat</span></li>';
-    res.hidden = false; resCur = -1;
+      ? `<li role="option" id="res-${i}" data-i="${i}"><span>${esc(h.o.n)}</span><span class="tag">${esc(KIND_SINGLE[h.o.k] || "")}${h.o.s ? ", " + h.o.s.slice(0, 4) : ""}</span></li>`
+      : `<li role="option" id="res-${i}" data-i="${i}"><span>${esc(h.p.n)}</span><span class="tag">personne${h.p.b ? ", né en " + h.p.b.slice(0, 4) : ""}</span></li>`).join("") || '<li role="presentation"><span class="tag">Aucun résultat</span></li>';
+    setRes(true); resCur = -1;
   }
   function choose(i) {
     const h = resItems[i];
     if (!h) return;
-    res.hidden = true; q.value = "";
+    setRes(false); q.value = "";
     if (h.type === "org") {
       const o = h.o;
-      if (o.t0 == null) { showOrg(o); return; }
+      if (o.t0 == null) { showOrg(o); setPane("panel", true); return; }
       selectOrg(o.id);
     } else selectPerson(h.p.id);
   }
@@ -788,16 +1340,29 @@
     if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
       ev.preventDefault();
       resCur = (resCur + (ev.key === "ArrowDown" ? 1 : -1) + items.length) % Math.max(1, items.length);
-      items.forEach((x, i) => x.classList.toggle("cur", i === resCur));
+      items.forEach((x, i) => { x.classList.toggle("cur", i === resCur); x.setAttribute("aria-selected", String(i === resCur)); });
+      if (items[resCur]) q.setAttribute("aria-activedescendant", items[resCur].id);
     } else if (ev.key === "Enter") choose(resCur >= 0 ? resCur : 0);
-    else if (ev.key === "Escape") res.hidden = true;
+    else if (ev.key === "Escape") setRes(false);
   });
   res.addEventListener("mousedown", (ev) => { const li = ev.target.closest("li[data-i]"); if (li) choose(+li.dataset.i); });
-  document.addEventListener("click", (ev) => { if (!ev.target.closest(".search")) res.hidden = true; });
+  document.addEventListener("click", (ev) => { if (!ev.target.closest(".search")) setRes(false); });
 
   let rt;
   new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 120); }).observe($("#scroller"));
 
-  showDefault();
-  render();
+  // liens d'évitement (boutons : un lien « # » modifierait le fragment d'URL qui porte l'état)
+  document.querySelector(".skip-links").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button");
+    if (!b) return;
+    const to = b.dataset.skip;
+    if (to !== "chart") setPane(to, true);
+    if (to === "chart") {
+      const bar = $("#chart .bar[tabindex='0']") || $("#chart .bar");
+      if (bar) bar.focus(); else $("#scroller").focus();
+    } else $("#" + to).focus();
+  });
+
+  // démarrage : un lien permanent restaure la vue, sinon vue par défaut
+  if (!applyHash()) { showDefault(); render(); }
 })();
