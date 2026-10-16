@@ -270,8 +270,10 @@
   function render() {
     const scroller = $("#scroller");
     const svg = $("#chart");
-    const W = Math.max(520, scroller.clientWidth - 4);
-    const LEFT = 84, RIGHT = 18;
+    // petit écran : marge gauche réduite, sans noms de présidents, largeur minimale plus faible
+    const narrow = scroller.clientWidth < 640;
+    const W = Math.max(narrow ? 380 : 520, scroller.clientWidth - 4);
+    const LEFT = narrow ? 34 : 84, RIGHT = 18;
     const innerW = W - LEFT - RIGHT;
     const vis = orgs.filter(isVisible);
     const L = computeLayout(vis, innerW, LEFT);
@@ -297,7 +299,7 @@
         const ya = L.Y(Math.max(a, state.y0)), yb = L.Y(Math.min(b, state.y1));
         if (yb <= ya) return;
         el("rect", { x: LEFT - 4, y: ya, width: W - LEFT + 4, height: yb - ya, fill: i % 2 ? "var(--band-b)" : "var(--band-a)" }, gBg);
-        if (yb - ya > 60) {
+        if (yb - ya > 60 && !narrow) {
           const t = el("text", { x: 70, y: (ya + yb) / 2, class: "yr", "text-anchor": "middle", transform: `rotate(-90 70 ${(ya + yb) / 2})` }, gBg);
           t.textContent = name;
         }
@@ -529,13 +531,16 @@
     const ax = $("#axis");
     ax.setAttribute("width", W);
     ax.replaceChildren();
-    for (const [v, name] of POS_NAMES) {
-      if (v < L.lo || v > L.hi) continue;
+    // axe étroit : noms abrégés, écrits sur deux niveaux pour ne pas se chevaucher
+    const tight = W < 640 && state.wing === "all";
+    const SHORT = ["Ext. g.", "Gauche", "C. gauche", "Centre", "C. droit", "Droite", "Ext. d."];
+    POS_NAMES.forEach(([v, name], i) => {
+      if (v < L.lo || v > L.hi) return;
       const xx = L.xs(v);
       el("line", { x1: xx, x2: xx, y1: 30, y2: 46, stroke: "var(--muted)" }, ax);
-      const t = el("text", { x: xx, y: 22, "text-anchor": "middle", class: "yr", "font-size": 12 }, ax);
-      t.textContent = name;
-    }
+      const t = el("text", { x: xx, y: tight ? 12 + (i % 2) * 12 : 22, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 12 }, ax);
+      t.textContent = tight ? SHORT[i] : name;
+    });
     const grad = el("defs", {}, ax);
     const lg = el("linearGradient", { id: "axg", x1: 0, x2: 1, y1: 0, y2: 0 }, grad);
     for (let i = 0; i <= 12; i++) {
@@ -544,8 +549,8 @@
     }
     el("rect", { x: LEFT, y: 36, width: W - LEFT - 18, height: 5, rx: 2.5, fill: "url(#axg)" }, ax);
     if (state.wing === "all") {
-      const t = el("text", { x: L.xs(3.85), y: 22, "text-anchor": "middle", class: "yr", "font-size": 12 }, ax);
-      t.textContent = "Non positionné";
+      const t = el("text", { x: L.xs(3.85), y: tight ? 24 : 22, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 12 }, ax);
+      t.textContent = tight ? "N. pos." : "Non positionné";
     }
   }
 
@@ -555,7 +560,7 @@
     $("#detail-count").innerHTML = `${n} organisations affichées sur ${total}. ` +
       (nodate ? `<button class="lnk" id="nodate">${nodate} sans date de fondation</button> ne sont pas dessinées.` : "");
     const b = $("#nodate");
-    if (b) b.onclick = () => showNoDate();
+    if (b) b.onclick = () => { showNoDate(); setPane("panel", true); };
   }
 
   // ---------------------------------------------------------------------- panneau
@@ -1052,6 +1057,36 @@
     };
   }
 
+  // ---------------------------------------------------- panneaux repliables (petits écrans)
+  // Sous 860 px, les filtres et la fiche sont repliés : le bouton « Filtres » ouvre un panneau plein
+  // écran sous l'en-tête, « Fiche » un volet en bas ; un seul est ouvert à la fois.
+  const narrowMq = window.matchMedia("(max-width: 860px)");
+  const PANES = { filters: $("#filters"), panel: $("#panel") };
+  const PANE_BTN = { filters: $("#toggle-filters"), panel: $("#toggle-panel") };
+  function setPane(name, open, { focus = false } = {}) {
+    if (!narrowMq.matches) return;
+    const other = name === "filters" ? "panel" : "filters";
+    PANES[name].classList.toggle("open", open);
+    if (open) PANES[other].classList.remove("open");
+    for (const k of Object.keys(PANES)) PANE_BTN[k].setAttribute("aria-expanded", String(PANES[k].classList.contains("open")));
+    if (focus) (open ? PANES[name] : PANE_BTN[name]).focus({ preventScroll: true });
+  }
+  for (const k of Object.keys(PANE_BTN)) {
+    PANE_BTN[k].addEventListener("click", () => setPane(k, !PANES[k].classList.contains("open"), { focus: true }));
+  }
+  // échap referme le panneau ouvert (sauf si une autre commande a déjà utilisé la touche)
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key !== "Escape" || ev.defaultPrevented) return;
+    const open = Object.keys(PANES).find((k) => PANES[k].classList.contains("open"));
+    if (open) setPane(open, false, { focus: true });
+  });
+  // en revenant à une grande fenêtre, tout est de nouveau visible : on oublie les états « ouvert »
+  narrowMq.addEventListener("change", () => {
+    for (const k of Object.keys(PANES)) { PANES[k].classList.remove("open"); PANE_BTN[k].setAttribute("aria-expanded", "false"); }
+  });
+  // l'axe du haut suit le défilement horizontal de la frise
+  $("#scroller").addEventListener("scroll", () => { $("#axis-top").scrollLeft = $("#scroller").scrollLeft; }, { passive: true });
+
   // ------------------------------------------------------------------- interactions
   function neighborsForced(id) {
     const s = new Set([id]);
@@ -1063,6 +1098,7 @@
     state.sel = id; state.person = null;
     forced = neighborsForced(id);
     showOrg(O.get(id));
+    setPane("panel", true);
     srAnnounce(`Fiche affichée : ${O.get(id).n}`);
     render();
     if (scroll) scrollToOrg(id);
@@ -1071,6 +1107,7 @@
     state.person = id; state.sel = null;
     forced = new Set((orgsByPers.get(id) || []).map((e) => e.o));
     showPerson(P.get(id));
+    setPane("panel", true);
     srAnnounce(`Parcours affiché : ${P.get(id).n}`);
     render();
     const first = (orgsByPers.get(id) || []).map((e) => O.get(e.o)).filter((o) => o && o.t0 != null).sort((a, b) => a.t0 - b.t0)[0];
@@ -1096,7 +1133,7 @@
   $("#chart").addEventListener("click", (ev) => {
     const bar = ev.target.closest(".bar");
     if (bar) selectOrg(bar.dataset.id, false);
-    else if (state.sel || state.person) selectNone();
+    else if (state.sel || state.person) { selectNone(); setPane("panel", false); }
   });
   // Clavier : Tab entre dans la frise, flèches haut/bas = organisation précédente ou suivante dans
   // le temps, flèches gauche/droite = voisine la plus proche sur l'axe pendant la même période,
@@ -1226,7 +1263,7 @@
   $("#date-range").addEventListener("input", (ev) => setDate(monthIso(+ev.target.value)));
   $("#date").addEventListener("change", (ev) => setDate(ev.target.value || null));
   $("#date-clear").onclick = () => setDate(null);
-  $("#date-see").onclick = () => selectNone();
+  $("#date-see").onclick = () => { selectNone(); setPane("panel", true, { focus: true }); };
 
   // familles et natures
   const famBox = $("#families");
@@ -1293,7 +1330,7 @@
     setRes(false); q.value = "";
     if (h.type === "org") {
       const o = h.o;
-      if (o.t0 == null) { showOrg(o); return; }
+      if (o.t0 == null) { showOrg(o); setPane("panel", true); return; }
       selectOrg(o.id);
     } else selectPerson(h.p.id);
   }
@@ -1319,6 +1356,7 @@
     const b = ev.target.closest("button");
     if (!b) return;
     const to = b.dataset.skip;
+    if (to !== "chart") setPane(to, true);
     if (to === "chart") {
       const bar = $("#chart .bar[tabindex='0']") || $("#chart .bar");
       if (bar) bar.focus(); else $("#scroller").focus();

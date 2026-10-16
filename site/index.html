@@ -24,10 +24,12 @@
     <ul id="results" class="results" role="listbox" aria-label="Résultats de recherche" hidden></ul>
   </div>
   <div class="tools">
+    <button id="toggle-filters" class="only-narrow" type="button" aria-expanded="false" aria-controls="filters">Filtres</button>
+    <button id="toggle-panel" class="only-narrow" type="button" aria-expanded="false" aria-controls="panel">Fiche</button>
     <button id="copy-link" type="button">Copier le lien</button>
     <button id="export-csv" type="button">Exporter en CSV</button>
-    <span id="status" class="status" role="status" aria-live="polite"></span>
   </div>
+  <div id="status" class="status" role="status" aria-live="polite"></div>
 </header>
 
 <div class="layout">
