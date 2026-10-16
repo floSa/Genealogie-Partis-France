@@ -100,8 +100,9 @@ le fichier à relire pour valider ou corriger.
 
 Le texte des résumés vient de Wikipédia et reste sous licence CC BY-SA 4.0 (attribution et partage
 à l'identique) ; les données structurées viennent de Wikidata (CC0). Les résultats électoraux viennent de
-ParlGov et les positions d'experts de la Chapel Hill Expert Survey : citations dans `docs/SOURCES.md`, conditions
-de ParlGov à confirmer avant toute diffusion publique. Le site rappelle la source de
+ParlGov (publication sous licence CC0) et les positions d'experts de la Chapel Hill Expert Survey (citation
+demandée) : références complètes dans `docs/SOURCES.md`. Le code est sous licence MIT (`LICENSE`), les données
+sous les licences de leurs sources (`data/LICENCE.md`). Le site rappelle la source de
 chaque fiche et renvoie vers la page Wikipédia.
 
 ## Limites connues
