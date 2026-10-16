@@ -28,6 +28,7 @@ puis ouvrir http://localhost:8765. Le site propose :
 - un clic sur une personne (ou la recherche) : son parcours tracé à travers les partis ;
 - une photographie à une date donnée, des liens permanents, un export CSV et un formulaire
   « Corriger cette fiche » qui produit l'entrée à coller dans `data/overrides.json` ;
+- résultats aux législatives et européennes (ParlGov) et positions d'experts par année (CHES) dans chaque fiche ;
 - des filtres par famille politique (communiste, trotskiste, socialiste, écologiste, centriste,
   libéral, gaulliste, droite, souverainiste, extrême droite, régionaliste...) et par nature.
 
@@ -98,7 +99,9 @@ le fichier à relire pour valider ou corriger.
 ## Licences et sources
 
 Le texte des résumés vient de Wikipédia et reste sous licence CC BY-SA 4.0 (attribution et partage
-à l'identique) ; les données structurées viennent de Wikidata (CC0). Le site rappelle la source de
+à l'identique) ; les données structurées viennent de Wikidata (CC0). Les résultats électoraux viennent de
+ParlGov et les positions d'experts de la Chapel Hill Expert Survey : citations dans `docs/SOURCES.md`, conditions
+de ParlGov à confirmer avant toute diffusion publique. Le site rappelle la source de
 chaque fiche et renvoie vers la page Wikipédia.
 
 ## Limites connues

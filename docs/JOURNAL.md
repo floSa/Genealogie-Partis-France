@@ -72,3 +72,15 @@ de pages par un modèle de langage.
 - Non fait faute de source fiable et légère : résultats électoraux, nombre d'élus (les champs de l'infobox sont
   alimentés par Wikidata et vides) et position dans le temps issue de CHES ou des votes. Ils demandent des jeux de
   données externes à télécharger et à rapprocher des noms de partis ; à décider ensemble.
+
+## Troisième tour : résultats électoraux et positions d'experts
+
+- Sources retenues parce qu'elles se téléchargent sans compte et en quelques fichiers : ParlGov et CHES
+  (le Manifesto Project demande une clé d'accès, non utilisé). L'INSEE ne publie pas de résultats électoraux.
+- ParlGov donne 392 lignes de résultats pour la France (législatives et européennes, depuis 1902) et 80 partis ;
+  59 sont rapprochés de nos organisations (45 par Wikidata, 7 par sigle, 7 à la main), pour 224 résultats depuis
+  1958. CHES apporte 66 mesures pour 1999-2024. Les présidentielles ne sont pas dans ParlGov.
+- ParlGov traite UMP et Les Républicains comme un seul parti, FN et RN aussi : les résultats sont répartis entre
+  les membres d'une lignée d'après la date de l'élection.
+- Les appels `wbgetentities` par titre anglais sont lents (plus d'une minute pour deux titres lors d'un essai) :
+  limitation de débit côté Wikidata, sans conséquence car mis en cache.

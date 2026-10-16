@@ -115,6 +115,18 @@ class TestCasDeReference(Base):
         self.assertIn("Rassemblement national", cibles)
         self.assertIn("Les Patriotes (parti politique)", cibles)
 
+    def test_resultats_electoraux_repartis_dans_la_lignee(self):
+        annees = lambda t: {e["date"][:4] for e in self.orgs[t]["elections"] if e["type"] == "parliament"}
+        self.assertTrue({"2002", "2007", "2012"} <= annees("Union pour un mouvement populaire"))
+        self.assertTrue({"2017", "2022"} <= annees("Les Républicains"))
+        self.assertGreaterEqual(len(annees("Parti socialiste (France)")), 10)
+        self.assertIn("1986", annees("Rassemblement national"))
+
+    def test_positions_d_experts(self):
+        pcf = self.orgs["Parti communiste français"]
+        self.assertTrue(pcf["expert_positions"])
+        self.assertTrue(all(-3 <= e["lrgen"] <= 3 for e in pcf["expert_positions"]))
+
     def test_scission_npa_revolution_permanente(self):
         a = self.orgs["Nouveau Parti anticapitaliste"]["id"]
         b = self.orgs["Révolution permanente (parti politique)"]["id"]

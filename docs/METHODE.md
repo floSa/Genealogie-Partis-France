@@ -132,6 +132,13 @@ successifs d'une même personne dans un même parti restent distincts.
 **Mise à jour.** `s00_refresh.py` compare les révisions ; `run_update.py` enchaîne vérification, découverte,
 reconstruction et `s09_diff_builds.py`. Le client accepte `PARTIS_FRESH=1` (ignorer le cache en lecture).
 
+**Données externes.** `s04e_external_data.py` apporte, depuis ParlGov et CHES, les résultats aux législatives et
+européennes (voix, sièges), la position gauche-droite composite et les positions d'experts par année (voir
+`SOURCES.md`). Elles complètent la position quand Wikipédia n'en donne pas (`position_source` = `experts` ou
+`parlgov`, avant la déduction par relations), alimentent le score d'importance (part de voix maximale aux
+législatives) et servent de contrôle : un écart de plus de 1,3 point entre Wikipédia et les experts est signalé
+dans `anomalies.csv` (`position_wikipedia_vs_experts`).
+
 **Niveau de zoom.** Score = nombre de langues Wikidata + 0,5 x nombre de relations + 0,25 x nombre
 de personnes rattachées + années d'existence sous la Ve République (plafonnées, divisées par 4).
 Les 40 premières organisations du coeur, hors étrangères, associations, think tanks, groupes
@@ -154,6 +161,9 @@ Un lien de personne dont la page est en fait une organisation (erreur d'interwik
   une page. Un parti sans page Wikipédia est absent, de même que la plupart des listes locales.
 - Seules les personnes notables sont retenues (environ 2 200) : plus de 6 versions linguistiques, ou
   citées comme fondateur ou dirigeant. Les dates d'adhésion manquent pour une partie d'entre elles.
+- Les résultats électoraux couvrent les législatives et les européennes (ParlGov) ; pas de présidentielles, pas de
+  municipales ni de départementales. Les 80 partis français de ParlGov ne sont pas tous rapprochés (59 le sont ;
+  le reste est surtout des regroupements).
 - Quelques fusions ou scissions de l'infobox sont partielles ou ambiguës ; elles sont conservées
   telles quelles (voir `anomalies.csv`).
 - Les courants internes ne sont ceux que Wikipédia range comme tels (14) ; les sections « Histoire »

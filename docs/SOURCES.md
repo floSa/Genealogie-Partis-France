@@ -125,8 +125,23 @@ obtenues (`fondation_depuis_wikidata`, `fondation_depuis_resume`, `position_dedu
 `inclus_par_regle_souple`...), et `france_evidence` pourquoi elle est jugée française. La copie
 locale du wikitexte de chaque page est dans `data/raw/pages.sqlite` (table `pages`).
 
+## Données externes (résultats électoraux, positions d'experts)
+
+| Source | Fichiers | Usage | Citation |
+|---|---|---|---|
+| ParlGov (parlgov.org) | `view_party.csv`, `party.csv`, `view_election.csv` (dossier `parlgov-development_csv-utf-8`) | partis français, voix et sièges aux législatives et européennes depuis 1958, position gauche-droite composite | Döring, Holger et Philip Manow, *Parliaments and governments database (ParlGov)*, parlgov.org (version de développement) ; conditions d'utilisation à confirmer sur le site avant toute diffusion |
+| Chapel Hill Expert Survey (chesdata.eu) | `1999-2024_CHES_dataset_meansV2.csv` | position gauche-droite (`lrgen`), économique (`lrecon`) et société (`galtan`) par année d'enquête | Rovny, Polk, Bakker, Hooghe, Jolly, Marks, Steenbergen et Vachudova, 2025, « The 2024 Chapel Hill Expert Survey on political party positioning in Europe : Twenty-five years of party positional data », *Electoral Studies* 97, doi:10.1016/j.electstud.2025.102981 |
+
+Les fichiers sont dans `data/external/`. Rapprochement (`s04e_external_data.py`) : page Wikipédia anglaise
+du parti dans ParlGov, convertie en identifiant Wikidata (`wbgetentities` avec `sites=enwiki`), puis notre
+organisation ; repli par sigle ; correspondances manuelles dans `data/overrides.json` (`external_matches`).
+CHES est relié à ParlGov par l'identifiant Manifesto (`cmp`). Échelle 0-10 convertie en -3 à +3
+(`(x - 5) x 0,6`). Les partis non rapprochés sont listés dans `data/review/externes_non_rapproches.csv`
+(surtout des regroupements : « autres de gauche », « sans étiquette »). ParlGov regroupe UMP et Les
+Républicains en un seul parti : les résultats sont répartis entre les membres de la lignée selon la date.
+
 ## Ce qui n'est pas utilisé
 
-Ni dump complet de Wikipédia, ni moteur de recherche, ni modèle de langage, ni données électorales,
-ni autre site. Le texte des résumés est repris tel quel de Wikipédia (première phrase ou premier
+Ni dump complet de Wikipédia, ni moteur de recherche, ni modèle de langage, ni résultats de présidentielles
+(absents de ParlGov pour la France), ni résultats détaillés par commune. Le texte des résumés est repris tel quel de Wikipédia (première phrase ou premier
 paragraphe), avec renvoi vers la page d'origine.
