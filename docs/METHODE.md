@@ -89,7 +89,10 @@ l'intervalle inversé sont retirées (4 cas) et signalées.
 elle est conservée comme « une page ». Les relations dont la cible n'est pas une organisation
 retenue sont écartées et listées dans `unresolved_edges.csv`.
 
-**Position gauche-droite.** Lue dans le champ « positionnement » de l'infobox ; quand plusieurs périodes
+**Position gauche-droite.** Les règles d'arbitrage, les seuils des sept classes et les décisions explicites sont
+dans `data/definitions.json`, expliqués dans `DEFINITIONS.md` : experts CHES, puis ParlGov, puis Wikipédia, puis catégories,
+relations, famille. La lecture de l'infobox Wikipédia, détaillée ci-dessous, n'est plus qu'une source parmi d'autres.
+Lue dans le champ « positionnement » de l'infobox ; quand plusieurs périodes
 sont données (« Avant 1914 », « Après 1914 », « Actuel »), la période actuelle ou la plus récente est
 retenue, les factions sont ignorées, et une plage (« centre gauche à gauche ») donne la moyenne.
 Échelle : -3 extrême gauche, -2 gauche, -1 centre gauche, 0 centre, +1 centre droit, +2 droite,

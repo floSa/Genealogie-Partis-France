@@ -39,10 +39,10 @@ puis ouvrir http://localhost:8765. Le site propose :
 | `site/` | le site (HTML, CSS, JavaScript sans dépendance) et ses données `data.js` |
 | `data/graph/` | le graphe : `graph.json` (référence), `nodes.json`, `edges.json` et exports CSV |
 | `data/review/` | contrôle qualité : `RAPPORT.md`, anomalies, pages écartées, couverture |
-| `data/overrides.json` | corrections manuelles appliquées par-dessus l'extraction |
+| `data/overrides.json`, `data/definitions.json` | corrections manuelles ; seuils et décisions sur les positions politiques |
 | `data/raw/` | copie locale de Wikipédia et Wikidata (bases SQLite) : tout est rejouable hors ligne |
 | `pipeline/` | les scripts Python (bibliothèque standard uniquement) |
-| `docs/` | `METHODE.md` (règles de construction), `SOURCES.md` (requêtes exactes et vérification), `ARCHITECTURE.md` (chaîne et schéma), `MODELE_DE_DONNEES.md` (champs), `JOURNAL.md` (choix et impasses) |
+| `docs/` | `DEFINITIONS.md` (ce qui est de gauche, de droite, d'extrême...), `METHODE.md` (règles de construction), `SOURCES.md` (requêtes exactes et vérification), `ARCHITECTURE.md` (chaîne et schéma), `MODELE_DE_DONNEES.md` (champs), `JOURNAL.md` (choix et impasses) |
 
 ## Chiffres (collecte du 16 octobre 2026)
 
