@@ -140,8 +140,8 @@
   // au plus), une seule suite par organisation.
   const chainNext = new Map(), chainPrev = new Map();
   D.orgEdges
-    .filter((e) => e.ty === "succession" && (e.dc || e.c))
-    .sort((a, b) => (b.dc + b.c) - (a.dc + a.c))
+    .filter((e) => e.ty === "succession" && (e.dc || e.c || e.w))
+    .sort((a, b) => (b.dc + b.c + b.w) - (a.dc + a.c + a.w))
     .forEach((e) => {
       const a = O.get(e.s), b = O.get(e.t);
       if (!a || !b || a === b || a.t0 == null || b.t0 == null || b.t0 < a.t0) return;
@@ -340,6 +340,7 @@
     // relations
     let nEdges = 0;
     for (const e of D.orgEdges) {
+      if (e.ty === "current_of") continue; // courant interne : listé dans la fiche, non tracé
       if (e.ty === "affiliation" ? !state.aff : !state.rel) continue;
       // un changement de nom sur la même ligne est déjà continu : pas de connecteur
       if (e.ty === "succession" && state.chains && geom.get(e.s) && geom.get(e.t) &&
@@ -626,6 +627,8 @@
     const succ = out.filter((e) => e.ty === "succession").map((e) => row(e.t, "Devenu", dt(e)));
     const affOut = out.filter((e) => e.ty === "affiliation").map((e) => row(e.t, "", dt(e)));
     const affIn = inn.filter((e) => e.ty === "affiliation").map((e) => row(e.s, "", dt(e)));
+    const courantDe = out.filter((e) => e.ty === "current_of").map((e) => row(e.t, "", ""));
+    const courants = inn.filter((e) => e.ty === "current_of").map((e) => row(e.s, "", dt(e)));
 
     const pe = persByOrg.get(o.id) || [];
     const byPerson = (role) => pe.filter((e) => e.r === role && P.get(e.p));
@@ -656,6 +659,8 @@
       ${relList("Origine", [...parents, ...pred, ...mergedFrom])}
       ${relList("Devenir", [...succ, ...mergedInto])}
       ${relList(`Scissions (${children.length})`, children)}
+      ${relList("Courant interne de", courantDe)}
+      ${relList(`Courants internes (${courants.length})`, courants)}
       ${relList("Fait partie de", affOut)}
       ${relList("Composantes et membres", affIn)}
       ${relList("Fondateurs", founderRows)}
