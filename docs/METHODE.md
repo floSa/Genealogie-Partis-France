@@ -111,6 +111,27 @@ Wikipédia a une seule page, les noms successifs lus dans le champ « fondation 
 deux ans) les place sur une même ligne du site. Les changements de nom que Wikipédia ne relie pas
 par une succession ne sont pas devinés.
 
+**Relations de Wikidata.** Une requête (P155, P156, P1365, P1366, P807) apporte une seconde source
+indépendante : elle confirme des relations de Wikipédia (niveau de confiance `confirmee_page_et_wikidata`)
+et en ajoute quelques-unes (`wikidata_seule`). Wikidata emploie parfois « suivi par » pour une scission : une
+succession qui chevauche son prédécesseur de plus de deux ans, ou qui le précède, est écartée.
+
+**Lignées.** Les successions déclarées par la page source, confirmées par deux sources ou par Wikidata, qui
+se suivent sans chevaucher de plus de deux ans, forment une lignée (champ `lineage` : tête, rang, taille). Le
+site place une lignée sur une même ligne. `data/overrides.json` permet d'imposer une lignée (`lineages`) ou une date.
+
+**Courants internes.** Une organisation dont une catégorie est « Courant du Parti socialiste » (ou « de l'... »)
+est reliée à ce parti par une relation `current_of`, sans modèle de langage.
+
+**Dirigeants successifs.** `s04d_leaders.py` lit les sections « Présidents », « Premiers secrétaires »,
+« Secrétaires généraux », « Dirigeants » des pages de partis, ainsi que les pages dédiées qu'elles citent
+(« Premier secrétaire du Parti socialiste »), sous forme de tableaux ou de listes : première personne citée par
+ligne et dates du mandat. Une personne n'est retenue que si sa propre page est celle d'une personnalité. Les mandats
+successifs d'une même personne dans un même parti restent distincts.
+
+**Mise à jour.** `s00_refresh.py` compare les révisions ; `run_update.py` enchaîne vérification, découverte,
+reconstruction et `s09_diff_builds.py`. Le client accepte `PARTIS_FRESH=1` (ignorer le cache en lecture).
+
 **Niveau de zoom.** Score = nombre de langues Wikidata + 0,5 x nombre de relations + 0,25 x nombre
 de personnes rattachées + années d'existence sous la Ve République (plafonnées, divisées par 4).
 Les 40 premières organisations du coeur, hors étrangères, associations, think tanks, groupes

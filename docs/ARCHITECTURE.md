@@ -45,6 +45,8 @@ flowchart LR
 | 2 | `s02_fetch_parties.py` | `discovery.json` | `pages.sqlite`, `promoted.json` |
 | 3 | `s03_parse_parties.py` | `pages.sqlite` | `data/graph/parties_raw.json` |
 | 4a | `s04a_wikidata_people.py` | Wikidata | `data/raw/wd_people.json` |
+| 4c | `s04c_wikidata_relations.py` | Wikidata | `data/raw/wd_relations.json` |
+| 4d | `s04d_leaders.py` | `parties_raw.json`, `pages.sqlite` | `data/graph/leaders_raw.json`, `pages.sqlite` |
 | 4b | `s04b_people.py` | `parties_raw.json`, `wd_people.json` | `pages.sqlite`, `data/graph/people_raw.json` |
 | 5 | `s02b_snowball.py` | `parties_raw.json`, `people_raw.json` | `pages.sqlite` (pages nouvelles) |
 | 6 | `s02c_wikidata_entities.py` | `pages.sqlite` | `data/raw/wd_entities.json` |
@@ -53,7 +55,7 @@ flowchart LR
 | 9 | `s07_export_site.py` | le graphe | `site/data.js` |
 | 10 | `s08_review_list.py` | le graphe, `_build_side.json` | `data/review/A_VALIDER.md` |
 
-`run_all.py` enchaîne ces étapes (`python pipeline/run_all.py` pour tout, ou une liste de numéros).
+`s00_refresh.py` (mise à jour incrémentale) et `s09_diff_builds.py` (rapport de changements) complètent la chaîne ; `run_update.py` les enchaîne avec les autres. `run_all.py` enchaîne les étapes du tableau (`python pipeline/run_all.py` pour tout, ou une liste de numéros).
 Les numéros d'étape de `run_all.py` suivent le tableau ci-dessus ; les noms de fichiers conservent
 l'ordre historique de création.
 

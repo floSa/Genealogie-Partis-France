@@ -55,3 +55,20 @@ de pages par un modèle de langage.
 - Courants internes et sensibilités hors catégories dédiées ; dirigeants successifs de chaque parti.
 - Résultats électoraux, positionnement variable dans le temps.
 - Vue réseau libre (personnes et partis) en plus de la frise.
+
+## Deuxième tour : consolidation et mise à jour
+
+- Mise à jour incrémentale : vérifier 6 890 pages stockées coûte environ 140 requêtes (une par lot de 50
+  titres) ; seules les pages dont la révision a changé sont retéléchargées (108 lors du premier essai).
+  Aucun jeton n'est consommé : ce sont des requêtes HTTP faites par un script Python.
+- Wikidata contient 126 relations de filiation entre partis français (et non 21) : elles confirment 43 relations
+  de Wikipédia et en ajoutent 15 ; certaines étaient en réalité des scissions (« suivi par »), d'où le filtre sur le
+  chevauchement dans le temps.
+- Les courants internes sont rattachés à leur parti par la catégorie, sans modèle de langage (16 courants).
+- Les dirigeants successifs viennent des tableaux de Wikipédia (311 mandats ajoutés) ; les mandats multiples
+  d'une même personne dans un même parti ne sont plus fusionnés.
+- Les fonctions du site (photographie à une date, liens permanents, export CSV, formulaire de correction, accessibilité)
+  ont été développées par un agent en parallèle dans une copie de travail séparée, puis fusionnées.
+- Non fait faute de source fiable et légère : résultats électoraux, nombre d'élus (les champs de l'infobox sont
+  alimentés par Wikidata et vides) et position dans le temps issue de CHES ou des votes. Ils demandent des jeux de
+  données externes à télécharger et à rapprocher des noms de partis ; à décider ensemble.

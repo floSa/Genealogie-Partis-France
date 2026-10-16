@@ -26,6 +26,8 @@ puis ouvrir http://localhost:8765. Le site propose :
 - les scissions, fusions et successions tracées entre les barres, les coalitions en option ;
 - un clic sur un parti : résumé, origine, scissions, fondateurs, dirigeants, personnes rattachées ;
 - un clic sur une personne (ou la recherche) : son parcours tracé à travers les partis ;
+- une photographie à une date donnée, des liens permanents, un export CSV et un formulaire
+  « Corriger cette fiche » qui produit l'entrée à coller dans `data/overrides.json` ;
 - des filtres par famille politique (communiste, trotskiste, socialiste, écologiste, centriste,
   libéral, gaulliste, droite, souverainiste, extrême droite, régionaliste...) et par nature.
 
@@ -43,12 +45,13 @@ puis ouvrir http://localhost:8765. Le site propose :
 
 ## Chiffres (collecte du 16 octobre 2026)
 
-- 645 organisations (603 depuis 1958, 42 ancêtres antérieurs reliés) : 372 partis, 146 mouvements
+- 646 organisations (603 depuis 1958, 43 ancêtres antérieurs reliés) : 372 partis, 146 mouvements
   et organisations, 44 coalitions, 14 courants internes, 18 mouvements de jeunesse, 19 associations,
   4 think tanks, 5 micro-partis et 23 groupes parlementaires (masqués par défaut sur le site).
-- 561 relations entre organisations : 167 scissions, 137 fusions, 33 successions, 224 affiliations.
-  180 sont confirmées par les deux pages concernées.
-- 2 212 personnes et 5 161 liens (4 464 adhésions, 500 fonctions de direction, 197 fondations).
+- 590 relations entre organisations : 168 scissions, 137 fusions, 45 successions, 224 affiliations et
+  16 rattachements de courants internes à leur parti. 180 sont confirmées par les deux pages concernées,
+  3 par une page et Wikidata, 13 ne reposent que sur Wikidata.
+- 2 364 personnes et 5 568 liens (4 741 adhésions, 630 mandats de dirigeants, 197 fondations).
 - 97 % des organisations ont une date de fondation (17 n'en ont aucune et ne sont pas dessinées).
 - 62 % ont une position gauche-droite lue sur Wikipédia (infobox ou catégories) ou déduite de leurs
   relations ; 185 autres sont placées d'après leur famille politique (contour en pointillés sur le
@@ -57,7 +60,20 @@ puis ouvrir http://localhost:8765. Le site propose :
 - 22 organisations « périphériques » (basques espagnols, mouvements d'Afrique coloniale...) sont
   conservées mais masquées par défaut.
 
-## Rejouer ou mettre à jour
+## Mettre à jour les données
+
+```bash
+python pipeline/run_update.py            # vérifie les pages, découvre les nouveaux partis, reconstruit
+python pipeline/run_update.py --offline  # reconstruction et rapport seulement (sans réseau)
+python -m unittest discover -s tests     # tests de non-régression du graphe
+```
+
+La mise à jour compare la révision de chaque page stockée avec celle de Wikipédia (une requête par
+lot de 50 pages) et ne retélécharge que les pages modifiées, puis écrit `data/review/CHANGEMENTS.md` :
+organisations nouvelles ou disparues, dates et relations modifiées, nouveaux candidats, pages Wikipédia
+changées. Compter 15 à 30 minutes, sans aucun coût en jetons (le réseau seul est sollicité).
+
+## Rejouer
 
 ```bash
 python pipeline/run_all.py          # toute la chaîne (reprend là où elle s'est arrêtée)

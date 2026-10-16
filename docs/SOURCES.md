@@ -50,6 +50,10 @@ SELECT ?item ?frTitle ?label ?inc ?dis ?sl WHERE {
    `?party p:P112 ?st. ?st ps:P112 ?person.` (fondateur) et `?party p:P488 ?st. ?st ps:P488 ?person.`
    (président ou dirigeant).
 
+4. Relations de filiation (`s04c_wikidata_relations.py`) : pour les mêmes partis, les propriétés P155 et
+   P1365 (suit, remplace), P156 et P1366 (suivi par, remplacé par) et P807 (séparé de), filtrées par
+   `FILTER(?p IN (wdt:P155, wdt:P156, wdt:P1365, wdt:P1366, wdt:P807))`.
+
 Le nombre de versions linguistiques (`wikibase:sitelinks`) sert d'indice de notoriété.
 
 ## Appels à l'API de Wikipédia
@@ -90,6 +94,10 @@ Les racines de catégories explorées figurent dans `ROOT_CATS` (`s01_discover.p
 partis avec années) et les champs `fonctionN` avec `depuis le fonctionN`, `à partir du fonctionN`,
 `jusqu'au fonctionN`, ainsi que la naissance et le décès. Seules l'introduction et l'infobox
 sont téléchargées (section 0).
+
+**Sections de dirigeants** (`s04d_leaders.py`) : titres de section « Dirigeants », « Présidents », « Premiers
+secrétaires », « Secrétaires généraux », « Porte-parole », « Chefs » et les pages citées par
+`{{Article détaillé|...}}` ; lignes de tableau (`{|` ... `|-`) et éléments de liste, première personne liée et dates.
 
 **Première phrase de l'introduction** : sert à reconnaître une organisation sans infobox (« est un
 parti... »), à repérer un verbe au passé (organisation disparue), à tirer des dates de dernier
