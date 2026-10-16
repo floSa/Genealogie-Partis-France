@@ -10,6 +10,10 @@ gratuite, rejouable et vérifiable.
 
 ## Ouvrir le site
 
+En ligne : https://flosa.github.io/Genealogie-Partis-France/ (republié automatiquement à chaque modification du dossier `site/`).
+
+En local :
+
 Double-cliquer sur `site/index.html` (aucun serveur ni connexion nécessaires). Si votre
 navigateur le bloque, lancer dans un terminal :
 
