@@ -23,7 +23,9 @@ def main():
 
     db = sqlite3.connect(str(ROOT / "data" / "raw" / "pages.sqlite"))
     last_rev = db.execute("SELECT MAX(rev_ts), MIN(fetched), MAX(fetched) FROM pages").fetchone()
+    defs = json.loads((ROOT / "data" / "definitions.json").read_text(encoding="utf-8"))
     meta = {
+        "classes": [{k: c[k] for k in ("code", "libelle", "min", "max", "definition")} for c in defs["classes"]],
         "generated": datetime.date.today().isoformat(),
         "wikipedia_last_revision": last_rev[0],
         "collected_from": datetime.datetime.fromtimestamp(last_rev[1]).date().isoformat() if last_rev[1] else None,
@@ -37,7 +39,8 @@ def main():
                 {
                     "id": n["id"], "n": n["name"], "t": n["title"], "ab": n["abbreviations"], "k": n["kind"],
                     "s": n["start"], "e": n["end"], "st": n["status"], "sc": n["scope"],
-                    "pv": n["position_value"], "ps": n["position_source"], "pc": n["position_codes"], "fam": n["families"],
+                    "pv": n["position_value"], "ps": n["position_source"], "pc": n["position_codes"], "pl": n.get("position_label"),
+                    "pw": n.get("position_why", ""), "pb": 1 if n.get("position_borderline") else 0, "pd": 1 if n.get("position_disagreement") else 0, "fam": n["families"],
                     "tier": n["tier"], "per": n["peripheral"], "sl": n["sitelinks"], "imp": n["importance"],
                     "sum": n["summary"], "url": n["url"], "fl": n["flags"], "np": n.get("persons_linked", 0),
                     "ideo": n["ideologies"][:6], "nc": n.get("name_changes", []),

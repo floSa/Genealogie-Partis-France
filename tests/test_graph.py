@@ -92,7 +92,10 @@ class TestCasDeReference(Base):
         rn = self.orgs["Rassemblement national"]
         self.assertEqual(rn["start"][:4], "1972")
         self.assertEqual([c["label"] for c in rn["name_changes"]], ["FN", "RN"])
-        self.assertEqual(rn["position_codes"], ["extreme_droite"])
+        # cas sensible : l'indice des experts est a la frontiere de l'extreme droite et Wikipedia le classe plus a droite ;
+        # tant qu'aucune decision explicite n'existe, il doit etre signale comme frontiere ou desaccord
+        self.assertIn(rn["position_label"], ("droite", "extreme_droite"))
+        self.assertTrue(rn["position_borderline"] or rn["position_disagreement"] or rn["position_source"] == "decision")
 
     def test_lignee_gaulliste_sur_une_meme_ligne(self):
         titres = ("Rassemblement pour la République", "Union pour un mouvement populaire", "Les Républicains")
@@ -126,6 +129,36 @@ class TestCasDeReference(Base):
         pcf = self.orgs["Parti communiste français"]
         self.assertTrue(pcf["expert_positions"])
         self.assertTrue(all(-3 <= e["lrgen"] <= 3 for e in pcf["expert_positions"]))
+
+    def test_classes_de_position_coherentes_avec_les_seuils(self):
+        defs = json.loads((ROOT / "data" / "definitions.json").read_text(encoding="utf-8"))
+        gauche, droite = [c["max"] for c in defs["classes"][:3]], [c["min"] for c in defs["classes"][4:]]
+        self.assertEqual(gauche, sorted(gauche))
+        self.assertEqual(droite, sorted(droite))
+
+        def classe(v):
+            codes = ["extreme_gauche", "gauche", "centre_gauche", "centre", "centre_droit", "droite", "extreme_droite"]
+            if v <= gauche[0]: return codes[0]
+            if v <= gauche[1]: return codes[1]
+            if v <= gauche[2]: return codes[2]
+            if v < droite[0]: return codes[3]
+            if v < droite[1]: return codes[4]
+            if v < droite[2]: return codes[5]
+            return codes[6]
+
+        for n in self.orgs.values():
+            if n.get("position_value") is not None and n["position_source"] != "decision":
+                self.assertEqual(n["position_label"], classe(n["position_value"]), n["title"])
+
+    def test_decision_france_insoumise(self):
+        lfi = self.orgs["La France insoumise"]
+        self.assertEqual(lfi["position_label"], "gauche")
+        self.assertEqual(lfi["position_source"], "decision")
+        self.assertIn("institutions", lfi["position_why"])
+
+    def test_gauche_radicale_n_est_pas_l_extreme_gauche(self):
+        pcf = self.orgs["Parti communiste français"]
+        self.assertEqual(pcf["position_label"], "gauche")
 
     def test_scission_npa_revolution_permanente(self):
         a = self.orgs["Nouveau Parti anticapitaliste"]["id"]

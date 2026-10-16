@@ -229,11 +229,13 @@ def plain_for_dates(s: str) -> str:
 # ------------------------------------------------------- positionnement
 SPECTRUM = {
     "extreme_gauche": -3,
+    "gauche_radicale": -2.3,  # gauche (et non extreme gauche) : voir data/definitions.json
     "gauche": -2,
     "centre_gauche": -1,
     "centre": 0,
     "centre_droit": 1,
     "droite": 2,
+    "droite_radicale": 2.3,  # droite (et non extreme droite) : voir data/definitions.json
     "extreme_droite": 3,
 }
 
@@ -241,10 +243,14 @@ SPECTRUM = {
 def position_code(text: str) -> str | None:
     t = text.lower().replace("-", " ").replace("é", "e").replace("è", "e").replace("ê", "e")
     t = re.sub(r"\s+", " ", t)
-    if "extreme gauche" in t or "gauche radicale" in t:
+    if "extreme gauche" in t:
         return "extreme_gauche"
+    if "gauche radicale" in t:
+        return "gauche_radicale"
     if "extreme droite" in t:
         return "extreme_droite"
+    if "droite radicale" in t:
+        return "droite_radicale"
     if "centre gauche" in t:
         return "centre_gauche"
     if "centre droit" in t or "centre droite" in t:

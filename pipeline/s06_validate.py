@@ -235,6 +235,29 @@ def main():
     write_csv(REVIEW / "unresolved_edges.csv", sorted(side["unresolved_edges"]), ["page", "type_relation", "cible", "texte"])
     write_csv(REVIEW / "dropped_scope.csv", sorted(side["dropped_scope"]), ["titre", "fin"])
 
+    # ---- arbitrage des positions : tableau complet et synthese des cas sensibles
+    labels = {c["code"]: c["libelle"] for c in json.loads((ROOT / "data" / "definitions.json").read_text(encoding="utf-8"))["classes"]}
+    arb = sorted((n for n in orgs.values() if n.get("position_value") is not None),
+                 key=lambda n: (n["tier"], -n["importance"]))
+    rows_arb = []
+    for n in arb:
+        c = n.get("position_candidates", {})
+        rows_arb.append([n["title"], n["kind"], n["tier"], c.get("wikipedia", c.get("categories", "")), c.get("ches", ""),
+                         c.get("parlgov", ""), n["position_value"], n["position_source"], labels.get(n.get("position_label"), ""),
+                         "oui" if n.get("position_borderline") else "", "oui" if n.get("position_disagreement") else "",
+                         n.get("position_why", "")])
+    write_csv(REVIEW / "positions_arbitrage.csv", rows_arb,
+              ["titre", "nature", "niveau", "wikipedia", "ches", "parlgov", "indice_retenu", "source_retenue", "classe",
+               "proche_d_une_frontiere", "sources_en_desaccord", "explication"])
+    md = ["# Arbitrage des positions : organisations principales", "",
+          "Règles et seuils : `data/definitions.json`, expliqués dans `docs/DEFINITIONS.md`. Indice de -3 (extrême gauche) à +3 (extrême droite).",
+          "« Frontière » : à moins de 0,2 d'un seuil ; « désaccord » : les sources ne donnent pas la même classe.", "",
+          "| Organisation | Classe retenue | Indice | Source retenue | Frontière | Désaccord | Explication |", "|---|---|---|---|---|---|---|"]
+    for n in [x for x in arb if x["tier"] <= 1][:45]:
+        md.append(f"| {n['name']} | {labels.get(n.get('position_label'), '')} | {n['position_value']} | {n['position_source']} | "
+                  f"{'oui' if n.get('position_borderline') else ''} | {'oui' if n.get('position_disagreement') else ''} | {n.get('position_why', '')} |")
+    (REVIEW / "ARBITRAGE_POSITIONS.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+
     # ---- couverture
     # 'trouve' : un alias correspond exactement au titre ou au nom d'une organisation ;
     # 'trouve_par_sigle' : seulement par un sigle (a verifier a la main, risque de faux positif).

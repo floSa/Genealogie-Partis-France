@@ -59,6 +59,35 @@ def name_changes_from(founded_raw: str):
 
 G = ROOT / "data" / "graph"
 REVIEW = ROOT / "data" / "review"
+DEFS = json.loads((ROOT / "data" / "definitions.json").read_text(encoding="utf-8"))
+CLASSES = DEFS["classes"]
+CLASS_LABEL = {c["code"]: c["libelle"] for c in CLASSES}
+_LEFT = [c["max"] for c in CLASSES[:3]]    # bornes de l'extreme gauche, de la gauche, du centre gauche
+_RIGHT = [c["min"] for c in CLASSES[4:]]   # bornes du centre droit, de la droite, de l'extreme droite
+IGNORED_MENTION = re.compile("|".join(DEFS["regle_de_decision"]["mentions_ignorees_wikipedia"]), re.I)
+
+
+def classify(v):
+    """Indice (-3..+3) -> code de classe, d'apres les seuils de data/definitions.json."""
+    if v <= _LEFT[0]:
+        return "extreme_gauche"
+    if v <= _LEFT[1]:
+        return "gauche"
+    if v <= _LEFT[2]:
+        return "centre_gauche"
+    if v < _RIGHT[0]:
+        return "centre"
+    if v < _RIGHT[1]:
+        return "centre_droit"
+    if v < _RIGHT[2]:
+        return "droite"
+    return "extreme_droite"
+
+
+def fmt(v):
+    return f"{v:+.2f}".replace(".", ",")
+
+
 FRANCE_QID = "Q142"
 PARTY_QS = {"Q7278"}  # parti politique
 YEAR_MIN_SCOPE = 1958
@@ -226,6 +255,8 @@ def position_from(rec, cats):
             pool = [p for p in base if p.get("header", "") == headers[-1]]  # periode la plus recente
         else:
             pool = base
+    # les mentions incertaines (« voire extreme gauche (conteste) ») ne definissent pas la position
+    pool = [p for p in pool if not IGNORED_MENTION.search(p["context"] + " " + p.get("header", ""))] or pool
     # les codes d'un meme segment (ex. 'centre gauche a gauche') forment une plage
     first_ctx = pool[0]["context"]
     group = [p for p in pool if p["context"] == first_ctx] or [pool[0]]
@@ -761,6 +792,10 @@ def main():
         if pv is None:
             pv, pcodes, psrc = position_fallback(cats, rec)
         fam = families_of(rec, cats)
+        for d in DEFS["criteres_des_familles"]["decisions"]:  # decisions explicites sur les familles
+            if d["titre"] == rec["title"]:
+                fam = [f for f in fam if f not in d.get("familles_retirees", [])] + [
+                    f for f in d.get("familles_ajoutees", []) if f not in fam]
         wd = rec["wd"]
         sl = wd.get("sl", 0)
         sy, ey = year_of(rec["start"]), year_of(rec["end"])
@@ -918,18 +953,62 @@ def main():
                     {k: ch[k] for k in ("year", "lrgen", "lrecon", "galtan")})
                 n_ex += 1
             node["parlgov_left_right"] = x["parlgov_left_right"]
-        n_filled = 0
         for n in nodes_org:
             n["elections"].sort(key=lambda e: e["date"])
             n["expert_positions"].sort(key=lambda e: e["year"])
-            if n["position_value"] is None and (n["expert_positions"] or n["parlgov_left_right"] is not None):
-                v = n["expert_positions"][-1]["lrgen"] if n["expert_positions"] else n["parlgov_left_right"]
-                n["position_value"] = v
-                n["position_codes"] = [min(SPECTRUM, key=lambda c: abs(SPECTRUM[c] - v))]
-                n["position_source"] = "experts" if n["expert_positions"] else "parlgov"
-                n["flags"].append("position_depuis_" + n["position_source"])
-                n_filled += 1
-        print(f"donnees externes : {n_el} resultats electoraux, {n_ex} positions d'experts, {n_filled} positions completees")
+        print(f"donnees externes : {n_el} resultats electoraux, {n_ex} positions d'experts")
+
+    # ---- arbitrage de la position politique : regles et decisions de data/definitions.json
+    decisions = {d["titre"]: d for d in DEFS["decisions"]}
+    n_surveys = DEFS["regle_de_decision"]["ches_nombre_d_enquetes"]
+    order = DEFS["regle_de_decision"]["ordre_des_sources"]
+    src_name = {"ches": "Experts CHES", "parlgov": "ParlGov", "wikipedia": "Wikipédia (infobox)",
+                "categories": "Wikipédia (catégories)", "decision": "Décision du propriétaire"}
+    edges_t = [*_LEFT, *_RIGHT]
+    n_by_src = Counter()
+    for n in nodes_org:
+        wiki = n["position_value"] if n["position_source"] in ("infobox", "categories") else None
+        recent = n["expert_positions"][-n_surveys:]
+        cand = {
+            "ches": round(sum(e["lrgen"] for e in recent) / len(recent), 2) if recent else None,
+            "parlgov": n["parlgov_left_right"],
+            "wikipedia": wiki if n["position_source"] == "infobox" else None,
+            "categories": wiki if n["position_source"] == "categories" else None,
+        }
+        cand = {k: v for k, v in cand.items() if v is not None}
+        n["position_candidates"] = cand
+        dec = decisions.get(n["title"])
+        chosen = next(((s, cand[s]) for s in order if s in cand), None)
+        n["position_label"], n["position_why"], n["position_disagreement"], n["position_borderline"] = None, "", False, False
+        if chosen:
+            src, v = chosen
+            n["position_value"], n["position_source"] = v, src
+            n["position_label"] = classify(v)
+            detail = ""
+            if src == "ches":
+                detail = f" ({recent[0]['year']}-{recent[-1]['year']})" if len(recent) > 1 else f" ({recent[0]['year']})"
+            n["position_why"] = f"{src_name[src]}{detail} : indice {fmt(v)}, soit {CLASS_LABEL[n['position_label']].lower()}."
+            others = {s: classify(x) for s, x in cand.items() if s != src}
+            diff = {s: c for s, c in others.items() if c != n["position_label"]}
+            if diff:
+                n["position_disagreement"] = True
+                n["position_why"] += " Autres sources : " + " ; ".join(
+                    f"{src_name[s]} {CLASS_LABEL[c].lower()} ({fmt(cand[s])})" for s, c in diff.items()) + "."
+            n["position_borderline"] = any(abs(v - t) < 0.2 for t in edges_t)
+            n_by_src[src] += 1
+        if dec:
+            code = dec["classe"]
+            if chosen is None:
+                n["position_value"] = SPECTRUM[code]
+            n["position_label"] = code
+            n["position_source"] = "decision"
+            n["position_why"] = f"Décision explicite : {CLASS_LABEL[code].lower()}. {dec['pourquoi']}" + (
+                f" (sans décision : {CLASS_LABEL[classify(chosen[1])].lower()}, indice {fmt(chosen[1])}, "
+                f"{src_name[chosen[0]]})" if chosen and classify(chosen[1]) != code else "")
+            n["position_borderline"] = False
+            n_by_src["decision"] += 1
+        n["position_codes"] = [n["position_label"]] if n["position_label"] else []
+    print("positions arbitrees, par source retenue :", dict(n_by_src))
 
     # position deduite des organisations voisines (membres d'une coalition, scission, successeur)
     # pour celles qui n'ont ni position, ni famille permettant de l'estimer
@@ -952,8 +1031,10 @@ def main():
         if vals:
             v = round(sum(vals) / len(vals), 2)
             n["position_value"] = v
-            n["position_codes"] = [min(SPECTRUM, key=lambda c: abs(SPECTRUM[c] - v))]
+            n["position_label"] = classify(v)
+            n["position_codes"] = [n["position_label"]]
             n["position_source"] = "relations"
+            n["position_why"] = f"Déduite des organisations voisines (moyenne {fmt(v)}), soit {CLASS_LABEL[n['position_label']].lower()}."
             n["flags"].append("position_deduite_des_relations")
             n_inferred += 1
     print("positions deduites des relations:", n_inferred)
