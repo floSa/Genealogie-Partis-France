@@ -597,7 +597,7 @@
         <p>Le champ « Voir à la date » trace une ligne sur la frise et liste les organisations qui existaient ce jour-là.</p>
       </section>
       <section><h3>Sources et limites</h3>
-        <p class="src">Données extraites automatiquement de Wikipédia en français (texte sous licence CC BY-SA 4.0) et de Wikidata (CC0). Les positions gauche-droite sont celles que déclare Wikipédia, ou une estimation par famille politique, signalée par un contour en pointillés. Les dates sont souvent limitées à l'année.</p>
+        <p class="src">Données extraites automatiquement de Wikipédia en français (texte sous licence CC BY-SA 4.0) et de Wikidata (CC0). Les positions gauche-droite sont celles que déclare Wikipédia, ou une estimation par famille politique, signalée par un contour en pointillés. Les dates sont souvent limitées à l'année. Résultats électoraux : ParlGov ; positions d'experts : Chapel Hill Expert Survey (Rovny, Polk, Bakker, Hooghe, Jolly, Marks, Steenbergen, Vachudova, 2025, Electoral Studies 97).</p>
         <p class="src">Données collectées du ${esc(m.collected_from || "?")} au ${esc(m.collected_to || "?")}${m.wikipedia_last_revision ? ", dernière révision Wikipédia lue : " + esc(String(m.wikipedia_last_revision).slice(0, 10)) : ""}.</p>
       </section>`;
   }
@@ -641,6 +641,17 @@
     const founderRows = founders.map((e) => `<li>${perLink(e.p)}<span class="d">${esc(e.s ? fmtDate(e.s) : "")}</span></li>`);
     const memberRows = members.map((e) => `<li>${perLink(e.p)}<span class="d">${esc(e.s || e.e ? span(e.s, e.e, true) : "")}</span></li>`);
 
+    const elTypes = { parliament: "Législatives", ep: "Européennes" };
+    const electionsHtml = (o.el && o.el.length) ? `<section><h3>Résultats électoraux (${o.el.length})</h3>
+      <table class="mini"><thead><tr><th>Année</th><th>Scrutin</th><th>% des voix</th><th>Sièges</th></tr></thead><tbody>${
+        o.el.map((e) => `<tr><td>${esc(e[0].slice(0, 4))}</td><td>${esc(elTypes[e[1]] || e[1])}</td><td>${e[2] != null ? esc(String(e[2]).replace(".", ",")) : ""}</td><td>${e[3] != null ? esc(String(e[3])) + (e[4] ? " / " + esc(String(e[4])) : "") : ""}</td></tr>`).join("")
+      }</tbody></table>
+      <p class="src">Source : ParlGov (législatives et européennes depuis 1958).</p></section>` : "";
+    const expertsHtml = (o.ex && o.ex.length) ? `<section><h3>Position selon les experts</h3>
+      <table class="mini"><thead><tr><th>Année</th><th>Gauche-droite</th><th>Économie</th><th>Société</th></tr></thead><tbody>${
+        o.ex.map((e) => `<tr><td>${e[0]}</td><td>${posWord(e[1])} (${esc(String(e[1]).replace(".", ","))})</td><td>${e[2] != null ? esc(String(e[2]).replace(".", ",")) : ""}</td><td>${e[3] != null ? esc(String(e[3]).replace(".", ",")) : ""}</td></tr>`).join("")
+      }</tbody></table>
+      <p class="src">Source : Chapel Hill Expert Survey. Échelle de -3 (extrême gauche, libéralisme social, libertaire) à +3 (extrême droite, conservatisme).</p></section>` : "";
     const famBadges = o.fam.map((f) => `<span class="badge">${esc(FAMILY_LABEL[f] || f)}</span>`).join("");
     const posNote = o.pv == null ? (o.px != null ? `Position estimée : ${posWord(o.px)}` : "Position non renseignée") : `Position : ${posWord(o.pv)}`;
     const status = { actif: "toujours actif", dissous: "dissous", fusionne: "a fusionné", transforme: "transformé" }[o.st] || o.st;
@@ -665,6 +676,8 @@
       ${relList("Composantes et membres", affIn)}
       ${relList("Fondateurs", founderRows)}
       ${relList(`Dirigeants (${leaderRows.length})`, leaderRows)}
+      ${electionsHtml}
+      ${expertsHtml}
       <section><h3>Personnes rattachées (${memberRows.length})</h3>
         <ul class="rel" id="members">${memberRows.slice(0, 12).join("")}</ul>
         ${memberRows.length > 12 ? `<button class="more" id="more-members">Afficher les ${memberRows.length - 12} autres</button>` : ""}
