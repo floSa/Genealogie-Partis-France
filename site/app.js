@@ -39,12 +39,21 @@
   };
   const ROLE_LABEL = { founder: "Fondateur", leader: "Dirigeant", member: "Membre" };
   const REL_LABEL = { split: "Scission", merge: "Fusion", succession: "Succession", affiliation: "Affiliation" };
-  const POS_NAMES = [
-    [-3, "Extrême gauche"], [-2, "Gauche"], [-1, "Centre gauche"], [0, "Centre"],
-    [1, "Centre droit"], [2, "Droite"], [3, "Extrême droite"],
+  // Classes de position : seuils lus dans data/definitions.json (via meta.classes), voir docs/DEFINITIONS.md
+  const CLASSES = (D.meta && D.meta.classes) || [
+    { code: "extreme_gauche", libelle: "Extrême gauche", min: -3, max: -2.6 }, { code: "gauche", libelle: "Gauche", min: -2.6, max: -1.4 },
+    { code: "centre_gauche", libelle: "Centre gauche", min: -1.4, max: -0.5 }, { code: "centre", libelle: "Centre", min: -0.5, max: 0.5 },
+    { code: "centre_droit", libelle: "Centre droit", min: 0.5, max: 1.4 }, { code: "droite", libelle: "Droite", min: 1.4, max: 2.6 },
+    { code: "extreme_droite", libelle: "Extrême droite", min: 2.6, max: 3 },
   ];
+  const CLASS_BY_CODE = new Map(CLASSES.map((c) => [c.code, c]));
+  const THRESHOLDS = CLASSES.slice(0, -1).map((c) => c.max); // frontières entre classes, de gauche à droite
+  // centre de chaque classe : sert à placer les noms sur l'axe
+  const POS_NAMES = CLASSES.map((c) => [(Math.max(c.min, -3) + Math.min(c.max, 3)) / 2, c.libelle]);
   const WINGS = {
-    all: [-3.3, 4.3], xg: [-3.3, -2.35], g: [-2.35, -0.65], c: [-0.65, 0.65], d: [0.65, 2.35], xd: [2.35, 3.3],
+    all: [-3.3, 4.3],
+    xg: [-3.3, THRESHOLDS[0]], g: [THRESHOLDS[0], THRESHOLDS[2]], c: [THRESHOLDS[2], THRESHOLDS[3]],
+    d: [THRESHOLDS[3], THRESHOLDS[5]], xd: [THRESHOLDS[5], 3.3],
   };
   const PRESIDENTS = [
     ["de Gaulle", 1958.0, 1969.3], ["Pompidou", 1969.4, 1974.3], ["Giscard d'Estaing", 1974.4, 1981.4],
@@ -97,12 +106,13 @@
     }
     return STOPS[STOPS.length - 1][1];
   };
-  const posWord = (v) => {
-    if (v == null) return "non renseignée";
-    let best = POS_NAMES[0];
-    for (const p of POS_NAMES) if (Math.abs(p[0] - v) < Math.abs(best[0] - v)) best = p;
-    return best[1].toLowerCase();
+  const classOf = (v) => {
+    const T = THRESHOLDS;
+    const i = v <= T[0] ? 0 : v <= T[1] ? 1 : v <= T[2] ? 2 : v < T[3] ? 3 : v < T[4] ? 4 : v < T[5] ? 5 : 6;
+    return CLASSES[i];
   };
+  const posWord = (v) => (v == null ? "non renseignée" : classOf(v).libelle.toLowerCase());
+
 
   // --------------------------------------------------------------- préparation des données
   const famCount = new Map();
@@ -312,10 +322,10 @@
       const t = el("text", { x: 4, y: yy - 3, class: "yr" }, gBg);
       t.textContent = y;
     }
-    for (const [v] of POS_NAMES) {
+    for (const v of THRESHOLDS) { // frontières entre classes de position
       if (v < L.lo || v > L.hi) continue;
       const xx = L.xs(v);
-      el("line", { x1: xx, x2: xx, y1: 0, y2: H, stroke: "var(--grid)", "stroke-dasharray": v === 0 ? "" : "2 5" }, gBg);
+      el("line", { x1: xx, x2: xx, y1: 0, y2: H, stroke: "var(--grid)", "stroke-dasharray": "2 5" }, gBg);
     }
     if (state.wing === "all") {
       const xx = L.xs(3.5);
@@ -390,7 +400,7 @@
       const bar = el("g", {
         class: "bar", tabindex: o.id === tabId ? 0 : -1, role: "button", "data-id": o.id,
         "aria-pressed": state.sel === o.id ? "true" : "false",
-        "aria-label": `${o.n}, ${KIND_SINGLE[o.k] || ""}, ${span(o.s, o.e, o.st === "actif")}, position ${o.pv == null ? (o.px != null ? "estimée : " : "") : ""}${o.px != null ? posWord(o.px) : "non renseignée"}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}`,
+        "aria-label": `${o.n}, ${KIND_SINGLE[o.k] || ""}, ${span(o.s, o.e, o.st === "actif")}, position ${posText(o)}${td != null && isActiveAt(o, td) ? ", active à la date choisie" : ""}`,
       }, gBars);
       barEls.set(o.id, bar);
       // anneau de focus clavier (visible même sur une barre estompée ou très fine)
@@ -539,7 +549,7 @@
       if (v < L.lo || v > L.hi) return;
       const xx = L.xs(v);
       el("line", { x1: xx, x2: xx, y1: 30, y2: 46, stroke: "var(--muted)" }, ax);
-      const t = el("text", { x: xx, y: tight ? 12 + (i % 2) * 12 : 22, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 12 }, ax);
+      const t = el("text", { x: xx, y: 14 + (i % 2) * 12, "text-anchor": "middle", class: "yr", "font-size": tight ? 10.5 : 11.5 }, ax);
       t.textContent = tight ? SHORT[i] : name;
     });
     const grad = el("defs", {}, ax);
@@ -653,7 +663,8 @@
       }</tbody></table>
       <p class="src">Source : Chapel Hill Expert Survey. Échelle de -3 (extrême gauche, libéralisme social, libertaire) à +3 (extrême droite, conservatisme).</p></section>` : "";
     const famBadges = o.fam.map((f) => `<span class="badge">${esc(FAMILY_LABEL[f] || f)}</span>`).join("");
-    const posNote = o.pv == null ? (o.px != null ? `Position estimée : ${posWord(o.px)}` : "Position non renseignée") : `Position : ${posWord(o.pv)}`;
+    const posNote = o.pl ? `Position : ${CLASS_BY_CODE.get(o.pl).libelle.toLowerCase()}` : o.px != null ? `Position estimée : ${posWord(o.px)}` : "Position non renseignée";
+    const posFlags = (o.pb ? `<span class="badge">proche d'une frontière</span>` : "") + (o.pd ? `<span class="badge">sources en désaccord</span>` : "");
     const status = { actif: "toujours actif", dissous: "dissous", fusionne: "a fusionné", transforme: "transformé" }[o.st] || o.st;
     const lineage = (() => {
       const names = (o.nc && o.nc.length >= 2) ? o.nc.map((c) => `${esc(c.label)} (${esc(fmtDate(c.date))})`) : [];
@@ -663,8 +674,9 @@
       <h2>${esc(o.n)}</h2>
       <div class="meta">${esc(KIND_SINGLE[o.k] || "")}${o.ab && o.ab.length ? " (" + esc(o.ab.join(", ")) + ")" : ""}<br>
         ${esc(span(o.s, o.e, o.st === "actif"))} - ${esc(status)}${o.endUnknown ? ", date de fin inconnue" : ""}</div>
-      <div><span class="badge">${esc(posNote)}</span>${famBadges}${o.per ? '<span class="badge">hors de France ou frontalier</span>' : ""}</div>
+      <div><span class="badge">${esc(posNote)}</span>${posFlags}${famBadges}${o.per ? '<span class="badge">hors de France ou frontalier</span>' : ""}</div>
       <p>${esc(o.sum || "Pas de résumé disponible.")}</p>
+      ${o.pw ? `<p class="kicker"><b>Pourquoi cette position ?</b> ${esc(o.pw)}</p>` : ""}
       ${lineage}
       <p class="src">Source : <a href="${esc(o.url)}" target="_blank" rel="noopener">Wikipédia</a>, texte sous licence CC BY-SA 4.0.</p>
       ${relList("Origine", [...parents, ...pred, ...mergedFrom])}
@@ -939,8 +951,9 @@
     return /[;"\r\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
   }
   const csvRow = (cells) => cells.map(csvCell).join(";");
+  // position d'une organisation en toutes lettres : arbitrée (classe), estimée ou absente
   function posText(o) {
-    if (o.pv != null) return posWord(o.pv);
+    if (o.pl && CLASS_BY_CODE.get(o.pl)) return CLASS_BY_CODE.get(o.pl).libelle.toLowerCase();
     return o.px != null ? `${posWord(o.px)} (estimée)` : "non positionnée";
   }
 
@@ -1225,7 +1238,7 @@
     const bar = ev.target.closest(".bar");
     if (!bar) { tip.hidden = true; return; }
     const o = O.get(bar.dataset.id);
-    tip.innerHTML = `<b>${esc(o.n)}</b>${esc(KIND_SINGLE[o.k] || "")}<br>${esc(span(o.s, o.e, o.st === "actif"))}<br>${esc(o.pv == null ? (o.px != null ? "position estimée : " + posWord(o.px) : "position non renseignée") : posWord(o.pv))}`;
+    tip.innerHTML = `<b>${esc(o.n)}</b>${esc(KIND_SINGLE[o.k] || "")}<br>${esc(span(o.s, o.e, o.st === "actif"))}<br>${esc("position : " + posText(o))}`;
     tip.hidden = false;
     const x = Math.min(ev.clientX + 14, window.innerWidth - 320), y = Math.min(ev.clientY + 14, window.innerHeight - 110);
     tip.style.left = x + "px"; tip.style.top = y + "px";
