@@ -1,0 +1,51 @@
+{
+  "_commentaire": "Règles d'arbitrage de la position politique des organisations. Lues par pipeline/s05_build_graph.py et par le site. Expliquées dans docs/DEFINITIONS.md. Pour changer une frontière ou une décision, modifier ce fichier puis lancer `python pipeline/run_all.py 7 8 9 10`.",
+
+  "echelle": {
+    "description": "Indice de position de -3 (extrême gauche) à +3 (extrême droite), 0 = centre. Les enquêtes d'experts (CHES, ParlGov) utilisent une échelle de 0 (gauche) à 10 (droite), convertie par indice = (valeur - 5) x 0,6.",
+    "conversion_0_10": {"origine": 5, "facteur": 0.6}
+  },
+
+  "classes": [
+    {"code": "extreme_gauche", "libelle": "Extrême gauche", "min": -3.0, "max": -2.6,
+     "definition": "Organisation dont l'indice est de -2,6 ou moins. Critère qualitatif de référence : refus de participer aux institutions et aux règles du jeu démocratique du pays."},
+    {"code": "gauche", "libelle": "Gauche", "min": -2.6, "max": -1.4,
+     "definition": "Organisation de gauche qui participe aux institutions, y compris sa frange radicale (gauche radicale)."},
+    {"code": "centre_gauche", "libelle": "Centre gauche", "min": -1.4, "max": -0.5,
+     "definition": "Gauche réformiste ou sociale-libérale, proche du centre."},
+    {"code": "centre", "libelle": "Centre", "min": -0.5, "max": 0.5,
+     "definition": "Organisation qui ne se range ni à gauche ni à droite."},
+    {"code": "centre_droit", "libelle": "Centre droit", "min": 0.5, "max": 1.4,
+     "definition": "Droite libérale ou modérée, proche du centre."},
+    {"code": "droite", "libelle": "Droite", "min": 1.4, "max": 2.6,
+     "definition": "Organisation de droite qui participe aux institutions, y compris sa frange radicale (droite radicale)."},
+    {"code": "extreme_droite", "libelle": "Extrême droite", "min": 2.6, "max": 3.0,
+     "definition": "Organisation dont l'indice est de +2,6 ou plus. Critère qualitatif de référence : refus des institutions et des règles du jeu démocratique du pays."}
+  ],
+
+  "regle_de_decision": {
+    "ordre_des_sources": ["decision", "ches", "parlgov", "wikipedia", "categories", "relations", "famille"],
+    "explication": {
+      "decision": "Décision explicite du propriétaire du projet (section 'decisions' ci-dessous) : elle l'emporte toujours.",
+      "ches": "Moyenne des deux dernières enquêtes d'experts Chapel Hill (position gauche-droite générale 'lrgen') : mesure datée, publiée, réalisée par des spécialistes.",
+      "parlgov": "Position gauche-droite composite de ParlGov, qui couvre aussi les partis disparus avant 1999.",
+      "wikipedia": "Champ 'positionnement' de l'infobox, période actuelle ou la plus récente ; les mentions incertaines (« voire », « contesté », « selon ») sont ignorées ; « gauche radicale » = gauche, « droite radicale » = droite.",
+      "categories": "Catégories Wikipédia du type « Parti politique de gauche ».",
+      "relations": "Moyenne des organisations voisines du graphe (membres d'une coalition, scission, successeur) pour celles qui n'ont aucune autre information.",
+      "famille": "Estimation d'après la famille politique (affichée en pointillés sur le site)."
+    },
+    "ches_nombre_d_enquetes": 2,
+    "mentions_ignorees_wikipedia": ["contest", "voire", "selon", "parfois", "certains", "accus"]
+  },
+
+  "decisions": [
+    {"titre": "La France insoumise", "classe": "gauche",
+     "pourquoi": "Elle participe aux institutions et aux élections : de gauche (gauche radicale), pas d'extrême gauche au sens retenu ici (refus des institutions). Les experts la placent à -2,5, juste en deçà de la frontière de l'extrême gauche (-2,6).",
+     "decide_par": "propriétaire du projet", "date": "2026-10-16"}
+  ],
+
+  "criteres_des_familles": {
+    "_commentaire": "Les familles (souverainiste, gaulliste, communiste, etc.) sont des étiquettes de filtrage, pas des positions. Elles viennent des idéologies de l'infobox, des catégories d'organisation et du nom (mots-clés dans pipeline/s05_build_graph.py, FAMILY_RULES). Une décision peut ajouter ou retirer une famille pour une organisation : {\"titre\": ..., \"familles_ajoutees\": [...], \"familles_retirees\": [...], \"pourquoi\": ...}.",
+    "decisions": []
+  }
+}
