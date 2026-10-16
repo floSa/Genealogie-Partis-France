@@ -41,6 +41,8 @@ def main():
                     "tier": n["tier"], "per": n["peripheral"], "sl": n["sitelinks"], "imp": n["importance"],
                     "sum": n["summary"], "url": n["url"], "fl": n["flags"], "np": n.get("persons_linked", 0),
                     "ideo": n["ideologies"][:6], "nc": n.get("name_changes", []),
+                    "el": [[e["date"], e["type"], e["vote_share"], e["seats"], e["seats_total"]] for e in n.get("elections", [])],
+                    "ex": [[e["year"], e["lrgen"], e["lrecon"], e["galtan"]] for e in n.get("expert_positions", [])],
                 }
             )
         else:

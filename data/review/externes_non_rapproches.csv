@@ -1,0 +1,26 @@
+﻿source,sigle,nom,identifiant
+CHES,D,,
+CHES,Ensemble,,
+CHES,LO-LCR,,
+CHES,NC,,31630
+ParlGov,AO,Alliance of the Overseas,2400
+ParlGov,C,Conservatives,2589
+ParlGov,CeD,Centre Right,2250
+ParlGov,CeG,Centre Left,2251
+ParlGov,G,Gaullists,1094
+ParlGov,GDR,Democratic and Republican Left,2272
+ParlGov,IOM,Overseas Independents,2277
+ParlGov,MP,Party of Presidential Majority,2260
+ParlGov,NC,New Centre,1058
+ParlGov,RPR+UDF,RPR/UDF connected list,2264
+ParlGov,TPA,Three Parties Alliance -- Third Force,2279
+ParlGov,d-centre,other centre,2858
+ParlGov,d-droite,other right,285
+ParlGov,d-eco,other ecologists,2249
+ParlGov,d-gauche,other left,177
+ParlGov,etc,others,1328
+ParlGov,ex-dro,other far-right,2079
+ParlGov,ex-gau,other far-left,2083
+ParlGov,no-seat,no seat,2080
+ParlGov,none,no party affiliation,947
+ParlGov,one-seat,one seat,2859

@@ -7,7 +7,7 @@ Aretes organisation-organisation : 590 ({'split': 168, 'merge': 137, 'affiliatio
 
 ## Completude des champs (organisations)
 - date de fondation : 629/646 (97 %)
-- positionnement (valeur -3..+3) : 406/646 (62 %)
+- positionnement (valeur -3..+3) : 413/646 (63 %)
 - au moins une famille politique : 589/646 (91 %)
 
 ## Repartition
@@ -18,6 +18,6 @@ Aretes organisation-organisation : 590 ({'split': 168, 'merge': 137, 'affiliatio
 - organisations existantes a une date donnee : {1960: 86, 1970: 119, 1980: 151, 1990: 177, 2000: 229, 2010: 298, 2020: 343, 2025: 344}
 
 ## Controles
-- anomalies : {'moyenne': 137, 'faible': 88} (voir anomalies.csv)
+- anomalies : {'moyenne': 136, 'faible': 88} (voir anomalies.csv)
 - couverture des entites attendues : 62/64 trouvees par leur nom, 2 seulement par un sigle (['Parti ouvrier independant democratique', 'Chasse, peche, nature et traditions']), absentes : []
 - pages ecartees : 899 (excluded.csv) ; relations non resolues : 92 (unresolved_edges.csv)

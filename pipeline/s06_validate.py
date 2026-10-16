@@ -168,6 +168,15 @@ def main():
         if "dates_contradictoires" in n.get("flags", []):
             an.append(("moyenne", "dates_contradictoires", t, ""))
 
+    # ---- positions : Wikipedia contre experts (CHES), signal de coherence
+    for n in orgs.values():
+        ex = n.get("expert_positions") or []
+        if ex and n["position_value"] is not None and n["position_source"] in ("infobox", "categories"):
+            gap = abs(n["position_value"] - ex[-1]["lrgen"])
+            if gap > 1.3:
+                an.append(("moyenne" if gap > 1.8 else "faible", "position_wikipedia_vs_experts", n["title"],
+                           f"Wikipedia {n['position_value']} / CHES {ex[-1]['lrgen']} ({ex[-1]['year']})"))
+
     # ---- aretes org-org
     adj_split, adj_succ = defaultdict(list), defaultdict(list)
     for e in oe:

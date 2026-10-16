@@ -887,6 +887,50 @@ def main():
         n_lineages += 1
     print("lignees de changements de nom :", n_lineages)
 
+    # donnees externes (ParlGov, CHES) : resultats electoraux et positions d'experts, reparties entre
+    # les membres d'une lignee selon la date (ParlGov traite UMP et LR comme un seul parti)
+    ext_path = G / "external_raw.json"
+    by_title_node = {n["title"]: n for n in nodes_org}
+    for n in nodes_org:
+        n["elections"], n["expert_positions"], n["parlgov_left_right"] = [], [], None
+    if ext_path.exists():
+        lin = defaultdict(list)
+        for n in nodes_org:
+            if n.get("lineage"):
+                lin[n["lineage"]["id"]].append(n)
+
+        def holder(node, year):
+            members = lin.get(node["lineage"]["id"], [node]) if node.get("lineage") else [node]
+            alive = [m for m in members if m["start"] and int(m["start"][:4]) <= year + 1
+                     and (not m["end"] or year <= int(m["end"][:4]) + 1)]
+            return alive[-1] if alive else node
+
+        n_el = n_ex = 0
+        for title, x in json.loads(ext_path.read_text(encoding="utf-8")).items():
+            node = by_title_node.get(title)
+            if not node:
+                continue
+            for el in x["elections"]:
+                holder(node, int(el["date"][:4]))["elections"].append(el)
+                n_el += 1
+            for ch in x["ches"]:
+                holder(node, ch["year"])["expert_positions"].append(
+                    {k: ch[k] for k in ("year", "lrgen", "lrecon", "galtan")})
+                n_ex += 1
+            node["parlgov_left_right"] = x["parlgov_left_right"]
+        n_filled = 0
+        for n in nodes_org:
+            n["elections"].sort(key=lambda e: e["date"])
+            n["expert_positions"].sort(key=lambda e: e["year"])
+            if n["position_value"] is None and (n["expert_positions"] or n["parlgov_left_right"] is not None):
+                v = n["expert_positions"][-1]["lrgen"] if n["expert_positions"] else n["parlgov_left_right"]
+                n["position_value"] = v
+                n["position_codes"] = [min(SPECTRUM, key=lambda c: abs(SPECTRUM[c] - v))]
+                n["position_source"] = "experts" if n["expert_positions"] else "parlgov"
+                n["flags"].append("position_depuis_" + n["position_source"])
+                n_filled += 1
+        print(f"donnees externes : {n_el} resultats electoraux, {n_ex} positions d'experts, {n_filled} positions completees")
+
     # position deduite des organisations voisines (membres d'une coalition, scission, successeur)
     # pour celles qui n'ont ni position, ni famille permettant de l'estimer
     FAM_WITH_POS = {"trotskiste", "communiste", "maoiste", "anarchiste_libertaire", "extreme_gauche_autre",
@@ -1083,7 +1127,10 @@ def main():
         sy, ey = year_of(n["start"]), year_of(n["end"])
         years_ve = max(0, min(ey or 2026, 2026) - max(sy or 1958, 1958)) if (ey or 2026) >= 1958 else 0
         n["persons_linked"] = org_persons[n["id"]]
-        n["importance"] = round(n["sitelinks"] + 0.5 * n["degree"] + 0.25 * n["persons_linked"] + min(years_ve, 40) / 4, 1)
+        peak = max([e["vote_share"] or 0 for e in n["elections"] if e["type"] == "parliament"] or [0])
+        n["peak_vote_share"] = peak or None
+        n["importance"] = round(n["sitelinks"] + 0.5 * n["degree"] + 0.25 * n["persons_linked"]
+                                + min(years_ve, 40) / 4 + 0.3 * peak, 1)
         n["tier"] = 3
     NO_MACRO = {"association", "think_tank", "parliamentary_group", "micro_party"}
     ranked = sorted(

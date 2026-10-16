@@ -20,7 +20,7 @@ STEPS = {
     3: ["s03_parse_parties.py"],
     4: ["s04a_wikidata_people.py", "s04b_people.py"],
     5: ["s02b_snowball.py", "s03_parse_parties.py", "s04b_people.py", "s02b_snowball.py"],
-    6: ["s02c_wikidata_entities.py"],
+    6: ["s02c_wikidata_entities.py", "s04e_external_data.py"],
     7: ["s05_build_graph.py"],
     8: ["s06_validate.py"],
     9: ["s07_export_site.py"],
