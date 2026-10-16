@@ -38,5 +38,32 @@
       "_pourquoi": "La page couvre Les Verts (1984) puis EELV (2010) puis Les Écologistes (2023) ; Les Verts a sa propre page jusqu'en 2010 : on fait commencer cette entité en 2010 pour que les deux barres se suivent (chevauchement de 26 ans sinon)."
     }
   },
-  "lineages": []
+  "lineages": [],
+  "external_matches": {
+    "_commentaire": "Rapprochements manuels entre ParlGov / CHES et nos organisations quand ni Wikidata ni le sigle ne suffisent (sigle ParlGov -> titre de page ; sigle CHES -> titre de page).",
+    "parlgov": {
+      "FN": "Rassemblement national",
+      "RPR": "Rassemblement pour la République",
+      "MF": "Mouvement pour la France",
+      "H": "Horizons",
+      "REM|R": "Renaissance (parti)",
+      "PFN": "Parti des forces nouvelles (France)",
+      "U5R": "Union pour la nouvelle République"
+    },
+    "ches": {
+      "FN": "Rassemblement national",
+      "RN": "Rassemblement national",
+      "RPR": "Rassemblement pour la République",
+      "LREM": "Renaissance (parti)",
+      "RE": "Renaissance (parti)",
+      "DLF": "Debout la France",
+      "PG": "Parti de gauche (France)",
+      "REC": "Reconquête (parti politique)",
+      "MEI": "Mouvement écologiste indépendant",
+      "MPF": "Mouvement pour la France",
+      "Horizons": "Horizons",
+      "DL": "Démocratie libérale (parti politique)",
+      "MN": "Mouvement national républicain"
+    }
+  }
 }
