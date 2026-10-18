@@ -80,7 +80,7 @@ RPR, l'UMP et Les Républicains forment une seule lignée ; voir d'où viennent 
   vérifiable ligne par ligne ; *limite* : les sections en prose (histoire des partis, courants non catégorisés)
   ne sont pas exploitées.
 - **Copie locale SQLite plutôt que requêtes à la demande**, parce que toute analyse se rejoue hors ligne et que
-  Wikimédia limite le débit ; *limite* : 85 Mo à reconstruire en une à deux heures si on repart de zéro.
+  Wikimédia limite le débit ; *limite* : environ 80 Mo à reconstruire en une à deux heures si on repart de zéro.
 - **Site statique sans bibliothèque plutôt que framework**, parce qu'il s'ouvre en double-cliquant et se publie
   tel quel ; *limite* : tout le code d'affichage est écrit à la main dans `site/app.js`.
 - **Experts avant Wikipédia pour la position politique**, parce qu'une enquête d'experts applique la même méthode à
