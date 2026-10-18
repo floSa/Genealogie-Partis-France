@@ -19,8 +19,8 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 NETWORK = [
     "s00_refresh.py", "s01_discover.py", "s02_fetch_parties.py", "s03_parse_parties.py",
-    "s04a_wikidata_people.py", "s04b_people.py", "s02b_snowball.py", "s03_parse_parties.py",
-    "s04b_people.py", "s02b_snowball.py", "s02c_wikidata_entities.py", "s04e_external_data.py",
+    "s04a_wikidata_people.py", "s04c_wikidata_relations.py", "s04d_leaders.py", "s04b_people.py",
+    "s02b_snowball.py", "s03_parse_parties.py", "s04d_leaders.py", "s04b_people.py", "s02b_snowball.py", "s02c_wikidata_entities.py", "s04e_external_data.py",
 ]
 BUILD = ["s05_build_graph.py", "s06_validate.py", "s07_export_site.py", "s08_review_list.py", "s09_diff_builds.py"]
 
